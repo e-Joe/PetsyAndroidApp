@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.bytecode.petsy.ui.theme.OutlineBorder
 
 @Composable
-fun RoundedInput(modifier: Modifier) {
+fun RoundedInput(modifier: Modifier, hint: String) {
     val textState = remember {
         mutableStateOf("")
     }
@@ -27,10 +27,10 @@ fun RoundedInput(modifier: Modifier) {
     {
         OutlinedTextField(
             value = textState.value,
-            onValueChange = {textState.value = it },
+            onValueChange = { textState.value = it },
             shape = RoundedCornerShape(50.dp),
             placeholder = {
-                Text(text = "Hint")
+                Text(text = hint)
             },
             singleLine = true,
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -51,7 +51,8 @@ fun PreviewRoundedInput() {
     Column {
         RoundedInput(
             modifier = Modifier
-                .padding(top = 34.dp, start = 20.dp, end = 20.dp)
+                .padding(top = 34.dp, start = 20.dp, end = 20.dp),
+            hint = "Hint"
         )
     }
 }

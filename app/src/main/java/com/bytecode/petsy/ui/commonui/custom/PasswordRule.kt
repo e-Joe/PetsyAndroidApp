@@ -16,14 +16,14 @@ import com.bytecode.petsy.R
 import com.bytecode.petsy.ui.theme.TextSecondary
 
 @Composable
-fun PasswordRule() {
+fun PasswordRule(text: String) {
     Row {
         Image(painter = painterResource(id = R.drawable.ic_circle_check), contentDescription = "")
         Text(
-            text = "8+ Characters",
+            text = text,
             fontSize = 12.sp,
             color = TextSecondary,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Normal,
             modifier = Modifier
                 .padding(start = 10.dp)
 
@@ -35,6 +35,6 @@ fun PasswordRule() {
 @Composable
 fun PreviewPasswordRule() {
     Box {
-        PasswordRule()
+        PasswordRule("8+ Characters")
     }
 }

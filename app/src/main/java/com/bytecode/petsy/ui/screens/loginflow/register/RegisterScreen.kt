@@ -26,6 +26,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
 import com.bytecode.petsy.ui.commonui.buttons.GradientButton
+import com.bytecode.petsy.ui.commonui.custom.PasswordRules
 import com.bytecode.petsy.ui.commonui.inputs.RoundedInput
 import com.bytecode.petsy.ui.theme.ButtonCollorGradient1
 import com.bytecode.petsy.ui.theme.ButtonCollorGradient2
@@ -90,14 +91,23 @@ fun RegisterScreen(navController: NavHostController) {
 
                 RoundedInput(
                     modifier = Modifier
-                        .padding(start = 20.dp, end = 20.dp)
+                        .padding(start = 20.dp, end = 20.dp),
+                    hint = "Email"
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 RoundedInput(
                     modifier = Modifier
-                        .padding(start = 20.dp, end = 20.dp)
+                        .padding(start = 20.dp, end = 20.dp),
+                    hint = "Password"
+                )
+
+                PasswordRules(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 40.dp)
+                        .padding(top = 20.dp)
                 )
             }
 
