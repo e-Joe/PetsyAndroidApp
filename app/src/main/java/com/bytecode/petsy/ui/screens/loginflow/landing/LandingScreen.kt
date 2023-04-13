@@ -117,6 +117,8 @@ fun LandingScreen(navController: NavHostController) {
                     }
                 }
 
+                Spacer(modifier = Modifier.height(70.dp))
+
                 Row {
                     TextButton(
                         contentPadding = PaddingValues(0.dp),

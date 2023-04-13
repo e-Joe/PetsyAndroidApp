@@ -16,5 +16,7 @@ val ButtonCollorGradient1 = Color(0xFF63C4AF)
 val ButtonCollorGradient2 = Color(0xFF25cdf0)
 val ButtonCollorGradient3 = Color(0xFF59A192)
 
+val OutlineBorder = Color(0xFFE1E1E1)
+
 
 
