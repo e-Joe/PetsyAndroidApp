@@ -55,8 +55,9 @@ private fun BoxScope.RegisterScreenBottomPart() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
             GradientButton(
-                text = stringResource(R.string.common_next)
-            ) {}
+                text = stringResource(R.string.common_next),
+                onClick = {}
+            )
 
             Spacer(modifier = Modifier.height(40.dp))
 

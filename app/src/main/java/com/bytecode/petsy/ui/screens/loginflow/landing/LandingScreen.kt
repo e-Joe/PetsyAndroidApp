@@ -18,6 +18,7 @@ import com.bytecode.petsy.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.ui.commonui.headers.HeaderOnboarding
+import com.bytecode.petsy.ui.navigation.Screens
 import com.bytecode.petsy.ui.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -43,7 +44,7 @@ fun LandingScreen(navController: NavHostController) {
             PetsyImageBackground()
             HeaderOnboarding()
             RenderTopPart()
-            RenderBottomPart()
+            RenderBottomPart(navController)
         }
     }
 }
@@ -59,7 +60,7 @@ private fun RenderTopPart() {
 }
 
 @Composable
-private fun BoxScope.RenderBottomPart() {
+private fun BoxScope.RenderBottomPart(navController: NavHostController) {
     val context = LocalContext.current
 
     Column(
@@ -72,8 +73,9 @@ private fun BoxScope.RenderBottomPart() {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             GradientButton(
-                text = stringResource(R.string.common_register)
-            ) {}
+                text = stringResource(R.string.common_register),
+                onClick = { navController.navigate(Screens.RegisterScreen.route) }
+            )
 
             TextButton(
                 modifier = Modifier.height(50.dp),

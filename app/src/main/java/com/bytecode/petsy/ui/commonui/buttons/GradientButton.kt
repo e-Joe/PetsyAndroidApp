@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.bytecode.petsy.ui.navigation.Screens
 import com.bytecode.petsy.ui.theme.ButtonCollorGradient1
 import com.bytecode.petsy.ui.theme.ButtonCollorGradient2
 import com.bytecode.petsy.ui.theme.button_gradient_text
@@ -29,7 +31,7 @@ import com.bytecode.petsy.ui.theme.button_gradient_text
 @Composable
 fun GradientButton(
     text: String,
-    onClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     Button(
         modifier = Modifier
@@ -41,7 +43,7 @@ fun GradientButton(
         ),
         contentPadding = PaddingValues(),
         shape = RoundedCornerShape(50),
-        onClick = { onClick },
+        onClick = { onClick() },
         elevation = ButtonDefaults.elevation(
             defaultElevation = 0.dp, pressedElevation = 0.dp, disabledElevation = 0.dp
         )
