@@ -7,7 +7,12 @@ import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.ui.navigation.SetupNavGraph
 import com.bytecode.petsy.ui.theme.PetsyTheme
 
-class MainActivity : ComponentActivity() {
+/**
+ * Main activity in Petsy application
+ *
+ * @author Ilija Vucetic
+ */
+class PetsyActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

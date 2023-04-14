@@ -8,22 +8,23 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.bytecode.petsy.R
-import com.bytecode.petsy.ui.theme.TextSecondary
+import com.bytecode.petsy.ui.theme.regular
 
+/**
+ * Creates a Composable function that displays a password rule item with an image and text.
+ * @param text The text to display for the password rule.
+ * @author Ilija Vuceic
+ */
 @Composable
 fun PasswordRule(text: String) {
     Row {
         Image(painter = painterResource(id = R.drawable.ic_circle_check), contentDescription = "")
         Text(
             text = text,
-            fontSize = 12.sp,
-            color = TextSecondary,
-            fontWeight = FontWeight.Normal,
+            style = regular,
             modifier = Modifier
                 .padding(start = 10.dp)
 

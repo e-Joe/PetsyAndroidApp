@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Petsy</string>
+    <string name="register_your_account">Your account</string>
+    <string name="common_next">Next</string>
+    <string name="register_already_have_account">You already have an account.</string>
+    <string name="register_login_here">Login Here</string>
+    <string name="common_about_us">About us</string>
+    <string name="common_privacy_policy">Privacy policy</string>
+    <string name="common_email">Email</string>
+    <string name="common_password">Password</string>
+    <string name="common_login">Login</string>
+    <string name="common_register">Register</string>
+    <string name="password_characters_rule">8+ Characters</string>
+    <string name="password_number_rule">Number</string>
+    <string name="password_uppercase_rule">Uppercase Letter</string>
+    <string name="password_lowercase_rule">Lowercase letter</string>
 </resources>

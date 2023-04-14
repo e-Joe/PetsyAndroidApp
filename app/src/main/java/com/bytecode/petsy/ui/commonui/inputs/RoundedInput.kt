@@ -17,6 +17,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bytecode.petsy.ui.theme.OutlineBorder
 
+/**
+ * Function is a composable function in Kotlin that creates a rounded input field with
+ * an outlined border using Jetpack Compose, a modern UI toolkit for building Android apps.
+ * It takes two parameters:
+ *
+ * @param modifier Modifier - A modifier that allows you to apply additional styling or
+ * behavior to the input field. You can use this parameter to customize the appearance
+ * or behavior of the input field in your UI.
+ *
+ * @param hint String - A string that specifies the hint or placeholder text for the input field.
+ * This text will be displayed inside the input field when it is empty, providing a visual
+ * indication of what type of input is expected.
+ *
+ * @author Ilija Vucetic
+ */
 @Composable
 fun RoundedInput(modifier: Modifier, hint: String) {
     val textState = remember {
