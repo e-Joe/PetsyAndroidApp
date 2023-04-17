@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.bytecode.petsy.ui.screens.loginflow.landing.LandingScreen
+import com.bytecode.petsy.ui.screens.loginflow.login.LoginScreen
 import com.bytecode.petsy.ui.screens.loginflow.register.DogsNameScreen
 import com.bytecode.petsy.ui.screens.loginflow.register.RegisterFirstScreen
 import com.bytecode.petsy.ui.screens.loginflow.register.RegisterSecondScreen
@@ -47,6 +48,10 @@ fun SetupNavGraph(navController: NavHostController) {
 
         composable(route = Screens.VerifyEmailScreen.route) {
             VerifyEmailScreen(navController = navController)
+        }
+
+        composable(route = Screens.LoginScreen.route) {
+            LoginScreen(navController = navController)
         }
     }
 }

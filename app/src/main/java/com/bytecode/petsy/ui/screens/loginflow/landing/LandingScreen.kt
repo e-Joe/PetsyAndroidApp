@@ -80,9 +80,7 @@ private fun BoxScope.RenderBottomPart(navController: NavHostController) {
             TextButton(
                 modifier = Modifier.height(50.dp),
                 contentPadding = PaddingValues(0.dp),
-                onClick = {
-                    Toast.makeText(context, "Login", Toast.LENGTH_SHORT).show()
-                }) {
+                onClick = { navController.navigate(Screens.LoginScreen.route) }) {
                 Text(
                     text = stringResource(R.string.common_login),
                     style = button_primary_text

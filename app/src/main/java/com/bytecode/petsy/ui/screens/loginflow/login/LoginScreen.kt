@@ -1,25 +1,128 @@
 package com.bytecode.petsy.ui.screens.loginflow.login
 
-import android.util.Log
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.bytecode.petsy.R
+import com.bytecode.petsy.ui.commonui.AboutUsAndPrivacyView
+import com.bytecode.petsy.ui.commonui.PetsyImageBackground
+import com.bytecode.petsy.ui.commonui.buttons.AddNewButton
+import com.bytecode.petsy.ui.commonui.buttons.GradientButton
+import com.bytecode.petsy.ui.commonui.headers.HeaderOnboarding
+import com.bytecode.petsy.ui.commonui.inputs.RoundedInput
+import com.bytecode.petsy.ui.navigation.Screens
+import com.bytecode.petsy.ui.theme.h4_link
 
+/**
+ * Composable function that represents the register screen UI.
+ *
+ * @param navController The NavHostController used for navigation within the app.
+ *
+ * @author Ilija Vucetic
+ */
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController) {
     Scaffold { paddingValues ->
-        Log.d("Padding values", "$paddingValues")
-        Box {
-            Text(
-                text = "LoginScreen",
-                color = Color.White,
-                fontSize = 36.sp,
-                fontWeight = FontWeight.Black
-            )
+        Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
+            PetsyImageBackground()
+            HeaderOnboarding()
+            LoginForm()
+            LoginScreenBottomPart(navController)
         }
     }
+}
+
+@Composable
+private fun BoxScope.LoginScreenBottomPart(navController: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .align(Alignment.BottomCenter)
+            .padding(bottom = 30.dp), horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            GradientButton(
+                text = stringResource(R.string.login_login),
+                onClick = { navController.navigate(Screens.RegisterSecondScreen.route) }
+            )
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.login_dont_have_account),
+                    style = MaterialTheme.typography.h4
+                )
+                Text(
+                    text = stringResource(R.string.login_register_here),
+                    style = h4_link,
+                    modifier = Modifier.padding(start = 3.dp),
+                    textDecoration = TextDecoration.Underline
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(57.dp))
+        AboutUsAndPrivacyView()
+    }
+}
+
+@Composable
+private fun BoxScope.LoginForm() {
+    Column(
+        modifier = Modifier
+            .padding(top = 150.dp)
+            .align(Alignment.TopCenter)
+            .fillMaxWidth()
+    ) {
+        Text(
+            style = MaterialTheme.typography.h1,
+            text = stringResource(R.string.login_login),
+            modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp)
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        RoundedInput(
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+            hint = stringResource(R.string.common_email)
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        RoundedInput(
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+            hint = stringResource(R.string.common_password)
+        )
+
+        AddNewButton(
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(end = 20.dp, top = 20.dp),
+            showIcon = false,
+            text = stringResource(R.string.login_forgot_password)
+        ) {}
+    }
+}
+
+
+@Preview
+@Composable
+fun RegisterPreview() {
+    LoginScreen(rememberNavController())
 }

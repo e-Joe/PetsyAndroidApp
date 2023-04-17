@@ -19,13 +19,21 @@ import com.bytecode.petsy.ui.theme.button_text_inverse
 @Composable
 fun AddNewButton(
     modifier: Modifier,
+    text: String = stringResource(R.string.register_add_new),
+    showIcon: Boolean = true,
     onClick: () -> Unit
 ) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
-        Icon(painter = painterResource(id = R.drawable.ic_plus), contentDescription = "", tint = TextPrimary)
-        Spacer(modifier = Modifier.width(10.dp))
+        if(showIcon) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_plus),
+                contentDescription = "",
+                tint = TextPrimary
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+        }
         Text(
-            text = stringResource(R.string.register_add_new),
+            text = text,
             style = button_text_inverse,
             textDecoration = TextDecoration.Underline
         )

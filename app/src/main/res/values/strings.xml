@@ -22,4 +22,8 @@
     <string name="password_uppercase_rule">Uppercase Letter</string>
     <string name="password_lowercase_rule">Lowercase letter</string>
     <string name="register_add_new">Add new</string>
+    <string name="login_dont_have_account">Don’t have an account?</string>
+    <string name="login_register_here">Register here?</string>
+    <string name="login_login">Login</string>
+    <string name="login_forgot_password">Forgot password?</string>
 </resources>

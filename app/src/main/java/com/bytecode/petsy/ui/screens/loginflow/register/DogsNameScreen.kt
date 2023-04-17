@@ -30,14 +30,14 @@ fun DogsNameScreen(navController: NavHostController) {
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
             HeaderOnboarding()
-            RegisterForm()
-            RegisterScreenBottomPart(navController)
+            DogsForm()
+            DogsScreenBottomPart(navController)
         }
     }
 }
 
 @Composable
-private fun BoxScope.RegisterScreenBottomPart(navController: NavHostController) {
+private fun BoxScope.DogsScreenBottomPart(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -59,7 +59,7 @@ private fun BoxScope.RegisterScreenBottomPart(navController: NavHostController) 
 }
 
 @Composable
-private fun BoxScope.RegisterForm() {
+private fun BoxScope.DogsForm() {
     Column(
         modifier = Modifier
             .padding(top = 150.dp)
