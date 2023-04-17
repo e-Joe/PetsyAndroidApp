@@ -79,7 +79,7 @@ private fun BoxScope.RegisterScreenBottomPart(navController: NavHostController) 
             }
         }
 
-        Spacer(modifier = Modifier.height(80.dp))
+        Spacer(modifier = Modifier.height(57.dp))
         AboutUsAndPrivacyView()
     }
 }

@@ -21,6 +21,7 @@ import com.bytecode.petsy.ui.commonui.buttons.AddNewButton
 import com.bytecode.petsy.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.ui.commonui.inputs.RoundedInput
+import com.bytecode.petsy.ui.navigation.Screens
 
 
 @Composable
@@ -48,11 +49,11 @@ private fun BoxScope.RegisterScreenBottomPart(navController: NavHostController) 
 
             GradientButton(
                 text = stringResource(R.string.common_next),
-                onClick = {}
+                onClick = { navController.navigate(Screens.VerifyEmailScreen.route) }
             )
         }
 
-        Spacer(modifier = Modifier.height(80.dp))
+        Spacer(modifier = Modifier.height(57.dp))
         AboutUsAndPrivacyView()
     }
 }

@@ -90,7 +90,7 @@ private fun BoxScope.RenderBottomPart(navController: NavHostController) {
             }
         }
 
-        Spacer(modifier = Modifier.height(70.dp))
+        Spacer(modifier = Modifier.height(57.dp))
         AboutUsAndPrivacyView()
     }
 }

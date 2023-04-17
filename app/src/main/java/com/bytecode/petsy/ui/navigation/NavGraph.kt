@@ -8,6 +8,7 @@ import com.bytecode.petsy.ui.screens.loginflow.landing.LandingScreen
 import com.bytecode.petsy.ui.screens.loginflow.register.DogsNameScreen
 import com.bytecode.petsy.ui.screens.loginflow.register.RegisterFirstScreen
 import com.bytecode.petsy.ui.screens.loginflow.register.RegisterSecondScreen
+import com.bytecode.petsy.ui.screens.loginflow.register.VerifyEmailScreen
 import com.bytecode.petsy.ui.screens.loginflow.splash.SplashScreen
 
 /**
@@ -42,6 +43,10 @@ fun SetupNavGraph(navController: NavHostController) {
 
         composable(route = Screens.DogsNameScreen.route) {
             DogsNameScreen(navController = navController)
+        }
+
+        composable(route = Screens.VerifyEmailScreen.route) {
+            VerifyEmailScreen(navController = navController)
         }
     }
 }
