@@ -5,7 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.bytecode.petsy.ui.screens.loginflow.landing.LandingScreen
-import com.bytecode.petsy.ui.screens.loginflow.register.RegisterScreen
+import com.bytecode.petsy.ui.screens.loginflow.register.RegisterFirstScreen
+import com.bytecode.petsy.ui.screens.loginflow.register.RegisterSecondScreen
 import com.bytecode.petsy.ui.screens.loginflow.splash.SplashScreen
 
 /**
@@ -29,8 +30,12 @@ fun SetupNavGraph(navController: NavHostController) {
             LandingScreen(navController = navController)
         }
 
-        composable(route = Screens.RegisterScreen.route) {
-            RegisterScreen(navController = navController)
+        composable(route = Screens.RegisterFirstScreen.route) {
+            RegisterFirstScreen(navController = navController)
+        }
+
+        composable(route = Screens.RegisterSecondScreen.route) {
+            RegisterSecondScreen(navController = navController)
         }
     }
 }

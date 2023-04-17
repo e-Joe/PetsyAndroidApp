@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -19,10 +18,8 @@ import com.bytecode.petsy.R
 import com.bytecode.petsy.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.ui.commonui.buttons.GradientButton
-import com.bytecode.petsy.ui.commonui.custom.PasswordRules
 import com.bytecode.petsy.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.ui.commonui.inputs.RoundedInput
-import com.bytecode.petsy.ui.theme.h4_link
 
 /**
  * Composable function that represents the register screen UI.
@@ -32,19 +29,19 @@ import com.bytecode.petsy.ui.theme.h4_link
  * @author Ilija Vucetic
  */
 @Composable
-fun RegisterScreen(navController: NavHostController) {
+fun RegisterSecondScreen(navController: NavHostController) {
     Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
             HeaderOnboarding()
             RegisterForm()
-            RegisterScreenBottomPart()
+            RegisterScreenBottomPart(navController)
         }
     }
 }
 
 @Composable
-private fun BoxScope.RegisterScreenBottomPart() {
+private fun BoxScope.RegisterScreenBottomPart(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -58,24 +55,6 @@ private fun BoxScope.RegisterScreenBottomPart() {
                 text = stringResource(R.string.common_next),
                 onClick = {}
             )
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.register_already_have_account),
-                    style = MaterialTheme.typography.h4
-                )
-                Text(
-                    text = stringResource(R.string.register_login_here),
-                    style = h4_link,
-                    modifier = Modifier.padding(start = 3.dp),
-                    textDecoration = TextDecoration.Underline
-                )
-            }
         }
 
         Spacer(modifier = Modifier.height(80.dp))
@@ -92,14 +71,14 @@ private fun BoxScope.RegisterForm() {
             .fillMaxWidth()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.img_temp_steps),
+            painter = painterResource(id = R.drawable.img_temp_steps_second),
             contentDescription = "",
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
         Text(
             style = MaterialTheme.typography.h1,
-            text = stringResource(R.string.register_your_account),
+            text = stringResource(R.string.register_about_you),
             modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp)
         )
 
@@ -107,21 +86,30 @@ private fun BoxScope.RegisterForm() {
 
         RoundedInput(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.common_email)
+            hint = stringResource(R.string.register_first_name)
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         RoundedInput(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.common_password)
+            hint = stringResource(R.string.register_last_name)
         )
 
-        PasswordRules(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp)
-                .padding(top = 20.dp)
+        Spacer(modifier = Modifier.height(10.dp))
+
+        RoundedInput(
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+            hint = stringResource(R.string.register_country),
+            endIcon = painterResource(id = R.drawable.ic_bottom_arrow_input_field),
+            isEnabled = false
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        RoundedInput(
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
+            hint = stringResource(R.string.register_phone_number)
         )
     }
 }
@@ -129,6 +117,6 @@ private fun BoxScope.RegisterForm() {
 
 @Preview
 @Composable
-fun RegisterPreview() {
-    RegisterScreen(rememberNavController())
+fun RegisterSecondPreview() {
+    RegisterSecondScreen(navController = rememberNavController())
 }

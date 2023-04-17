@@ -5,17 +5,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bytecode.petsy.ui.theme.OutlineBorder
+import com.bytecode.petsy.ui.theme.TextSecondary
+import com.bytecode.petsy.ui.theme.inputHint
 
 /**
  * Function is a composable function in Kotlin that creates a rounded input field with
@@ -33,17 +34,22 @@ import com.bytecode.petsy.ui.theme.OutlineBorder
  * @author Ilija Vucetic
  */
 @Composable
-fun RoundedInput(modifier: Modifier, hint: String) {
+fun RoundedInput(
+    modifier: Modifier,
+    hint: String,
+    endIcon: Painter? = null,
+    isEnabled: Boolean = true
+) {
     val textState = remember {
         mutableStateOf("")
     }
-
     Box(modifier = modifier)
     {
         OutlinedTextField(
             value = textState.value,
             onValueChange = { textState.value = it },
             shape = RoundedCornerShape(50.dp),
+            textStyle = inputHint,
             placeholder = {
                 Text(text = hint)
             },
@@ -52,9 +58,22 @@ fun RoundedInput(modifier: Modifier, hint: String) {
                 backgroundColor = Color.White,
                 cursorColor = Color.Black,
                 focusedBorderColor = OutlineBorder,
-                unfocusedBorderColor = OutlineBorder
+                unfocusedBorderColor = OutlineBorder,
+                disabledBorderColor = OutlineBorder,
+                disabledTextColor = TextSecondary,
+                textColor = Color.Red,
+                disabledPlaceholderColor = TextSecondary.copy(0.5f),
+                placeholderColor = TextSecondary.copy(0.5f)
             ),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            trailingIcon = {
+                if (endIcon != null)
+                    Icon(
+                        painter = endIcon,
+                        contentDescription = ""
+                    )
+            },
+            enabled = isEnabled
         )
     }
 }
@@ -67,7 +86,8 @@ fun PreviewRoundedInput() {
         RoundedInput(
             modifier = Modifier
                 .padding(top = 34.dp, start = 20.dp, end = 20.dp),
-            hint = "Hint"
+            hint = "Hint",
+            endIcon = null
         )
     }
 }

@@ -34,6 +34,16 @@ val Typography = Typography(
     )
 )
 
+val inputHint: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFont,
+            fontSize = 14.sp,
+            color = TextSecondary,
+            fontWeight = FontWeight.Normal
+        )
+    }
+
 val regular: TextStyle
     @Composable get() {
         return TextStyle(

@@ -74,7 +74,7 @@ private fun BoxScope.RenderBottomPart(navController: NavHostController) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             GradientButton(
                 text = stringResource(R.string.common_register),
-                onClick = { navController.navigate(Screens.RegisterScreen.route) }
+                onClick = { navController.navigate(Screens.RegisterFirstScreen.route) }
             )
 
             TextButton(
