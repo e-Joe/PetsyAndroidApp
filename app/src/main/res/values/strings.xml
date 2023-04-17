@@ -14,9 +14,12 @@
     <string name="register_last_name">Last name</string>
     <string name="register_country">Country</string>
     <string name="register_phone_number">Phone number</string>
+    <string name="register_about_you">About you</string>
+    <string name="register_your_dogs">Your dogs</string>
+    <string name="register_your_dogs_name">Your dog\'s name</string>
     <string name="password_characters_rule">8+ Characters</string>
     <string name="password_number_rule">Number</string>
     <string name="password_uppercase_rule">Uppercase Letter</string>
     <string name="password_lowercase_rule">Lowercase letter</string>
-    <string name="register_about_you">About you</string>
+    <string name="register_add_new">Add new</string>
 </resources>

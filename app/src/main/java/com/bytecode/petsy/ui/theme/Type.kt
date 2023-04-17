@@ -74,6 +74,16 @@ val button_text: TextStyle
         )
     }
 
+val button_text_inverse: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFontBold,
+            color = TextPrimary,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+        )
+    }
+
 val button_gradient_text: TextStyle
     @Composable get() {
         return TextStyle(

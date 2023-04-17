@@ -17,20 +17,14 @@ import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
 import com.bytecode.petsy.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.ui.commonui.PetsyImageBackground
+import com.bytecode.petsy.ui.commonui.buttons.AddNewButton
 import com.bytecode.petsy.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.ui.commonui.inputs.RoundedInput
-import com.bytecode.petsy.ui.navigation.Screens
 
-/**
- * Composable function that represents the register screen UI.
- *
- * @param navController The NavHostController used for navigation within the app.
- *
- * @author Ilija Vucetic
- */
+
 @Composable
-fun RegisterSecondScreen(navController: NavHostController) {
+fun DogsNameScreen(navController: NavHostController) {
     Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
@@ -54,7 +48,7 @@ private fun BoxScope.RegisterScreenBottomPart(navController: NavHostController) 
 
             GradientButton(
                 text = stringResource(R.string.common_next),
-                onClick = { navController.navigate(Screens.DogsNameScreen.route) }
+                onClick = {}
             )
         }
 
@@ -72,14 +66,14 @@ private fun BoxScope.RegisterForm() {
             .fillMaxWidth()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.img_temp_steps_second),
+            painter = painterResource(id = R.drawable.img_temp_steps_third),
             contentDescription = "",
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
         Text(
             style = MaterialTheme.typography.h1,
-            text = stringResource(R.string.register_about_you),
+            text = stringResource(R.string.register_your_dogs),
             modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp)
         )
 
@@ -87,37 +81,24 @@ private fun BoxScope.RegisterForm() {
 
         RoundedInput(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.register_first_name)
+            hint = stringResource(R.string.register_your_dogs_name)
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        RoundedInput(
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.register_last_name)
-        )
+        AddNewButton(
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(end = 20.dp)
+        ) {}
 
-        Spacer(modifier = Modifier.height(10.dp))
 
-        RoundedInput(
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.register_country),
-            endIcon = painterResource(id = R.drawable.ic_bottom_arrow_input_field),
-            isEnabled = false
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        RoundedInput(
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.register_phone_number)
-        )
     }
 }
 
 
 @Preview
 @Composable
-fun RegisterSecondPreview() {
-    RegisterSecondScreen(navController = rememberNavController())
+fun DogsNamePreview() {
+    DogsNameScreen(navController = rememberNavController())
 }

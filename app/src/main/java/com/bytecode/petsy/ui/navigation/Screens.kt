@@ -18,4 +18,5 @@ sealed class Screens(val route: String) {
     object ForgotPasswordScreen : Screens("forgot_password_screen")
     object RegisterFirstScreen : Screens("register_first_screen")
     object RegisterSecondScreen : Screens("register_second_screen")
+    object DogsNameScreen : Screens("dogs_name_screen")
 }
