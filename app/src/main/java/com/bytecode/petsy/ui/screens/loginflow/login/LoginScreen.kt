@@ -16,8 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
 import com.bytecode.petsy.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.ui.commonui.PetsyImageBackground
-import com.bytecode.petsy.ui.commonui.buttons.AddNewButton
 import com.bytecode.petsy.ui.commonui.buttons.GradientButton
+import com.bytecode.petsy.ui.commonui.buttons.IconTextButton
 import com.bytecode.petsy.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.ui.commonui.inputs.RoundedInput
 import com.bytecode.petsy.ui.navigation.Screens
@@ -36,7 +36,7 @@ fun LoginScreen(navController: NavHostController) {
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
             HeaderOnboarding()
-            LoginForm()
+            LoginForm(navController)
             LoginScreenBottomPart(navController)
         }
     }
@@ -83,7 +83,7 @@ private fun BoxScope.LoginScreenBottomPart(navController: NavHostController) {
 }
 
 @Composable
-private fun BoxScope.LoginForm() {
+private fun BoxScope.LoginForm(navController: NavHostController) {
     Column(
         modifier = Modifier
             .padding(top = 150.dp)
@@ -110,13 +110,14 @@ private fun BoxScope.LoginForm() {
             hint = stringResource(R.string.common_password)
         )
 
-        AddNewButton(
+        IconTextButton(
             modifier = Modifier
                 .align(Alignment.End)
                 .padding(end = 20.dp, top = 20.dp),
             showIcon = false,
-            text = stringResource(R.string.login_forgot_password)
-        ) {}
+            text = stringResource(R.string.login_forgot_password),
+            onClick = { navController.navigate(Screens.ForgotPasswordScreen.route) }
+        )
     }
 }
 

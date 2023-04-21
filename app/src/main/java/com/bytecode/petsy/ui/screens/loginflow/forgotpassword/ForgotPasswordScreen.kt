@@ -1,6 +1,5 @@
-package com.bytecode.petsy.ui.screens.loginflow.register
+package com.bytecode.petsy.ui.screens.loginflow.forgotpassword
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -8,7 +7,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,27 +15,25 @@ import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
 import com.bytecode.petsy.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.ui.commonui.PetsyImageBackground
-import com.bytecode.petsy.ui.commonui.buttons.IconTextButton
 import com.bytecode.petsy.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.ui.commonui.inputs.RoundedInput
 import com.bytecode.petsy.ui.navigation.Screens
 
-
 @Composable
-fun DogsNameScreen(navController: NavHostController) {
+fun ForgotPasswordScreen(navController: NavHostController) {
     Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
             HeaderOnboarding()
-            DogsForm()
-            DogsScreenBottomPart(navController)
+            PasswordRequestedForm()
+            PasswordRequestedBottomPart(navController)
         }
     }
 }
 
 @Composable
-private fun BoxScope.DogsScreenBottomPart(navController: NavHostController) {
+private fun BoxScope.PasswordRequestedBottomPart(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,10 +42,9 @@ private fun BoxScope.DogsScreenBottomPart(navController: NavHostController) {
     ) {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
             GradientButton(
-                text = stringResource(R.string.common_next),
-                onClick = { navController.navigate(Screens.VerifyEmailScreen.route) }
+                text = stringResource(R.string.common_send),
+                onClick = { navController.navigate(Screens.RegisterSecondScreen.route) }
             )
         }
 
@@ -59,22 +54,16 @@ private fun BoxScope.DogsScreenBottomPart(navController: NavHostController) {
 }
 
 @Composable
-private fun BoxScope.DogsForm() {
+private fun BoxScope.PasswordRequestedForm() {
     Column(
         modifier = Modifier
             .padding(top = 150.dp)
             .align(Alignment.TopCenter)
             .fillMaxWidth()
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.img_temp_steps_third),
-            contentDescription = "",
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
         Text(
             style = MaterialTheme.typography.h1,
-            text = stringResource(R.string.register_your_dogs),
+            text = stringResource(R.string.forgot_your_password_title),
             modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp)
         )
 
@@ -82,24 +71,14 @@ private fun BoxScope.DogsForm() {
 
         RoundedInput(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.register_your_dogs_name)
+            hint = stringResource(R.string.forgot_password_email_hint)
         )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        IconTextButton(
-            modifier = Modifier
-                .align(Alignment.End)
-                .padding(end = 20.dp)
-        ) {}
-
-
     }
 }
 
 
 @Preview
 @Composable
-fun DogsNamePreview() {
-    DogsNameScreen(navController = rememberNavController())
+fun ForgotPasswordPreview() {
+    ForgotPasswordScreen(rememberNavController())
 }

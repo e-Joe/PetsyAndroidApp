@@ -1,5 +1,6 @@
 package com.bytecode.petsy.ui.commonui.inputs
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -63,7 +64,8 @@ fun RoundedInput(
                 disabledTextColor = TextSecondary,
                 textColor = Color.Red,
                 disabledPlaceholderColor = TextSecondary.copy(0.5f),
-                placeholderColor = TextSecondary.copy(0.5f)
+                placeholderColor = TextSecondary.copy(0.5f),
+                focusedLabelColor = Color.Black
             ),
             modifier = Modifier.fillMaxWidth(),
             trailingIcon = {
@@ -73,7 +75,8 @@ fun RoundedInput(
                         contentDescription = ""
                     )
             },
-            enabled = isEnabled
+            enabled = isEnabled,
+            label = { Text(text = hint) }
         )
     }
 }

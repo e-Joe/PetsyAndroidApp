@@ -2,6 +2,7 @@
 
 package com.bytecode.petsy.ui.commonui.buttons
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -17,14 +18,17 @@ import com.bytecode.petsy.ui.theme.TextPrimary
 import com.bytecode.petsy.ui.theme.button_text_inverse
 
 @Composable
-fun AddNewButton(
+fun IconTextButton(
     modifier: Modifier,
     text: String = stringResource(R.string.register_add_new),
     showIcon: Boolean = true,
     onClick: () -> Unit
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
-        if(showIcon) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.clickable(onClick = onClick)
+    ) {
+        if (showIcon) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_plus),
                 contentDescription = "",
@@ -43,5 +47,5 @@ fun AddNewButton(
 @Preview
 @Composable
 fun AddNewButtonPreview() {
-    AddNewButton(modifier = Modifier) {}
+    IconTextButton(modifier = Modifier) {}
 }

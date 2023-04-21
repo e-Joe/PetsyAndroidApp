@@ -1,6 +1,7 @@
 package com.bytecode.petsy.ui.screens.loginflow.register
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -73,7 +74,11 @@ private fun BoxScope.DogsScreenBottomPart(navController: NavHostController) {
                 Text(
                     text = stringResource(R.string.register_login_here),
                     style = h4_link,
-                    modifier = Modifier.padding(start = 3.dp),
+                    modifier = Modifier
+                        .padding(start = 3.dp)
+                        .clickable(
+                            true,
+                            onClick = { navController.navigate(Screens.RegisterSecondScreen.route) }),
                     textDecoration = TextDecoration.Underline
                 )
             }

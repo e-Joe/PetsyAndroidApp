@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.bytecode.petsy.ui.screens.loginflow.forgotpassword.ForgotPasswordScreen
 import com.bytecode.petsy.ui.screens.loginflow.landing.LandingScreen
 import com.bytecode.petsy.ui.screens.loginflow.login.LoginScreen
 import com.bytecode.petsy.ui.screens.loginflow.register.DogsNameScreen
@@ -52,6 +53,10 @@ fun SetupNavGraph(navController: NavHostController) {
 
         composable(route = Screens.LoginScreen.route) {
             LoginScreen(navController = navController)
+        }
+
+        composable(route = Screens.ForgotPasswordScreen.route) {
+            ForgotPasswordScreen(navController = navController)
         }
     }
 }

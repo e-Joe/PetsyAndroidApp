@@ -26,4 +26,9 @@
     <string name="login_register_here">Register here?</string>
     <string name="login_login">Login</string>
     <string name="login_forgot_password">Forgot password?</string>
+    <string name="common_send">Send</string>
+    <string name="forgot_password_email_hint">email123@gmail.com</string>
+    <string name="forgot_your_password_title">Forgot your password</string>
+    <string name="register_open_email">Open email</string>
+    <string name="reset_password_requested_link">Reset link requested</string>
 </resources>
