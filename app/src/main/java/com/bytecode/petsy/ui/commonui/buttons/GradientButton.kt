@@ -15,10 +15,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import com.bytecode.petsy.ui.navigation.Screens
-import com.bytecode.petsy.ui.theme.ButtonCollorGradient1
-import com.bytecode.petsy.ui.theme.ButtonCollorGradient2
+import com.bytecode.petsy.ui.theme.ButtonColorGradient1
+import com.bytecode.petsy.ui.theme.ButtonColorGradient2
 import com.bytecode.petsy.ui.theme.button_gradient_text
 
 /**
@@ -57,7 +55,7 @@ fun GradientButton(
                 .background(
                     Brush.horizontalGradient(
                         colors = listOf(
-                            ButtonCollorGradient1, ButtonCollorGradient2, ButtonCollorGradient1
+                            ButtonColorGradient1, ButtonColorGradient2, ButtonColorGradient1
                         )
                     )
                 )
