@@ -1,0 +1,62 @@
+package com.bytecode.petsy.presentation.ui.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.bytecode.petsy.presentation.ui.screens.loginflow.forgotpassword.ForgotPasswordScreen
+import com.bytecode.petsy.presentation.ui.screens.loginflow.landing.LandingScreen
+import com.bytecode.petsy.presentation.ui.screens.loginflow.login.LoginScreen
+import com.bytecode.petsy.presentation.ui.screens.loginflow.register.DogsNameScreen
+import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterFirstScreen
+import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterSecondScreen
+import com.bytecode.petsy.presentation.ui.screens.loginflow.register.VerifyEmailScreen
+import com.bytecode.petsy.presentation.ui.screens.loginflow.splash.SplashScreen
+
+/**
+ * Creates a Composable function that sets up the navigation graph for the app using Jetpack Compose Navigation.
+ * @param navController The NavHostController used for navigation.
+ *
+ * @author Ilija Vucetic
+ */
+@Composable
+fun SetupNavGraph(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = Screens.LandingScreen.route
+    ) {
+
+        composable(route = Screens.SplashScreen.route) {
+            SplashScreen(navController = navController)
+        }
+
+        composable(route = Screens.LandingScreen.route) {
+            LandingScreen(navController = navController)
+        }
+
+        composable(route = Screens.RegisterFirstScreen.route) {
+            RegisterFirstScreen(navController = navController)
+        }
+
+        composable(route = Screens.RegisterSecondScreen.route) {
+            RegisterSecondScreen(navController = navController)
+        }
+
+
+        composable(route = Screens.DogsNameScreen.route) {
+            DogsNameScreen(navController = navController)
+        }
+
+        composable(route = Screens.VerifyEmailScreen.route) {
+            VerifyEmailScreen(navController = navController)
+        }
+
+        composable(route = Screens.LoginScreen.route) {
+            LoginScreen(navController = navController)
+        }
+
+        composable(route = Screens.ForgotPasswordScreen.route) {
+            ForgotPasswordScreen(navController = navController)
+        }
+    }
+}

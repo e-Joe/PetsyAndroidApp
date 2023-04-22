@@ -4,4 +4,8 @@
     <style name="Theme.Petsy" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/purple_700</item>
     </style>
+
+    <style name="SplashScreenTheme" parent="Theme.Petsy">
+        <item name="android:windowBackground">@drawable/bck_splash</item>
+    </style>
 </resources>

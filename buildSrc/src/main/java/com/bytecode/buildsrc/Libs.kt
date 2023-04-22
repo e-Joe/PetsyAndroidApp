@@ -7,13 +7,13 @@ object Versions {
 
 object SupportLib {
     const val CoreKtx = "androidx.core:core-ktx:${Versions.CoreKtx}"
-    const val Appcompat = "androidx.appcompat:appcompat:1.4.1"
-    const val Material = "com.google.android.material:material:1.5.0"
+    const val Appcompat = "androidx.appcompat:appcompat:1.6.1"
+    const val Material = "com.google.android.material:material:1.8.0"
     const val CoroutineCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
     const val CoroutineAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
     const val LifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
 
-    const val Splashscreen = "androidx.core:core-splashscreen:1.0.0-beta02"
+    const val Splashscreen = "androidx.core:core-splashscreen:1.0.1"
     const val Timber = "com.jakewharton.timber:timber:5.0.1"
     const val Paging = "androidx.paging:paging-runtime-ktx:3.1.1"
 }
@@ -30,7 +30,7 @@ object ComposeLib {
     const val Manifest = "androidx.compose.ui:ui-test-manifest:${Versions.Compose}"
 
     const val Activity = "androidx.activity:activity-compose:1.7.0"
-    const val ViewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
+    const val ViewModel = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
     const val ConstraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0"
     const val Lottie = "com.airbnb.android:lottie-compose:5.0.3"
     const val Paging = "androidx.paging:paging-compose:1.0.0-alpha14"
@@ -99,8 +99,8 @@ object HuaweiLib {
 }
 
 object DaggerHiltLib {
-    const val Android = "com.google.dagger:hilt-android:2.41"
-    const val Compiler = "com.google.dagger:hilt-android-compiler:2.41"
+    const val Android = "com.google.dagger:hilt-android:2.45"
+    const val Compiler = "com.google.dagger:hilt-android-compiler:2.45"
     const val Compose = "androidx.hilt:hilt-navigation-compose:1.0.0"
 }
 

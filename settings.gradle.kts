@@ -16,4 +16,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Petsy"
-include (":app")
+include(":app")
+include(":framework")

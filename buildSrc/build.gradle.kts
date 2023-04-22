@@ -13,7 +13,7 @@ repositories {
 object Versions {
     const val GRADLE = "7.4.1"
     const val KOTLIN = "1.8.20"
-    const val HILT = "2.41"
+    const val HILT = "2.45"
     const val GOOGLE_SERVICE = "4.3.10"
     const val CRASHLYTICS = "2.8.1"
     const val VERSION_CHECKER = "0.42.0"

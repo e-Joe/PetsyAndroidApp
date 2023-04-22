@@ -4,7 +4,9 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.parcelize")
+    id("org.jetbrains.kotlin.kapt")
     id("com.google.devtools.ksp")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -68,9 +70,12 @@ android {
 }
 
 dependencies {
+    implementation(project(mapOf("path" to ":framework")))
+
     //Core
     implementation(SupportLib.CoreKtx)
     implementation(SupportLib.LifecycleRuntime)
+    implementation(SupportLib.Splashscreen)
 
     //Compose
     implementation(ComposeLib.Ui)
@@ -84,6 +89,18 @@ dependencies {
     //Navigation
     implementation(NavigationLib.Navigation)
     implementation(AccompanistLib.Systemuicontroller)
+
+    // Dagger Hilt
+    implementation(DaggerHiltLib.Android)
+    kapt(DaggerHiltLib.Compiler)
+    implementation(DaggerHiltLib.Compose)
+
+    // Storage
+    implementation(StorageLib.RoomKtx)
+    ksp(StorageLib.RoomCompiler)
+    implementation(StorageLib.DatastorePref)
+    implementation(StorageLib.Datastore)
+    implementation(StorageLib.SecurityPref)
 
     //Test
     testImplementation(TestingLib.Junit)
