@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
+//https://ajkueterman.dev/posts/safely-launch-exception-ready-coroutines/
 abstract class MvvmViewModel : ViewModel() {
 
     private val handler = CoroutineExceptionHandler { _, exception ->

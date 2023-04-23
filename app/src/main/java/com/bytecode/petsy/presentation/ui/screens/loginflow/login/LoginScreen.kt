@@ -7,13 +7,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bytecode.framework.extension.getActivity
+import com.bytecode.framework.extension.launchActivity
 import com.bytecode.petsy.R
+import com.bytecode.petsy.presentation.ui.activities.petsy.PetsyActivity
 import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
@@ -31,19 +36,24 @@ import com.bytecode.petsy.presentation.ui.theme.h4_link
  * @author Ilija Vucetic
  */
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hiltViewModel()) {
     Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
             HeaderOnboarding()
             LoginForm(navController)
-            LoginScreenBottomPart(navController)
+            LoginScreenBottomPart(navController, viewModel)
         }
     }
 }
 
 @Composable
-private fun BoxScope.LoginScreenBottomPart(navController: NavHostController) {
+private fun BoxScope.LoginScreenBottomPart(
+    navController: NavHostController,
+    viewModel: LoginViewModel
+) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,7 +65,12 @@ private fun BoxScope.LoginScreenBottomPart(navController: NavHostController) {
 
             GradientButton(
                 text = stringResource(R.string.login_login),
-                onClick = { navController.navigate(Screens.RegisterSecondScreen.route) }
+                onClick = {
+                    viewModel.saveOnBoardingState(completed = true)
+                    context.launchActivity<PetsyActivity> { }
+                    val activity = context.getActivity()
+                    activity?.finish()
+                }
             )
 
             Spacer(modifier = Modifier.height(40.dp))
