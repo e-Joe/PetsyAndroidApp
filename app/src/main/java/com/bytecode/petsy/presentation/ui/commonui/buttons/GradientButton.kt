@@ -11,14 +11,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bytecode.petsy.presentation.ui.theme.ButtonColorGradient1
 import com.bytecode.petsy.presentation.ui.theme.ButtonColorGradient2
 import com.bytecode.petsy.presentation.ui.theme.button_gradient_text
-
+import com.bytecode.petsy.R
 /**
  * Creates a Composable function that displays a gradient button with text.
  *
@@ -37,7 +40,7 @@ fun GradientButton(
             .fillMaxWidth()
             .padding(start = 20.dp, end = 20.dp),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.Transparent
+            backgroundColor = Color.Transparent,
         ),
         contentPadding = PaddingValues(),
         shape = RoundedCornerShape(50),
@@ -52,13 +55,7 @@ fun GradientButton(
             modifier = Modifier
                 .height(50.dp)
                 .fillMaxWidth()
-                .background(
-                    Brush.horizontalGradient(
-                        colors = listOf(
-                            ButtonColorGradient1, ButtonColorGradient2, ButtonColorGradient1
-                        )
-                    )
-                )
+                .paint(painterResource(id = R.drawable.bck_button_gradient), contentScale = ContentScale.FillWidth)
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Text(
@@ -75,3 +72,4 @@ fun GradientButtonPreview() {
         text = "button"
     ) {}
 }
+
