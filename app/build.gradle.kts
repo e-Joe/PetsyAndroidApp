@@ -81,6 +81,8 @@ dependencies {
     implementation(ComposeLib.Ui)
     implementation(ComposeLib.Preview)
     implementation(ComposeLib.Material)
+    implementation(ComposeLib.MaterialIconCore)
+    implementation(ComposeLib.MaterialIconExtended)
     androidTestImplementation(AndroidTestingLib.ComposeTestJunit)
     debugImplementation(ComposeLib.Tooling)
     debugImplementation(ComposeLib.Manifest)

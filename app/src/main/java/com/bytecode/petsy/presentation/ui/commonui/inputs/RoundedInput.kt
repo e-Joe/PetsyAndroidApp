@@ -6,12 +6,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bytecode.petsy.presentation.ui.theme.OutlineBorder
@@ -38,13 +42,18 @@ fun RoundedInput(
     modifier: Modifier,
     hint: String,
     endIcon: Painter? = null,
-    isEnabled: Boolean = true
+    isEnabled: Boolean = true,
+    isPassword: Boolean = false
 ) {
     val textState = remember {
         mutableStateOf("")
     }
+
     Box(modifier = modifier)
     {
+        var password by rememberSaveable { mutableStateOf("") }
+        var passwordVisible by rememberSaveable { mutableStateOf(false) }
+
         OutlinedTextField(
             value = textState.value,
             onValueChange = { textState.value = it },
@@ -68,14 +77,28 @@ fun RoundedInput(
             ),
             modifier = Modifier.fillMaxWidth(),
             trailingIcon = {
-                if (endIcon != null)
+                if (endIcon != null) {
                     Icon(
                         painter = endIcon,
                         contentDescription = ""
                     )
+                }
+
+                if (isPassword) {
+                    val image = if (passwordVisible)
+                        Icons.Filled.Visibility
+                    else Icons.Filled.VisibilityOff
+
+                    val description = if (passwordVisible) "Hide password" else "Show password"
+
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(imageVector = image, description)
+                    }
+                }
             },
             enabled = isEnabled,
-            label = { Text(text = hint) }
+            label = { Text(text = hint) },
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         )
     }
 }

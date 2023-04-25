@@ -39,14 +39,14 @@ fun RegisterFirstScreen(navController: NavHostController) {
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
             HeaderOnboarding()
-            DogsForm()
-            DogsScreenBottomPart(navController)
+            RegisterForm()
+            BottomPart(navController)
         }
     }
 }
 
 @Composable
-private fun BoxScope.DogsScreenBottomPart(navController: NavHostController) {
+private fun BoxScope.BottomPart(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -78,7 +78,9 @@ private fun BoxScope.DogsScreenBottomPart(navController: NavHostController) {
                         .padding(start = 3.dp)
                         .clickable(
                             true,
-                            onClick = { navController.navigate(Screens.RegisterSecondScreen.route) }),
+                            onClick = {
+                                navController.popBackStack()
+                                navController.navigate(Screens.LoginScreen.route) }),
                     textDecoration = TextDecoration.Underline
                 )
             }
@@ -90,7 +92,7 @@ private fun BoxScope.DogsScreenBottomPart(navController: NavHostController) {
 }
 
 @Composable
-private fun BoxScope.DogsForm() {
+private fun BoxScope.RegisterForm() {
     Column(
         modifier = Modifier
             .padding(top = 150.dp)
@@ -120,7 +122,8 @@ private fun BoxScope.DogsForm() {
 
         RoundedInput(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.common_password)
+            hint = stringResource(R.string.common_password),
+            isPassword = true
         )
 
         PasswordRules(

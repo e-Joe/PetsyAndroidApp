@@ -6,10 +6,10 @@ import com.bytecode.petsy.data.repository.welcome.WelcomeRepository
 import kotlinx.coroutines.flow.FlowCollector
 import javax.inject.Inject
 
-class SaveOnBoarding @Inject constructor(
+class SaveOnBoardingUseCase @Inject constructor(
     @get:VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     internal val repository: WelcomeRepository
-) : LocalUseCase<SaveOnBoarding.Params, Unit>() {
+) : LocalUseCase<SaveOnBoardingUseCase.Params, Unit>() {
 
     data class Params(
         val completed: Boolean

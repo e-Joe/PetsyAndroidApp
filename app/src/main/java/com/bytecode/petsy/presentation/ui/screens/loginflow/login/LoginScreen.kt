@@ -1,5 +1,6 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.login
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -86,9 +87,15 @@ private fun BoxScope.LoginScreenBottomPart(
                 Text(
                     text = stringResource(R.string.login_register_here),
                     style = h4_link,
-                    modifier = Modifier.padding(start = 3.dp),
-                    textDecoration = TextDecoration.Underline
-                )
+                    modifier = Modifier
+                        .padding(start = 3.dp)
+                        .clickable(enabled = true) {
+                            navController.popBackStack()
+                            navController.navigate(Screens.RegisterFirstScreen.route)
+                        },
+                    textDecoration = TextDecoration.Underline,
+
+                    )
             }
         }
 
@@ -122,7 +129,8 @@ private fun BoxScope.LoginForm(navController: NavHostController) {
 
         RoundedInput(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.common_password)
+            hint = stringResource(R.string.common_password),
+            isPassword = true
         )
 
         IconTextButton(
