@@ -13,3 +13,5 @@ abstract class LocalUseCase<in Params, ReturnType> where ReturnType : Any {
         execute(params)
     }.flowOn(Dispatchers.IO)
 }
+
+

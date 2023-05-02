@@ -43,7 +43,9 @@ fun RoundedInput(
     hint: String,
     endIcon: Painter? = null,
     isEnabled: Boolean = true,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    onValueChange: (String) -> Unit = {},
+    isError: Boolean = false
 ) {
     val textState = remember {
         mutableStateOf("")
@@ -51,12 +53,11 @@ fun RoundedInput(
 
     Box(modifier = modifier)
     {
-        var password by rememberSaveable { mutableStateOf("") }
         var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
         OutlinedTextField(
             value = textState.value,
-            onValueChange = { textState.value = it },
+            onValueChange = { textState.value = it; onValueChange(it) },
             shape = RoundedCornerShape(50.dp),
             textStyle = inputHint,
             placeholder = {
@@ -98,7 +99,8 @@ fun RoundedInput(
             },
             enabled = isEnabled,
             label = { Text(text = hint) },
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+            isError = isError
         )
     }
 }
