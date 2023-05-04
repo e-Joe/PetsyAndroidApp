@@ -2,8 +2,7 @@ package com.bytecode.petsy.domain.di
 
 import android.annotation.SuppressLint
 import com.bytecode.petsy.data.repository.welcome.WelcomeRepository
-import com.bytecode.petsy.domain.usecase.validation.ValidateEmail
-import com.bytecode.petsy.domain.usecase.validation.ValidatePassword
+import com.bytecode.petsy.domain.usecase.validation.*
 import com.bytecode.petsy.domain.usecase.welcome.ReadOnBoarding
 import com.bytecode.petsy.domain.usecase.welcome.SaveOnBoardingUseCase
 import dagger.Module
@@ -39,5 +38,29 @@ class WelcomeModule {
     @Provides
     fun providePasswordValidation(): ValidatePassword {
         return ValidatePassword()
+    }
+
+    @Singleton
+    @Provides
+    fun providePasswordLengthValidation(): ValidatePasswordLength {
+        return ValidatePasswordLength()
+    }
+
+    @Singleton
+    @Provides
+    fun providePasswordDigitValidation(): ValidatePasswordDigit {
+        return ValidatePasswordDigit()
+    }
+
+    @Singleton
+    @Provides
+    fun providePasswordLowerCaseValidation(): ValidatePasswordLowerCase {
+        return ValidatePasswordLowerCase()
+    }
+
+    @Singleton
+    @Provides
+    fun providePasswordUperCaseValidation(): ValidatePasswordUpperCase {
+        return ValidatePasswordUpperCase()
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
@@ -34,12 +35,15 @@ import com.bytecode.petsy.presentation.ui.theme.h4_link
  * @author Ilija Vucetic
  */
 @Composable
-fun RegisterFirstScreen(navController: NavHostController) {
+fun RegisterFirstScreen(
+    navController: NavHostController,
+    viewModel: RegisterViewModel = hiltViewModel()
+) {
     Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
             HeaderOnboarding()
-            RegisterForm()
+            RegisterForm(viewModel)
             BottomPart(navController)
         }
     }
@@ -80,7 +84,8 @@ private fun BoxScope.BottomPart(navController: NavHostController) {
                             true,
                             onClick = {
                                 navController.popBackStack()
-                                navController.navigate(Screens.LoginScreen.route) }),
+                                navController.navigate(Screens.LoginScreen.route)
+                            }),
                     textDecoration = TextDecoration.Underline
                 )
             }
@@ -92,7 +97,7 @@ private fun BoxScope.BottomPart(navController: NavHostController) {
 }
 
 @Composable
-private fun BoxScope.RegisterForm() {
+private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
     Column(
         modifier = Modifier
             .padding(top = 150.dp)
@@ -123,14 +128,19 @@ private fun BoxScope.RegisterForm() {
         RoundedInput(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
             hint = stringResource(R.string.common_password),
-            isPassword = true
+            isPassword = true,
+            onValueChange = { viewModel.onEvent(RegisterFormEvent.PasswordChanged(it)) },
         )
 
         PasswordRules(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
-                .padding(top = 20.dp)
+                .padding(top = 20.dp),
+            isLengthRuleValid = viewModel.state.isPasswordLength,
+            isUpperCaseRuleValid = viewModel.state.isPasswordUpperCaseValid,
+            isLoweCaseRuleValid = viewModel.state.isPasswordLowerCaseValid,
+            isDigitRuleValid = viewModel.state.isPasswordDigitValid,
         )
     }
 }

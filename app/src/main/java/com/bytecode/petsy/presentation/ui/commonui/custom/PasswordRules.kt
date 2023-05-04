@@ -15,17 +15,23 @@ import com.bytecode.petsy.R
  * @author Ilija Vucetic
  */
 @Composable
-fun PasswordRules(modifier: Modifier) {
+fun PasswordRules(
+    modifier: Modifier,
+    isLengthRuleValid: Boolean = false,
+    isDigitRuleValid: Boolean = false,
+    isLoweCaseRuleValid: Boolean = false,
+    isUpperCaseRuleValid: Boolean = true,
+) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceBetween) {
         Column {
-            PasswordRule(stringResource(R.string.password_characters_rule))
+            PasswordRule(stringResource(R.string.password_characters_rule), isLengthRuleValid)
             Spacer(modifier = Modifier.height(10.dp))
-            PasswordRule(stringResource(R.string.password_number_rule))
+            PasswordRule(stringResource(R.string.password_number_rule), isDigitRuleValid)
         }
         Column {
-            PasswordRule(stringResource(R.string.password_uppercase_rule))
+            PasswordRule(stringResource(R.string.password_uppercase_rule), isUpperCaseRuleValid)
             Spacer(modifier = Modifier.height(10.dp))
-            PasswordRule(stringResource(R.string.password_lowercase_rule))
+            PasswordRule(stringResource(R.string.password_lowercase_rule), isLoweCaseRuleValid)
         }
     }
 }

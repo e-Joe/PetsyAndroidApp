@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="img_temp_steps" />
-                            <entry key="sourceFile" value="$USER_HOME$/Desktop/UX/Group 21686.svg" />
+                            <entry key="outputName" value="ic_circle_check_invalid" />
+                            <entry key="sourceFile" value="$USER_HOME$/Desktop/UX/circle-check.svg" />
                           </map>
                         </option>
                       </PersistentState>

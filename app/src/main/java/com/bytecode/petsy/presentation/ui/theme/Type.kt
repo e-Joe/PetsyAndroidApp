@@ -103,3 +103,13 @@ val button_primary_text: TextStyle
             fontWeight = FontWeight.Bold,
         )
     }
+
+val input_field_error: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFont,
+            color = InputTextErrorColor,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+        )
+    }

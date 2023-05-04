@@ -59,8 +59,6 @@ private fun BoxScope.LoginScreenBottomPart(
     navController: NavHostController,
     viewModel: LoginViewModel
 ) {
-    val context = LocalContext.current
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,7 +138,8 @@ private fun BoxScope.LoginForm(navController: NavHostController, viewModel: Logi
             hint = stringResource(R.string.common_email),
             isPassword = false,
             onValueChange = { viewModel.onEvent(LoginFormEvent.EmailChanged(it)) },
-            isError = state.emailError != null
+            isError = state.emailError != null,
+            errorMessage = state.emailError.toString()
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -150,7 +149,8 @@ private fun BoxScope.LoginForm(navController: NavHostController, viewModel: Logi
             hint = stringResource(R.string.common_password),
             isPassword = true,
             onValueChange = { viewModel.onEvent(LoginFormEvent.PasswordChanged(it)) },
-            isError = state.passwordError != null
+            isError = state.passwordError != null,
+            errorMessage = state.passwordError.toString()
         )
 
         IconTextButton(

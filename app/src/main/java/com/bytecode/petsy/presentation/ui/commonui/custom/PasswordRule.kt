@@ -19,9 +19,18 @@ import com.bytecode.petsy.presentation.ui.theme.regular
  * @author Ilija Vuceic
  */
 @Composable
-fun PasswordRule(text: String) {
+fun PasswordRule(text: String, isValid: Boolean = false) {
     Row {
-        Image(painter = painterResource(id = R.drawable.ic_circle_check), contentDescription = "")
+        if (isValid)
+            Image(
+                painter = painterResource(id = R.drawable.ic_circle_check_valid),
+                contentDescription = ""
+            )
+        else
+            Image(
+                painter = painterResource(id = R.drawable.ic_circle_check),
+                contentDescription = ""
+            )
         Text(
             text = text,
             style = regular,

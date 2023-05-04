@@ -16,7 +16,7 @@ class ValidateEmail @Inject constructor() {
         if (email.isBlank()) {
             return ValidationResult(
                 successful = false,
-                errorMessage = "The email can' be blank"
+                errorMessage = "The email can't be blank"
             )
         }
 

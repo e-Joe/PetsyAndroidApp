@@ -18,9 +18,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bytecode.petsy.presentation.ui.theme.OutlineBorder
-import com.bytecode.petsy.presentation.ui.theme.TextSecondary
-import com.bytecode.petsy.presentation.ui.theme.inputHint
+import com.bytecode.petsy.presentation.ui.theme.*
 
 /**
  * Function is a composable function in Kotlin that creates a rounded input field with
@@ -45,64 +43,73 @@ fun RoundedInput(
     isEnabled: Boolean = true,
     isPassword: Boolean = false,
     onValueChange: (String) -> Unit = {},
-    isError: Boolean = false
+    isError: Boolean = false,
+    errorMessage: String = ""
 ) {
     val textState = remember {
         mutableStateOf("")
     }
 
-    Box(modifier = modifier)
-    {
-        var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    Column(modifier = modifier) {
+        Box {
+            var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
-        OutlinedTextField(
-            value = textState.value,
-            onValueChange = { textState.value = it; onValueChange(it) },
-            shape = RoundedCornerShape(50.dp),
-            textStyle = inputHint,
-            placeholder = {
-                Text(text = hint)
-            },
-            singleLine = true,
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                backgroundColor = Color.White,
-                cursorColor = Color.Black,
-                focusedBorderColor = OutlineBorder,
-                unfocusedBorderColor = OutlineBorder,
-                disabledBorderColor = OutlineBorder,
-                disabledTextColor = TextSecondary,
-                textColor = Color.Red,
-                disabledPlaceholderColor = TextSecondary.copy(0.5f),
-                placeholderColor = TextSecondary.copy(0.5f),
-                focusedLabelColor = Color.Black
-            ),
-            modifier = Modifier.fillMaxWidth(),
-            trailingIcon = {
-                if (endIcon != null) {
-                    Icon(
-                        painter = endIcon,
-                        contentDescription = ""
-                    )
-                }
-
-                if (isPassword) {
-                    val image = if (passwordVisible)
-                        Icons.Filled.Visibility
-                    else Icons.Filled.VisibilityOff
-
-                    val description = if (passwordVisible) "Hide password" else "Show password"
-
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(imageVector = image, description)
+            OutlinedTextField(
+                value = textState.value,
+                onValueChange = { textState.value = it; onValueChange(it) },
+                shape = RoundedCornerShape(50.dp),
+                textStyle = inputHint,
+                placeholder = {
+                    Text(text = hint)
+                },
+                singleLine = true,
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    backgroundColor = Color.White,
+                    cursorColor = Color.Black,
+                    focusedBorderColor = OutlineBorder,
+                    unfocusedBorderColor = OutlineBorder,
+                    disabledBorderColor = OutlineBorder,
+                    disabledTextColor = TextSecondary,
+                    textColor = Color.Red,
+                    disabledPlaceholderColor = TextSecondary.copy(0.5f),
+                    placeholderColor = TextSecondary.copy(0.5f),
+                    focusedLabelColor = Color.Black
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                trailingIcon = {
+                    if (endIcon != null) {
+                        Icon(
+                            painter = endIcon, contentDescription = ""
+                        )
                     }
-                }
-            },
-            enabled = isEnabled,
-            label = { Text(text = hint) },
-            visualTransformation = if (passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
-            isError = isError
-        )
+
+                    if (isPassword) {
+                        val image = if (passwordVisible) Icons.Filled.Visibility
+                        else Icons.Filled.VisibilityOff
+
+                        val description = if (passwordVisible) "Hide password" else "Show password"
+
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(imageVector = image, description)
+                        }
+                    }
+                },
+                enabled = isEnabled,
+                label = { Text(text = hint) },
+                visualTransformation = if (passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+                isError = isError,
+            )
+        }
+
+        if (isError) {
+            Text(
+                text = errorMessage,
+                style = input_field_error,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
     }
+
 }
 
 
@@ -111,8 +118,7 @@ fun RoundedInput(
 fun PreviewRoundedInput() {
     Column {
         RoundedInput(
-            modifier = Modifier
-                .padding(top = 34.dp, start = 20.dp, end = 20.dp),
+            modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp),
             hint = "Hint",
             endIcon = null
         )
