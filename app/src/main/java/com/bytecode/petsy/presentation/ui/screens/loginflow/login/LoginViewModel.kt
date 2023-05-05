@@ -1,6 +1,5 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.login
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
 import com.bytecode.petsy.domain.usecase.validation.ValidateEmail
 import com.bytecode.petsy.domain.usecase.validation.ValidatePassword
-import com.bytecode.petsy.domain.usecase.validation.ValidationResult
 import com.bytecode.petsy.domain.usecase.welcome.SaveOnBoardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -23,7 +21,7 @@ class LoginViewModel @Inject constructor(
     private val validatePassword: ValidatePassword,
 ) : MvvmViewModel() {
 
-    var state by mutableStateOf(LoginFormState())
+    var state by mutableStateOf(LoginState())
 
     private val validationChannel = Channel<ValidationEvent>()
     val validationEvents = validationChannel.receiveAsFlow()
@@ -83,4 +81,18 @@ class LoginViewModel @Inject constructor(
     sealed class ValidationEvent {
         object Success : ValidationEvent()
     }
+}
+
+
+data class LoginState(
+    val email: String = "",
+    val password: String = "",
+    val emailError: String? = null,
+    val passwordError: String? = null,
+)
+
+sealed class LoginFormEvent {
+    data class EmailChanged(val email: String) : LoginFormEvent()
+    data class PasswordChanged(val password: String) : LoginFormEvent()
+    data class Submit(val done: String = "") : LoginFormEvent()
 }

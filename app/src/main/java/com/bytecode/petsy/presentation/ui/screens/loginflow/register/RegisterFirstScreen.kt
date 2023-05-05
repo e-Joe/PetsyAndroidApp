@@ -1,5 +1,6 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,8 +8,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
@@ -37,20 +40,20 @@ import com.bytecode.petsy.presentation.ui.theme.h4_link
 @Composable
 fun RegisterFirstScreen(
     navController: NavHostController,
-    viewModel: RegisterViewModel = hiltViewModel()
+    viewModel: RegisterViewModel,
 ) {
     Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
             HeaderOnboarding()
-            RegisterForm(viewModel)
-            BottomPart(navController)
+            RegisterForm(navController, viewModel)
+            BottomPart(navController, viewModel)
         }
     }
 }
 
 @Composable
-private fun BoxScope.BottomPart(navController: NavHostController) {
+private fun BoxScope.BottomPart(navController: NavHostController, viewModel: RegisterViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,7 +65,9 @@ private fun BoxScope.BottomPart(navController: NavHostController) {
 
             GradientButton(
                 text = stringResource(R.string.common_next),
-                onClick = { navController.navigate(Screens.RegisterSecondScreen.route) }
+                onClick = {
+                    viewModel.onEvent(RegisterFormEvent.Submit())
+                }
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -97,13 +102,28 @@ private fun BoxScope.BottomPart(navController: NavHostController) {
 }
 
 @Composable
-private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
+private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: RegisterViewModel) {
+    Log.d("RegisterViewModel", "mail:" + viewModel.state.email)
+    val state = viewModel.state
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .padding(top = 150.dp)
             .align(Alignment.TopCenter)
             .fillMaxWidth()
     ) {
+
+        LaunchedEffect(key1 = context) {
+            viewModel.validationEvents.collect { event ->
+                when (event) {
+                    is RegisterViewModel.ValidationEvent.Success -> {
+                        navController.navigate(Screens.RegisterSecondScreen.route)
+                    }
+                }
+            }
+        }
+
         Image(
             painter = painterResource(id = R.drawable.img_temp_steps),
             contentDescription = "",
@@ -120,7 +140,11 @@ private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
 
         RoundedInput(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.common_email)
+            hint = stringResource(R.string.common_email),
+            onValueChange = { viewModel.onEvent(RegisterFormEvent.EmailChanged(it)) },
+            isError = state.emailError != null,
+            errorMessage = state.emailError.toString(),
+            text = state.email
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -130,6 +154,9 @@ private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
             hint = stringResource(R.string.common_password),
             isPassword = true,
             onValueChange = { viewModel.onEvent(RegisterFormEvent.PasswordChanged(it)) },
+            isError = state.passwordError != null,
+            errorMessage = state.passwordError.toString(),
+            text = state.password
         )
 
         PasswordRules(
@@ -146,8 +173,8 @@ private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
 }
 
 
-@Preview
-@Composable
-fun RegisterPreview() {
-    RegisterFirstScreen(rememberNavController())
-}
+//@Preview
+//@Composable
+//fun RegisterPreview() {
+//    RegisterFirstScreen(rememberNavController(), vi)
+//}

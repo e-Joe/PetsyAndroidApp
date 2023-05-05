@@ -1,16 +1,14 @@
 package com.bytecode.petsy.presentation.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.bytecode.petsy.presentation.ui.screens.loginflow.forgotpassword.ForgotPasswordScreen
 import com.bytecode.petsy.presentation.ui.screens.loginflow.landing.LandingScreen
 import com.bytecode.petsy.presentation.ui.screens.loginflow.login.LoginScreen
-import com.bytecode.petsy.presentation.ui.screens.loginflow.register.DogsNameScreen
-import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterFirstScreen
-import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterSecondScreen
-import com.bytecode.petsy.presentation.ui.screens.loginflow.register.VerifyEmailScreen
+import com.bytecode.petsy.presentation.ui.screens.loginflow.register.*
 import com.bytecode.petsy.presentation.ui.screens.loginflow.splash.SplashScreen
 
 /**
@@ -35,11 +33,13 @@ fun SetupNavGraph(navController: NavHostController) {
         }
 
         composable(route = Screens.RegisterFirstScreen.route) {
-            RegisterFirstScreen(navController = navController)
+            val viewModel: RegisterViewModel = hiltViewModel(it)
+            RegisterFirstScreen(navController = navController, viewModel)
         }
 
         composable(route = Screens.RegisterSecondScreen.route) {
-            RegisterSecondScreen(navController = navController)
+            val viewModel: RegisterViewModel = hiltViewModel(navController.previousBackStackEntry!!)
+            RegisterSecondScreen(navController = navController,viewModel)
         }
 
 

@@ -1,5 +1,6 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -12,6 +13,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
@@ -30,7 +32,11 @@ import com.bytecode.petsy.presentation.ui.navigation.Screens
  * @author Ilija Vucetic
  */
 @Composable
-fun RegisterSecondScreen(navController: NavHostController) {
+fun RegisterSecondScreen(
+    navController: NavHostController,
+    viewModel: RegisterViewModel
+) {
+    Log.d("RegisterViewModel", "mail 2:" + viewModel.state.email)
     Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
@@ -115,9 +121,9 @@ private fun BoxScope.RegisterForm() {
     }
 }
 
-
-@Preview
-@Composable
-fun RegisterSecondPreview() {
-    RegisterSecondScreen(navController = rememberNavController())
-}
+//
+//@Preview
+//@Composable
+//fun RegisterSecondPreview() {
+//    RegisterSecondScreen(navController = rememberNavController())
+//}

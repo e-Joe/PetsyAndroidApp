@@ -44,10 +44,11 @@ fun RoundedInput(
     isPassword: Boolean = false,
     onValueChange: (String) -> Unit = {},
     isError: Boolean = false,
-    errorMessage: String = ""
+    errorMessage: String = "",
+    text: String = ""
 ) {
     val textState = remember {
-        mutableStateOf("")
+        mutableStateOf(text)
     }
 
     Column(modifier = modifier) {

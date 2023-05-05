@@ -53,6 +53,22 @@ class RegisterViewModel @Inject constructor(
                     state.copy(isPasswordUpperCaseValid = validatePasswordUpperCase.execute(state.password).successful)
             }
 
+            is RegisterFormEvent.FirstNameChanged -> {
+                //TODO
+            }
+
+            is RegisterFormEvent.LastNameChanged -> {
+                //TODO
+            }
+
+            is RegisterFormEvent.CountryChanged -> {
+                //TODO
+            }
+
+            is RegisterFormEvent.PhoneNumberChanged -> {
+                //TODO
+            }
+
             is RegisterFormEvent.Submit -> {
                 submitData()
             }
@@ -65,22 +81,19 @@ class RegisterViewModel @Inject constructor(
 
 
         val hasError = listOf(
-            emailresult,
-            passwordResult
+            emailresult, passwordResult
         ).any {
             it?.errorMessage != null
         }
 
         if (hasError) {
             state = state.copy(
-                emailError = emailresult.errorMessage,
-                passwordError = passwordResult.errorMessage
+                emailError = emailresult.errorMessage, passwordError = passwordResult.errorMessage
             )
             return
         } else {
             state = state.copy(
-                emailError = null,
-                passwordError = null
+                emailError = null, passwordError = null
             )
         }
 
@@ -94,3 +107,32 @@ class RegisterViewModel @Inject constructor(
         object Success : ValidationEvent()
     }
 }
+
+sealed class RegisterFormEvent {
+    data class EmailChanged(val email: String) : RegisterFormEvent()
+    data class PasswordChanged(val password: String) : RegisterFormEvent()
+    data class FirstNameChanged(val firstName: String) : RegisterFormEvent()
+    data class LastNameChanged(val firstName: String) : RegisterFormEvent()
+    data class CountryChanged(val firstName: String) : RegisterFormEvent()
+    data class PhoneNumberChanged(val firstName: String) : RegisterFormEvent()
+    data class Submit(val done: String = "") : RegisterFormEvent()
+}
+
+data class RegisterFormState(
+    val email: String = "",
+    val password: String = "",
+    val firstName: String = "",
+    val lastName: String = "",
+    val country: String = "",
+    val phoneNumber: String = "",
+    val emailError: String? = null,
+    val passwordError: String? = null,
+    val firstNameError: String? = null,
+    val lastNameError: String? = null,
+    val countryError: String? = null,
+    val phoneNumberError: String? = null,
+    val isPasswordDigitValid: Boolean = false,
+    val isPasswordLength: Boolean = false,
+    val isPasswordUpperCaseValid: Boolean = false,
+    val isPasswordLowerCaseValid: Boolean = false,
+)
