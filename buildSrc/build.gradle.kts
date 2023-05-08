@@ -27,7 +27,8 @@ object Deps {
     const val KOTLIN_GRADLE = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}"
     const val HILT = "com.google.dagger:hilt-android-gradle-plugin:${Versions.HILT}"
     const val GOOGLE_SERVICE = "com.google.gms:google-services:${Versions.GOOGLE_SERVICE}"
-    const val CRASHLYTICS = "com.google.firebase:firebase-crashlytics-gradle:${Versions.CRASHLYTICS}"
+    const val CRASHLYTICS =
+        "com.google.firebase:firebase-crashlytics-gradle:${Versions.CRASHLYTICS}"
     const val VERSION_CHECKER =
         "com.github.ben-manes:gradle-versions-plugin:${Versions.VERSION_CHECKER}"
     const val KTLINT = "org.jlleitschuh.gradle:ktlint-gradle:${Versions.KTLINT}"

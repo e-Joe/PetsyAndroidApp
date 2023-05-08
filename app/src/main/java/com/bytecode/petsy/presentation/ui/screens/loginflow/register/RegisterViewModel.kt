@@ -1,6 +1,5 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -22,13 +21,23 @@ class RegisterViewModel @Inject constructor(
     private val validatePasswordDigit: ValidatePasswordDigit,
     private val validatePasswordLowerCase: ValidatePasswordLowerCase,
     private val validatePasswordLength: ValidatePasswordLength,
-    private val validatePasswordUpperCase: ValidatePasswordUpperCase
+    private val validatePasswordUpperCase: ValidatePasswordUpperCase,
+    private val validateFirstName: ValidateFirstName,
+    private val validateSecondName: ValidateSecondName,
+    private val validateCountry: ValidateCountry,
+    private val validatePhoneNumber: ValidatePhoneNumber
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(RegisterFormState())
 
     private val validationChannel = Channel<ValidationEvent>()
     val validationEvents = validationChannel.receiveAsFlow()
+
+    private val countryModalChannel = Channel<ModalEvent>()
+    val countryModalEvents = countryModalChannel.receiveAsFlow()
+
+    private val countryChangeChannel = Channel<CountryEvent>()
+    val countryChangeEvents = countryChangeChannel.receiveAsFlow()
 
     fun saveOnBoardingState(completed: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         val params = SaveOnBoardingUseCase.Params(completed)
@@ -54,46 +63,112 @@ class RegisterViewModel @Inject constructor(
             }
 
             is RegisterFormEvent.FirstNameChanged -> {
-                //TODO
+                state = state.copy(firstName = event.firstName)
             }
 
             is RegisterFormEvent.LastNameChanged -> {
-                //TODO
+                state = state.copy(lastName = event.lastName)
             }
 
             is RegisterFormEvent.CountryChanged -> {
-                //TODO
+                state = state.copy(country = event.country)
             }
 
             is RegisterFormEvent.PhoneNumberChanged -> {
-                //TODO
+                state = state.copy(phoneNumber = event.phoneNumber)
             }
 
+            is RegisterFormEvent.CountryUpdated -> {
+                state = state.copy(country = event.name)
+                viewModelScope.launch {
+                    countryModalChannel.send(ModalEvent.Close)
+                }
+
+                viewModelScope.launch {
+                    countryChangeChannel.send(CountryEvent.CountryChanged(state.country))
+                }
+            }
+
+            is RegisterFormEvent.CountryFieldClicked -> {
+                viewModelScope.launch {
+                    countryModalChannel.send(ModalEvent.Open)
+                }
+            }
+
+            is RegisterFormEvent.CloseCountryModal-> {
+                viewModelScope.launch {
+                    countryModalChannel.send(ModalEvent.Close)
+                }
+            }
+
+
             is RegisterFormEvent.Submit -> {
-                submitData()
+                when (event.registrationStep) {
+                    RegistrationStep.FISRT -> validateFirstStep()
+                    RegistrationStep.SECOND -> validateSecondStep()
+                    RegistrationStep.THIRD -> validateSecondStep()
+                }
             }
         }
     }
 
-    fun submitData() {
-        var emailresult = validateEmail.execute(state.email)
-        var passwordResult = validatePassword.execute(state.password)
+    private fun validateFirstStep() {
+        val emailResult = validateEmail.execute(state.email)
+        val passwordResult = validatePassword.execute(state.password)
 
 
         val hasError = listOf(
-            emailresult, passwordResult
+            emailResult, passwordResult
         ).any {
             it?.errorMessage != null
         }
 
         if (hasError) {
             state = state.copy(
-                emailError = emailresult.errorMessage, passwordError = passwordResult.errorMessage
+                emailError = emailResult.errorMessage,
+                passwordError = passwordResult.errorMessage,
             )
             return
         } else {
             state = state.copy(
-                emailError = null, passwordError = null
+                emailError = null,
+                passwordError = null
+            )
+        }
+
+        viewModelScope.launch {
+            validationChannel.send(ValidationEvent.Success)
+        }
+
+    }
+
+    private fun validateSecondStep() {
+        val firstName = validateFirstName.execute(state.firstName)
+        val lastName = validateSecondName.execute(state.lastName)
+        val country = validateCountry.execute(state.country)
+        val phoneNumber = validatePhoneNumber.execute(state.phoneNumber)
+
+
+        val hasError = listOf(
+            firstName, lastName, country, phoneNumber
+        ).any {
+            it?.errorMessage != null
+        }
+
+        if (hasError) {
+            state = state.copy(
+                firstNameError = firstName.errorMessage,
+                lastNameError = lastName.errorMessage,
+                countryError = country.errorMessage,
+                phoneNumberError = phoneNumber.errorMessage
+            )
+            return
+        } else {
+            state = state.copy(
+                firstNameError = null,
+                lastNameError = null,
+                countryError = null,
+                phoneNumberError = null
             )
         }
 
@@ -106,16 +181,35 @@ class RegisterViewModel @Inject constructor(
     sealed class ValidationEvent {
         object Success : ValidationEvent()
     }
+
+    sealed class ModalEvent {
+        object Open : ModalEvent()
+        object Close : ModalEvent()
+    }
+
+    sealed class CountryEvent {
+        data class CountryChanged(val name: String) : CountryEvent()
+    }
+}
+
+enum class RegistrationStep {
+    FISRT,
+    SECOND,
+    THIRD
 }
 
 sealed class RegisterFormEvent {
     data class EmailChanged(val email: String) : RegisterFormEvent()
     data class PasswordChanged(val password: String) : RegisterFormEvent()
     data class FirstNameChanged(val firstName: String) : RegisterFormEvent()
-    data class LastNameChanged(val firstName: String) : RegisterFormEvent()
-    data class CountryChanged(val firstName: String) : RegisterFormEvent()
-    data class PhoneNumberChanged(val firstName: String) : RegisterFormEvent()
-    data class Submit(val done: String = "") : RegisterFormEvent()
+    data class LastNameChanged(val lastName: String) : RegisterFormEvent()
+    data class CountryChanged(val country: String) : RegisterFormEvent()
+    data class PhoneNumberChanged(val phoneNumber: String) : RegisterFormEvent()
+    data class CountryUpdated(val name: String) : RegisterFormEvent()
+    data class CountryFieldClicked(var a: String = "") : RegisterFormEvent()
+    data class CloseCountryModal(var a: String = "") : RegisterFormEvent()
+    data class Submit(val registrationStep: RegistrationStep = RegistrationStep.FISRT) :
+        RegisterFormEvent()
 }
 
 data class RegisterFormState(
@@ -135,4 +229,5 @@ data class RegisterFormState(
     val isPasswordLength: Boolean = false,
     val isPasswordUpperCaseValid: Boolean = false,
     val isPasswordLowerCaseValid: Boolean = false,
+    val countryDialogShow: Boolean = false
 )

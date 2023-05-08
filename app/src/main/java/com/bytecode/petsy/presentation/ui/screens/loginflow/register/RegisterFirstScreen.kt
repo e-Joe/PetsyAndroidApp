@@ -1,25 +1,20 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
@@ -29,6 +24,7 @@ import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
 import com.bytecode.petsy.presentation.ui.navigation.Screens
 import com.bytecode.petsy.presentation.ui.theme.h4_link
+
 
 /**
  * Composable function that represents the register screen UI.
@@ -48,9 +44,11 @@ fun RegisterFirstScreen(
             HeaderOnboarding()
             RegisterForm(navController, viewModel)
             BottomPart(navController, viewModel)
+            CountryPickerDialog(viewModel)
         }
     }
 }
+
 
 @Composable
 private fun BoxScope.BottomPart(navController: NavHostController, viewModel: RegisterViewModel) {
@@ -62,7 +60,6 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
     ) {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
             GradientButton(
                 text = stringResource(R.string.common_next),
                 onClick = {
@@ -103,7 +100,6 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
 
 @Composable
 private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: RegisterViewModel) {
-    Log.d("RegisterViewModel", "mail:" + viewModel.state.email)
     val state = viewModel.state
     val context = LocalContext.current
 
@@ -141,7 +137,9 @@ private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: R
         RoundedInput(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
             hint = stringResource(R.string.common_email),
-            onValueChange = { viewModel.onEvent(RegisterFormEvent.EmailChanged(it)) },
+            onValueChange = {
+                viewModel.onEvent(RegisterFormEvent.EmailChanged(it))
+            },
             isError = state.emailError != null,
             errorMessage = state.emailError.toString(),
             text = state.email
@@ -153,7 +151,9 @@ private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: R
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
             hint = stringResource(R.string.common_password),
             isPassword = true,
-            onValueChange = { viewModel.onEvent(RegisterFormEvent.PasswordChanged(it)) },
+            onValueChange = {
+                viewModel.onEvent(RegisterFormEvent.PasswordChanged(it))
+            },
             isError = state.passwordError != null,
             errorMessage = state.passwordError.toString(),
             text = state.password
@@ -172,9 +172,3 @@ private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: R
     }
 }
 
-
-//@Preview
-//@Composable
-//fun RegisterPreview() {
-//    RegisterFirstScreen(rememberNavController(), vi)
-//}

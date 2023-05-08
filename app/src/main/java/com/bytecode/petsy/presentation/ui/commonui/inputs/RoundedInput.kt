@@ -1,5 +1,6 @@
 package com.bytecode.petsy.presentation.ui.commonui.inputs
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bytecode.petsy.presentation.ui.theme.*
+import com.bytecode.petsy.util.noRippleClickable
 
 /**
  * Function is a composable function in Kotlin that creates a rounded input field with
@@ -45,19 +47,24 @@ fun RoundedInput(
     onValueChange: (String) -> Unit = {},
     isError: Boolean = false,
     errorMessage: String = "",
-    text: String = ""
+    text: String = "",
+    onClick: (String) -> Unit = {},
 ) {
-    val textState = remember {
-        mutableStateOf(text)
-    }
 
-    Column(modifier = modifier) {
+    Column(modifier = modifier.noRippleClickable { onClick("d") }) {
         Box {
+            var textState = rememberSaveable {
+                mutableStateOf(text)
+            }
             var passwordVisible by rememberSaveable { mutableStateOf(false) }
-
+            Log.d("Country", "2: ${textState.value}")
             OutlinedTextField(
-                value = textState.value,
-                onValueChange = { textState.value = it; onValueChange(it) },
+                onValueChange = {
+                    textState.value = it
+                    onValueChange(it)
+                    Log.d("Country", "3: ${textState.value}")
+                },
+                value = text,
                 shape = RoundedCornerShape(50.dp),
                 textStyle = inputHint,
                 placeholder = {

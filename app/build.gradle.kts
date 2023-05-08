@@ -19,6 +19,7 @@ android {
         targetSdk = Configs.TargetSdk
         versionCode = Configs.VersionCode
         versionName = Configs.VersionName
+        compileSdk = compileSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -109,5 +110,5 @@ dependencies {
     androidTestImplementation(AndroidTestingLib.JunitExt)
     androidTestImplementation(AndroidTestingLib.EspressoCore)
 
-
+    implementation("com.google.code.gson:gson:2.8.7")
 }

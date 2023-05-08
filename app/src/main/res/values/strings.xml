@@ -31,4 +31,5 @@
     <string name="forgot_your_password_title">Forgot your password</string>
     <string name="register_open_email">Open email</string>
     <string name="reset_password_requested_link">Reset link requested</string>
+    <string name="search_text">Search</string>
 </resources>

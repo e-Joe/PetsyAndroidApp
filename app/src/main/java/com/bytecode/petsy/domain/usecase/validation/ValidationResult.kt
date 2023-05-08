@@ -11,6 +11,10 @@ class ValidationResult(
 enum class ValidationType {
     EMAIL,
     PASSWORD,
+    FIRST_NAME,
+    LAST_NAME,
+    COUNTRY,
+    PHONE_NUMBER,
     NOT_DEFINED
 }
 
