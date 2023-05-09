@@ -103,6 +103,9 @@ private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: R
     val state = viewModel.state
     val context = LocalContext.current
 
+    var email = remember { mutableStateOf(state.email) }
+    var password = remember { mutableStateOf(state.password) }
+
     Column(
         modifier = Modifier
             .padding(top = 150.dp)
@@ -142,7 +145,7 @@ private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: R
             },
             isError = state.emailError != null,
             errorMessage = state.emailError.toString(),
-            text = state.email
+            textState = email
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -156,7 +159,7 @@ private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: R
             },
             isError = state.passwordError != null,
             errorMessage = state.passwordError.toString(),
-            text = state.password
+            textState = password
         )
 
         PasswordRules(

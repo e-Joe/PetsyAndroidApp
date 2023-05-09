@@ -95,7 +95,7 @@ class RegisterViewModel @Inject constructor(
                 }
             }
 
-            is RegisterFormEvent.CloseCountryModal-> {
+            is RegisterFormEvent.CloseCountryModal -> {
                 viewModelScope.launch {
                     countryModalChannel.send(ModalEvent.Close)
                 }

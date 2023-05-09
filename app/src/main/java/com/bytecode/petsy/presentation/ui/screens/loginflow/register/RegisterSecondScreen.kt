@@ -31,6 +31,7 @@ import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.countrypicker.CountryPickerBottomSheet
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
+import com.bytecode.petsy.presentation.ui.navigation.Screens
 
 /**
  * Composable function that represents the register screen UI.
@@ -44,7 +45,6 @@ fun RegisterSecondScreen(
     navController: NavHostController,
     viewModel: RegisterViewModel
 ) {
-    Log.d("RegisterViewModel", "mail 2:" + viewModel.state.email)
     Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
@@ -58,6 +58,18 @@ fun RegisterSecondScreen(
 
 @Composable
 private fun BoxScope.BottomPart(navController: NavHostController, viewModel: RegisterViewModel) {
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = context) {
+        viewModel.validationEvents.collect { event ->
+            when (event) {
+                is RegisterViewModel.ValidationEvent.Success -> {
+                    navController.navigate(Screens.DogsNameScreen.route)
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -66,7 +78,6 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
     ) {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
             GradientButton(
                 text = stringResource(R.string.common_next),
                 onClick = {
@@ -80,19 +91,20 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
     }
 }
 
-//onClick = { navController.navigate(Screens.DogsNameScreen.route) }
-
 @Composable
 private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
     val state = viewModel.state
     val context = LocalContext.current
-    var countryName by remember { mutableStateOf(state.country) }
+    var firstName = remember { mutableStateOf(state.firstName) }
+    var lastName = remember { mutableStateOf(state.lastName) }
+    var countryName = remember { mutableStateOf(state.country) }
+    var phoneNumber = remember { mutableStateOf(state.phoneNumber) }
 
     LaunchedEffect(key1 = context) {
         viewModel.countryChangeEvents.collect { event ->
             when (event) {
                 is RegisterViewModel.CountryEvent.CountryChanged -> {
-                    countryName = event.name
+                    countryName.value = event.name
                 }
             }
         }
@@ -124,7 +136,7 @@ private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
             onValueChange = { viewModel.onEvent(RegisterFormEvent.FirstNameChanged(it)) },
             isError = state.firstNameError != null,
             errorMessage = state.firstNameError.toString(),
-            text = state.firstName
+            textState = firstName
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -135,7 +147,7 @@ private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
             onValueChange = { viewModel.onEvent(RegisterFormEvent.LastNameChanged(it)) },
             isError = state.lastNameError != null,
             errorMessage = state.lastNameError.toString(),
-            text = state.lastName
+            textState = lastName
 
         )
 
@@ -151,7 +163,7 @@ private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
             },
             isError = state.countryError != null,
             errorMessage = state.countryError.toString(),
-            text = countryName
+            textState = countryName
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -162,7 +174,7 @@ private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
             onValueChange = { viewModel.onEvent(RegisterFormEvent.PhoneNumberChanged(it)) },
             isError = state.phoneNumberError != null,
             errorMessage = state.phoneNumberError.toString(),
-            text = state.phoneNumber
+            textState = phoneNumber
         )
     }
 }

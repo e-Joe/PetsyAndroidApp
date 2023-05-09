@@ -47,24 +47,20 @@ fun RoundedInput(
     onValueChange: (String) -> Unit = {},
     isError: Boolean = false,
     errorMessage: String = "",
-    text: String = "",
     onClick: (String) -> Unit = {},
+    textState: MutableState<String> = remember { mutableStateOf("") }
 ) {
 
     Column(modifier = modifier.noRippleClickable { onClick("d") }) {
         Box {
-            var textState = rememberSaveable {
-                mutableStateOf(text)
-            }
             var passwordVisible by rememberSaveable { mutableStateOf(false) }
-            Log.d("Country", "2: ${textState.value}")
+
             OutlinedTextField(
                 onValueChange = {
                     textState.value = it
                     onValueChange(it)
-                    Log.d("Country", "3: ${textState.value}")
                 },
-                value = text,
+                value = textState.value,
                 shape = RoundedCornerShape(50.dp),
                 textStyle = inputHint,
                 placeholder = {
