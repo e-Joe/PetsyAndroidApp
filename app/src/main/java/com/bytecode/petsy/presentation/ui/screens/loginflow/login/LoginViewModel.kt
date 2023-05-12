@@ -72,6 +72,7 @@ class LoginViewModel @Inject constructor(
             )
         }
 
+        saveOnBoardingState(true)
         viewModelScope.launch {
             validationChannel.send(ValidationEvent.Success)
         }
