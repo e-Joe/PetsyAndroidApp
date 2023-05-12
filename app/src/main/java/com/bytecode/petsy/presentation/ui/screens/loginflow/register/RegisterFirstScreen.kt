@@ -3,6 +3,7 @@ package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -12,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -42,7 +44,7 @@ fun RegisterFirstScreen(
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
             HeaderOnboarding()
-            RegisterForm(navController, viewModel)
+            Form(navController, viewModel)
             BottomPart(navController, viewModel)
             CountryPickerDialog(viewModel)
         }
@@ -99,7 +101,7 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
 }
 
 @Composable
-private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: RegisterViewModel) {
+private fun BoxScope.Form(navController: NavHostController, viewModel: RegisterViewModel) {
     val state = viewModel.state
     val context = LocalContext.current
 
@@ -116,9 +118,11 @@ private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: R
         LaunchedEffect(key1 = context) {
             viewModel.validationEvents.collect { event ->
                 when (event) {
-                    is RegisterViewModel.ValidationEvent.Success -> {
+                    is ValidationEvent.Success -> {
                         navController.navigate(Screens.RegisterSecondScreen.route)
                     }
+
+                    is ValidationEvent.Fail -> {}
                 }
             }
         }
@@ -145,7 +149,8 @@ private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: R
             },
             isError = state.emailError != null,
             errorMessage = state.emailError.toString(),
-            textState = email
+            textState = email,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -159,7 +164,8 @@ private fun BoxScope.RegisterForm(navController: NavHostController, viewModel: R
             },
             isError = state.passwordError != null,
             errorMessage = state.passwordError.toString(),
-            textState = password
+            textState = password,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
         )
 
         PasswordRules(

@@ -32,4 +32,15 @@
     <string name="register_open_email">Open email</string>
     <string name="reset_password_requested_link">Reset link requested</string>
     <string name="search_text">Search</string>
+    <string name="open_email">Open email app</string>
+    <string name="search_country_title">Search</string>
+    <string name="reset_link_title">Reset link requested</string>
+    <string name="reset_link_explanation">A password reset email has been sent.
+Please check your inbox for further
+instrunctions.</string>
+    <string name="reset_your_password_title">Reset your password</string>
+    <string name="reset_your_password_explanation">Please chosse a new password to finish signing in.</string>
+    <string name="btn_change_password">Change password</string>
+    <string name="new_password">New Password</string>
+
 </resources>

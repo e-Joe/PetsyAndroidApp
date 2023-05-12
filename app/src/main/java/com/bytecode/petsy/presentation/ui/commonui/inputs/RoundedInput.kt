@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -13,8 +14,11 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,12 +52,20 @@ fun RoundedInput(
     isError: Boolean = false,
     errorMessage: String = "",
     onClick: (String) -> Unit = {},
-    textState: MutableState<String> = remember { mutableStateOf("") }
+    textState: MutableState<String> = remember { mutableStateOf("") },
+    isLabelEnabled: Boolean = true,
+    requestFocus: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
 ) {
 
     Column(modifier = modifier.noRippleClickable { onClick("d") }) {
         Box {
-            var passwordVisible by rememberSaveable { mutableStateOf(false) }
+            var passwordVisible by rememberSaveable { mutableStateOf(isPassword) }
+            val focusRequester = FocusRequester()
+            LaunchedEffect(Unit) {
+                if (requestFocus)
+                    focusRequester.requestFocus()
+            }
 
             OutlinedTextField(
                 onValueChange = {
@@ -63,9 +75,6 @@ fun RoundedInput(
                 value = textState.value,
                 shape = RoundedCornerShape(50.dp),
                 textStyle = inputHint,
-                placeholder = {
-                    Text(text = hint)
-                },
                 singleLine = true,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     backgroundColor = Color.White,
@@ -79,7 +88,9 @@ fun RoundedInput(
                     placeholderColor = TextSecondary.copy(0.5f),
                     focusedLabelColor = Color.Black
                 ),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
                 trailingIcon = {
                     if (endIcon != null) {
                         Icon(
@@ -99,9 +110,14 @@ fun RoundedInput(
                     }
                 },
                 enabled = isEnabled,
-                label = { Text(text = hint) },
+                label = { if (isLabelEnabled) Text(text = hint) },
+                placeholder = {
+                    Text(text = hint)
+                },
                 visualTransformation = if (passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
                 isError = isError,
+                keyboardOptions = keyboardOptions
+
             )
         }
 

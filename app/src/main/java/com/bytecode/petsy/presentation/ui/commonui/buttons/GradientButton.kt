@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,7 @@ import com.bytecode.petsy.presentation.ui.theme.ButtonColorGradient1
 import com.bytecode.petsy.presentation.ui.theme.ButtonColorGradient2
 import com.bytecode.petsy.presentation.ui.theme.button_gradient_text
 import com.bytecode.petsy.R
+
 /**
  * Creates a Composable function that displays a gradient button with text.
  *
@@ -32,13 +34,16 @@ import com.bytecode.petsy.R
 @Composable
 fun GradientButton(
     text: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    alpha: Float = 1f,
+    enabled : Boolean = true
 ) {
     Button(
         modifier = Modifier
             .height(50.dp)
             .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp),
+            .padding(start = 20.dp, end = 20.dp)
+            .alpha(alpha),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Transparent,
         ),
@@ -47,7 +52,8 @@ fun GradientButton(
         onClick = { onClick() },
         elevation = ButtonDefaults.elevation(
             defaultElevation = 0.dp, pressedElevation = 0.dp, disabledElevation = 0.dp
-        )
+        ),
+        enabled = enabled
     ) {
 
         Box(
@@ -55,7 +61,10 @@ fun GradientButton(
             modifier = Modifier
                 .height(50.dp)
                 .fillMaxWidth()
-                .paint(painterResource(id = R.drawable.bck_button_gradient), contentScale = ContentScale.FillWidth)
+                .paint(
+                    painterResource(id = R.drawable.bck_button_gradient),
+                    contentScale = ContentScale.FillWidth
+                )
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Text(
@@ -69,7 +78,9 @@ fun GradientButton(
 @Composable
 fun GradientButtonPreview() {
     GradientButton(
-        text = "button"
-    ) {}
+        text = "button",
+        alpha = 1f,
+        onClick = {}
+    )
 }
 

@@ -3,6 +3,7 @@ package com.bytecode.petsy.presentation.ui.screens.loginflow.landing
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,7 @@ import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.navigation.Screens
 import com.bytecode.petsy.presentation.ui.theme.button_primary_text
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 /**
  * he @Composable function LandingScreen is a function in a Jetpack Compose-based Android
@@ -60,8 +62,6 @@ private fun RenderTopPart() {
 
 @Composable
 private fun BoxScope.RenderBottomPart(navController: NavHostController) {
-    val context = LocalContext.current
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -73,7 +73,9 @@ private fun BoxScope.RenderBottomPart(navController: NavHostController) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             GradientButton(
                 text = stringResource(R.string.common_register),
-                onClick = { navController.navigate(Screens.RegisterFirstScreen.route) }
+                onClick = {
+                    navController.navigate(Screens.RegisterFirstScreen.route)
+                }
             )
 
             TextButton(

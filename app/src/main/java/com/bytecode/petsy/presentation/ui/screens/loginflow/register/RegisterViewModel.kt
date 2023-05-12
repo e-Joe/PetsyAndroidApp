@@ -1,10 +1,14 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
+import com.bytecode.petsy.data.model.dto.Dog
 import com.bytecode.petsy.domain.usecase.validation.*
 import com.bytecode.petsy.domain.usecase.welcome.SaveOnBoardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +16,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
@@ -38,6 +43,11 @@ class RegisterViewModel @Inject constructor(
 
     private val countryChangeChannel = Channel<CountryEvent>()
     val countryChangeEvents = countryChangeChannel.receiveAsFlow()
+
+    private var dogsList = mutableStateListOf<Dog>(Dog(""))
+    private val _dogsListFlow = MutableStateFlow(dogsList)
+
+    val dogsListFlow: StateFlow<List<Dog>> get() = _dogsListFlow
 
     fun saveOnBoardingState(completed: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         val params = SaveOnBoardingUseCase.Params(completed)
@@ -106,8 +116,17 @@ class RegisterViewModel @Inject constructor(
                 when (event.registrationStep) {
                     RegistrationStep.FISRT -> validateFirstStep()
                     RegistrationStep.SECOND -> validateSecondStep()
-                    RegistrationStep.THIRD -> validateSecondStep()
+                    RegistrationStep.THIRD -> validateThirdStep()
                 }
+            }
+
+            is RegisterFormEvent.AddNewDogClicked -> {
+                if (!dogsList.last().name.isEmpty())
+                    addDog("")
+            }
+
+            is RegisterFormEvent.OnDogNameChanged -> {
+                dogsList[event.index] = dogsList[event.index].copy(name = event.name)
             }
         }
     }
@@ -175,20 +194,29 @@ class RegisterViewModel @Inject constructor(
         viewModelScope.launch {
             validationChannel.send(ValidationEvent.Success)
         }
+    }
+
+    private fun validateThirdStep() {
+        var isValid = true
+
+        dogsList.forEach { dog ->
+            if (dog.name.isEmpty())
+                isValid = false
+        }
+
+        if (isValid)
+            viewModelScope.launch {
+                validationChannel.send(ValidationEvent.Success)
+            }
+        else
+            viewModelScope.launch {
+                validationChannel.send(ValidationEvent.Fail)
+            }
 
     }
 
-    sealed class ValidationEvent {
-        object Success : ValidationEvent()
-    }
-
-    sealed class ModalEvent {
-        object Open : ModalEvent()
-        object Close : ModalEvent()
-    }
-
-    sealed class CountryEvent {
-        data class CountryChanged(val name: String) : CountryEvent()
+    fun addDog(name: String) {
+        dogsList.add(Dog(name))
     }
 }
 
@@ -196,6 +224,21 @@ enum class RegistrationStep {
     FISRT,
     SECOND,
     THIRD
+}
+
+sealed class ValidationEvent {
+    object Success : ValidationEvent()
+
+    object Fail : ValidationEvent()
+}
+
+sealed class ModalEvent {
+    object Open : ModalEvent()
+    object Close : ModalEvent()
+}
+
+sealed class CountryEvent {
+    data class CountryChanged(val name: String) : CountryEvent()
 }
 
 sealed class RegisterFormEvent {
@@ -210,6 +253,9 @@ sealed class RegisterFormEvent {
     data class CloseCountryModal(var a: String = "") : RegisterFormEvent()
     data class Submit(val registrationStep: RegistrationStep = RegistrationStep.FISRT) :
         RegisterFormEvent()
+
+    data class AddNewDogClicked(val clicked: Boolean = true) : RegisterFormEvent()
+    data class OnDogNameChanged(val index: Int, val name: String) : RegisterFormEvent()
 }
 
 data class RegisterFormState(
@@ -231,3 +277,23 @@ data class RegisterFormState(
     val isPasswordLowerCaseValid: Boolean = false,
     val countryDialogShow: Boolean = false
 )
+
+//data class RegisterFormState(
+//    val email: String = "vu@vu.com",
+//    val password: String = "Ejoe1989",
+//    val firstName: String = "Ilija",
+//    val lastName: String = "Vucetic",
+//    val country: String = "Serbia",
+//    val phoneNumber: String = "",
+//    val emailError: String? = null,
+//    val passwordError: String? = null,
+//    val firstNameError: String? = null,
+//    val lastNameError: String? = null,
+//    val countryError: String? = null,
+//    val phoneNumberError: String? = null,
+//    val isPasswordDigitValid: Boolean = false,
+//    val isPasswordLength: Boolean = false,
+//    val isPasswordUpperCaseValid: Boolean = false,
+//    val isPasswordLowerCaseValid: Boolean = false,
+//    val countryDialogShow: Boolean = false
+//)

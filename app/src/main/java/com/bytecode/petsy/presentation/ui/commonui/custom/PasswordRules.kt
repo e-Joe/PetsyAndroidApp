@@ -20,7 +20,7 @@ fun PasswordRules(
     isLengthRuleValid: Boolean = false,
     isDigitRuleValid: Boolean = false,
     isLoweCaseRuleValid: Boolean = false,
-    isUpperCaseRuleValid: Boolean = true,
+    isUpperCaseRuleValid: Boolean = false,
 ) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.SpaceBetween) {
         Column {

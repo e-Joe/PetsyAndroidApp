@@ -46,7 +46,7 @@ fun VerifyEmailScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(140.dp))
             }
 
-            RegisterForm()
+            Form()
             BottomPart(navController)
         }
     }
@@ -64,7 +64,7 @@ private fun BoxScope.BottomPart(navController: NavHostController) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
             GradientButton(
-                text = stringResource(R.string.common_next),
+                text = stringResource(R.string.open_email),
                 onClick = {}
             )
         }
@@ -75,7 +75,7 @@ private fun BoxScope.BottomPart(navController: NavHostController) {
 }
 
 @Composable
-private fun BoxScope.RegisterForm() {
+private fun BoxScope.Form() {
     Column(
         modifier = Modifier
             .padding(top = 150.dp)

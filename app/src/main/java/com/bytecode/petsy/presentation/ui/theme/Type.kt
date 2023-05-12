@@ -20,7 +20,7 @@ val PetsyDefaultFontBold = FontFamily(
 
 val Typography = Typography(
     h1 = TextStyle(
-        fontFamily = PetsyDefaultFont,
+        fontFamily = PetsyDefaultFontBold,
         fontSize = 30.sp,
         color = TextSecondary,
         fontWeight = FontWeight.Bold,

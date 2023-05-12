@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
-import com.bytecode.petsy.data.model.Country
+import com.bytecode.petsy.data.model.dto.Country
 import com.bytecode.petsy.util.countryList
 import kotlinx.coroutines.coroutineScope
 

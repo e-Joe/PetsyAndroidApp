@@ -1,7 +1,7 @@
 package com.bytecode.petsy.util
 
 import android.content.Context
-import com.bytecode.petsy.data.model.Country
+import com.bytecode.petsy.data.model.dto.Country
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.IOException

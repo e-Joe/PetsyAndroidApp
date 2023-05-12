@@ -1,8 +1,8 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -13,18 +13,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.bytecode.petsy.R
-import com.bytecode.petsy.data.model.Country
+import com.bytecode.petsy.data.model.dto.Country
 import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
@@ -49,7 +52,7 @@ fun RegisterSecondScreen(
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
             HeaderOnboarding()
-            RegisterForm(viewModel)
+            Form(viewModel)
             BottomPart(navController, viewModel)
             CountryPickerDialog(viewModel)
         }
@@ -63,9 +66,11 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
     LaunchedEffect(key1 = context) {
         viewModel.validationEvents.collect { event ->
             when (event) {
-                is RegisterViewModel.ValidationEvent.Success -> {
+                is ValidationEvent.Success -> {
                     navController.navigate(Screens.DogsNameScreen.route)
                 }
+
+                is ValidationEvent.Fail -> {}
             }
         }
     }
@@ -91,10 +96,13 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
+private fun BoxScope.Form(viewModel: RegisterViewModel) {
     val state = viewModel.state
     val context = LocalContext.current
+    val kc = LocalSoftwareKeyboardController.current
+
     var firstName = remember { mutableStateOf(state.firstName) }
     var lastName = remember { mutableStateOf(state.lastName) }
     var countryName = remember { mutableStateOf(state.country) }
@@ -103,7 +111,7 @@ private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
     LaunchedEffect(key1 = context) {
         viewModel.countryChangeEvents.collect { event ->
             when (event) {
-                is RegisterViewModel.CountryEvent.CountryChanged -> {
+                is CountryEvent.CountryChanged -> {
                     countryName.value = event.name
                 }
             }
@@ -159,6 +167,7 @@ private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
             endIcon = painterResource(id = R.drawable.ic_bottom_arrow_input_field),
             isEnabled = false,
             onClick = {
+                kc?.hide()
                 viewModel.onEvent(RegisterFormEvent.CountryFieldClicked())
             },
             isError = state.countryError != null,
@@ -174,7 +183,8 @@ private fun BoxScope.RegisterForm(viewModel: RegisterViewModel) {
             onValueChange = { viewModel.onEvent(RegisterFormEvent.PhoneNumberChanged(it)) },
             isError = state.phoneNumberError != null,
             errorMessage = state.phoneNumberError.toString(),
-            textState = phoneNumber
+            textState = phoneNumber,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
         )
     }
 }
@@ -192,11 +202,11 @@ fun CountryPickerDialog(viewModel: RegisterViewModel) {
         LaunchedEffect(key1 = context) {
             viewModel.countryModalEvents.collect { event ->
                 when (event) {
-                    is RegisterViewModel.ModalEvent.Open -> {
+                    is ModalEvent.Open -> {
                         expanded = true
                     }
 
-                    is RegisterViewModel.ModalEvent.Close -> {
+                    is ModalEvent.Close -> {
                         expanded = false
                     }
                 }
@@ -210,7 +220,8 @@ fun CountryPickerDialog(viewModel: RegisterViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    text = "Search", textAlign = TextAlign.Center,
+                    text = stringResource(R.string.search_country_title),
+                    textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )

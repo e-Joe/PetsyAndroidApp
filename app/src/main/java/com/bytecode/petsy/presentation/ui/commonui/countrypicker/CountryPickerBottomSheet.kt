@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.bytecode.petsy.data.model.Country
+import com.bytecode.petsy.data.model.dto.Country
 import com.bytecode.petsy.util.countryList
 import com.bytecode.petsy.util.localeToEmoji
 import com.bytecode.petsy.util.searchCountryList
@@ -54,7 +54,7 @@ fun CountryPickerBottomSheet(
             title()
 
             Column {
-                searchValue = countrySearchView(modalBottomSheetState)
+                searchValue = ""//countrySearchView(modalBottomSheetState)
 
                 LazyColumn(
                     contentPadding = PaddingValues(16.dp)

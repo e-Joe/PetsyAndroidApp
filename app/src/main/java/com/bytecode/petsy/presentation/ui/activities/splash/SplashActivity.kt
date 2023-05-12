@@ -24,13 +24,13 @@ class SplashActivity : ComponentActivity() {
             splashScreen.setKeepOnScreenCondition { true }
         }
         super.onCreate(savedInstanceState)
+
         lifecycleScope.launchWhenCreated {
             viewModel.startWelcome.collectLatest {
-                delay(1000)
+                delay(300)
                 if (it) navigateOnboardingActivity() else navigateMainActivity()
             }
         }
-
     }
 
     private fun navigateMainActivity() {
