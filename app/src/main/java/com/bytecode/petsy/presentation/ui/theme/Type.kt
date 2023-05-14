@@ -34,6 +34,13 @@ val Typography = Typography(
     )
 )
 
+val h4bold = TextStyle(
+    fontFamily = PetsyDefaultFontBold,
+    color = TextSecondary,
+    fontSize = 16.sp,
+    fontWeight = FontWeight.W700,
+)
+
 val inputHint: TextStyle
     @Composable get() {
         return TextStyle(

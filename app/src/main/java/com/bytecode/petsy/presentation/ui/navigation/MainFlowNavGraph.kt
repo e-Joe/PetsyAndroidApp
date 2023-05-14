@@ -1,0 +1,28 @@
+package com.bytecode.petsy.presentation.ui.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.bytecode.petsy.presentation.ui.screens.mainflow.brushing.BrushingScreen
+import com.bytecode.petsy.presentation.ui.screens.mainflow.dashboard.DashboardScreen
+import com.bytecode.petsy.presentation.ui.screens.mainflow.profile.ProfileScreen
+
+@Composable
+fun MainFlowNavGraph(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = BottomBarScreen.DashboardScreen.route
+    ) {
+        composable(route = BottomBarScreen.DashboardScreen.route) {
+            DashboardScreen()
+        }
+        composable(route = BottomBarScreen.BrushingScreen.route) {
+            BrushingScreen()
+        }
+        composable(route = BottomBarScreen.ProfileScreen.route) {
+            ProfileScreen()
+        }
+//        detailsNavGraph(navController = navController) //TODO add profile graph
+    }
+}

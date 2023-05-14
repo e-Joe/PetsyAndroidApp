@@ -23,53 +23,53 @@ import com.bytecode.petsy.presentation.ui.screens.loginflow.splash.SplashScreen
  * @author Ilija Vucetic
  */
 @Composable
-fun SetupNavGraph(navController: NavHostController) {
+fun LoginFlowGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screens.LandingScreen.route
+        startDestination = LoginFlowScreen.LandingScreen.route
     ) {
 
-        composable(route = Screens.SplashScreen.route) {
+        composable(route = LoginFlowScreen.SplashScreen.route) {
             SplashScreen(navController = navController)
         }
 
-        composable(route = Screens.LandingScreen.route) {
+        composable(route = LoginFlowScreen.LandingScreen.route) {
             LandingScreen(navController = navController)
         }
 
-        composable(route = Screens.RegisterFirstScreen.route) {
+        composable(route = LoginFlowScreen.RegisterFirstScreen.route) {
             val viewModel: RegisterViewModel = hiltViewModel(it)
             RegisterFirstScreen(navController = navController, viewModel)
         }
 
-        composable(route = Screens.RegisterSecondScreen.route) {
+        composable(route = LoginFlowScreen.RegisterSecondScreen.route) {
             val viewModel: RegisterViewModel = hiltViewModel(navController.previousBackStackEntry!!)
             RegisterSecondScreen(navController = navController, viewModel)
         }
 
-        composable(route = Screens.DogsNameScreen.route) {
+        composable(route = LoginFlowScreen.DogsNameScreen.route) {
             val viewModel: RegisterViewModel = hiltViewModel(navController.previousBackStackEntry!!)
             DogsNameScreen(navController = navController, viewModel)
         }
 
-        composable(route = Screens.VerifyEmailScreen.route) {
+        composable(route = LoginFlowScreen.VerifyEmailScreen.route) {
             VerifyEmailScreen(navController = navController)
         }
 
-        composable(route = Screens.LoginScreen.route) {
+        composable(route = LoginFlowScreen.LoginScreen.route) {
             LoginScreen(navController = navController)
         }
 
-        composable(route = Screens.ForgotPasswordScreen.route) {
+        composable(route = LoginFlowScreen.ForgotPasswordScreen.route) {
             val viewModel: ForgotPasswordViewModel = hiltViewModel(it)
             ForgotPasswordScreen(navController = navController,viewModel)
         }
 
-        composable(route = Screens.ForgotPasswordRequestedScreen.route) {
+        composable(route = LoginFlowScreen.ForgotPasswordRequestedScreen.route) {
             ForgotPasswordRequestedScreen(navController = navController)
         }
 
-        composable(route = Screens.ResetPasswordScreen.route) {
+        composable(route = LoginFlowScreen.ResetPasswordScreen.route) {
             val viewModel: ResetPasswordViewModel = hiltViewModel(it)
             ResetPasswordScreen(navController = navController,viewModel)
         }

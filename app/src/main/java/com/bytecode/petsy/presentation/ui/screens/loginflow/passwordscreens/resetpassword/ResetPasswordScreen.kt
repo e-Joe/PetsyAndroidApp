@@ -1,7 +1,5 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.passwordscreens.resetpassword
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -18,13 +16,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
@@ -33,9 +28,7 @@ import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.custom.PasswordRules
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
-import com.bytecode.petsy.presentation.ui.navigation.Screens
-import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterFormEvent
-import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterViewModel
+import com.bytecode.petsy.presentation.ui.navigation.LoginFlowScreen
 
 @Composable
 fun ResetPasswordScreen(navController: NavHostController, viewModel: ResetPasswordViewModel) {
@@ -65,7 +58,7 @@ private fun BoxScope.PasswordRequestedBottomPart(
             GradientButton(
                 text = stringResource(R.string.btn_change_password),
                 onClick = {
-                    navController.navigate(Screens.LandingScreen.route) {
+                    navController.navigate(LoginFlowScreen.LandingScreen.route) {
                         popUpTo(navController.graph.id){
                             inclusive = true
                         }

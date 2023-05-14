@@ -19,5 +19,8 @@ val ButtonColorGradient3 = Color(0xFF59A192)
 val OutlineBorder = Color(0xFFE1E1E1)
 val InputTextErrorColor = Color(0xFFB5302C)
 
+val NavigationItemActiveColor = Color(0xFF63C4AF)
+val ScreenBackgroundColor = Color(0xFF1A000000)
+
 
 

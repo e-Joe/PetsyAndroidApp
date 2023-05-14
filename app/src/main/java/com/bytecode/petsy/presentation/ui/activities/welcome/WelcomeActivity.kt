@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
-import com.bytecode.petsy.presentation.ui.navigation.SetupNavGraph
+import com.bytecode.petsy.presentation.ui.navigation.LoginFlowGraph
 import com.bytecode.petsy.presentation.ui.theme.PetsyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +20,7 @@ class WelcomeActivity : ComponentActivity() {
         setContent {
             PetsyTheme {
                 val navController = rememberNavController()
-                SetupNavGraph(navController = navController)
+                LoginFlowGraph(navController = navController)
             }
         }
     }

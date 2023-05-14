@@ -15,7 +15,7 @@ import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
-import com.bytecode.petsy.presentation.ui.navigation.Screens
+import com.bytecode.petsy.presentation.ui.navigation.LoginFlowScreen
 
 @Composable
 fun ForgotPasswordRequestedScreen(navController: NavHostController) {
@@ -41,7 +41,7 @@ private fun BoxScope.PasswordRequestedBottomPart(navController: NavHostControlle
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             GradientButton(
                 text = stringResource(R.string.open_email),
-                onClick = { navController.navigate(Screens.ResetPasswordScreen.route) }
+                onClick = { navController.navigate(LoginFlowScreen.ResetPasswordScreen.route) }
             )
         }
 

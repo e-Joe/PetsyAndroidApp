@@ -24,7 +24,7 @@ import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.custom.PasswordRules
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
-import com.bytecode.petsy.presentation.ui.navigation.Screens
+import com.bytecode.petsy.presentation.ui.navigation.LoginFlowScreen
 import com.bytecode.petsy.presentation.ui.theme.h4_link
 
 
@@ -88,7 +88,7 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
                             true,
                             onClick = {
                                 navController.popBackStack()
-                                navController.navigate(Screens.LoginScreen.route)
+                                navController.navigate(LoginFlowScreen.LoginScreen.route)
                             }),
                     textDecoration = TextDecoration.Underline
                 )
@@ -119,7 +119,7 @@ private fun BoxScope.Form(navController: NavHostController, viewModel: RegisterV
             viewModel.validationEvents.collect { event ->
                 when (event) {
                     is ValidationEvent.Success -> {
-                        navController.navigate(Screens.RegisterSecondScreen.route)
+                        navController.navigate(LoginFlowScreen.RegisterSecondScreen.route)
                     }
 
                     is ValidationEvent.Fail -> {}

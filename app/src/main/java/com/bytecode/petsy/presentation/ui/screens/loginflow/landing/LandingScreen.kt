@@ -3,11 +3,9 @@ package com.bytecode.petsy.presentation.ui.screens.loginflow.landing
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,10 +16,9 @@ import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
-import com.bytecode.petsy.presentation.ui.navigation.Screens
+import com.bytecode.petsy.presentation.ui.navigation.LoginFlowScreen
 import com.bytecode.petsy.presentation.ui.theme.button_primary_text
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.launch
 
 /**
  * he @Composable function LandingScreen is a function in a Jetpack Compose-based Android
@@ -74,14 +71,14 @@ private fun BoxScope.RenderBottomPart(navController: NavHostController) {
             GradientButton(
                 text = stringResource(R.string.common_register),
                 onClick = {
-                    navController.navigate(Screens.RegisterFirstScreen.route)
+                    navController.navigate(LoginFlowScreen.RegisterFirstScreen.route)
                 }
             )
 
             TextButton(
                 modifier = Modifier.height(50.dp),
                 contentPadding = PaddingValues(0.dp),
-                onClick = { navController.navigate(Screens.LoginScreen.route) }) {
+                onClick = { navController.navigate(LoginFlowScreen.LoginScreen.route) }) {
                 Text(
                     text = stringResource(R.string.common_login),
                     style = button_primary_text

@@ -1,8 +1,6 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.login
 
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,7 +18,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bytecode.framework.extension.getActivity
@@ -33,9 +30,8 @@ import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.buttons.IconTextButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
-import com.bytecode.petsy.presentation.ui.navigation.Screens
+import com.bytecode.petsy.presentation.ui.navigation.LoginFlowScreen
 import com.bytecode.petsy.presentation.ui.theme.h4_link
-import kotlinx.coroutines.flow.collect
 
 /**
  * Composable function that represents the register screen UI.
@@ -94,7 +90,7 @@ private fun BoxScope.LoginScreenBottomPart(
                         .padding(start = 3.dp)
                         .clickable(enabled = true) {
                             navController.popBackStack()
-                            navController.navigate(Screens.RegisterFirstScreen.route)
+                            navController.navigate(LoginFlowScreen.RegisterFirstScreen.route)
                         },
                     textDecoration = TextDecoration.Underline,
 
@@ -162,7 +158,7 @@ private fun BoxScope.LoginForm(navController: NavHostController, viewModel: Logi
                 .padding(end = 20.dp, top = 20.dp),
             showIcon = false,
             text = stringResource(R.string.login_forgot_password),
-            onClick = { navController.navigate(Screens.ForgotPasswordScreen.route) }
+            onClick = { navController.navigate(LoginFlowScreen.ForgotPasswordScreen.route) }
         )
     }
 }

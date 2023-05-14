@@ -13,18 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
-import com.bytecode.petsy.presentation.ui.navigation.Screens
-import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterFormEvent
+import com.bytecode.petsy.presentation.ui.navigation.LoginFlowScreen
 
 @Composable
 fun ForgotPasswordScreen(navController: NavHostController, viewModel: ForgotPasswordViewModel) {
@@ -53,7 +50,7 @@ private fun BoxScope.PasswordRequestedBottomPart(
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             GradientButton(
                 text = stringResource(R.string.common_send),
-                onClick = { navController.navigate(Screens.ForgotPasswordRequestedScreen.route) },
+                onClick = { navController.navigate(LoginFlowScreen.ForgotPasswordRequestedScreen.route) },
                 alpha = if (viewModel.state.isEmailValid) 1f else 0.3f,
                 enabled = viewModel.state.isEmailValid
             )

@@ -34,7 +34,7 @@ import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.countrypicker.CountryPickerBottomSheet
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
-import com.bytecode.petsy.presentation.ui.navigation.Screens
+import com.bytecode.petsy.presentation.ui.navigation.LoginFlowScreen
 
 /**
  * Composable function that represents the register screen UI.
@@ -67,7 +67,7 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
         viewModel.validationEvents.collect { event ->
             when (event) {
                 is ValidationEvent.Success -> {
-                    navController.navigate(Screens.DogsNameScreen.route)
+                    navController.navigate(LoginFlowScreen.DogsNameScreen.route)
                 }
 
                 is ValidationEvent.Fail -> {}
