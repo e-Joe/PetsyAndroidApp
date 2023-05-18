@@ -21,6 +21,7 @@ val InputTextErrorColor = Color(0xFFB5302C)
 
 val NavigationItemActiveColor = Color(0xFF63C4AF)
 val ScreenBackgroundColor = Color(0xFF1A000000)
+val ProgressColor = Color(0xFF63C4AF)
 
 
 

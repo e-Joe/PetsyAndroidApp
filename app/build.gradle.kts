@@ -29,8 +29,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -109,6 +109,8 @@ dependencies {
     testImplementation(TestingLib.Junit)
     androidTestImplementation(AndroidTestingLib.JunitExt)
     androidTestImplementation(AndroidTestingLib.EspressoCore)
+
+    implementation("com.github.hitanshu-dhawan:CircularProgressBar-Compose:1.0.0-rc01")
 
     implementation("com.google.code.gson:gson:2.8.7")
 }

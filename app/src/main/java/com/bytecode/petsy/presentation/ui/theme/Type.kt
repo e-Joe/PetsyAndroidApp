@@ -7,6 +7,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bytecode.petsy.R
 
@@ -22,6 +23,13 @@ val Typography = Typography(
     h1 = TextStyle(
         fontFamily = PetsyDefaultFontBold,
         fontSize = 30.sp,
+        color = TextSecondary,
+        fontWeight = FontWeight.Bold,
+    ),
+
+    h2 = TextStyle(
+        fontFamily = PetsyDefaultFontBold,
+        fontSize = 20.sp,
         color = TextSecondary,
         fontWeight = FontWeight.Bold,
     ),
@@ -118,5 +126,27 @@ val input_field_error: TextStyle
             color = InputTextErrorColor,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
+        )
+    }
+
+val ticker_text: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFontBold,
+            color = TextSecondary,
+            fontSize = 40.sp,
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 2.sp
+        )
+    }
+
+val paused_text: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFont,
+            color = TextSecondary,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Normal,
+            letterSpacing = 2.sp
         )
     }

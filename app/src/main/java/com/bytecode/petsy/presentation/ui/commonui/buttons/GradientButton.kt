@@ -36,10 +36,11 @@ fun GradientButton(
     text: String,
     onClick: () -> Unit,
     alpha: Float = 1f,
-    enabled : Boolean = true
+    enabled : Boolean = true,
+    modifier: Modifier = Modifier
 ) {
     Button(
-        modifier = Modifier
+        modifier = modifier
             .height(50.dp)
             .fillMaxWidth()
             .padding(start = 20.dp, end = 20.dp)
