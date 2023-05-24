@@ -45,5 +45,11 @@ instrunctions.</string>
     <string name="washing_teets_description">Did you know that by brushing your dog’s teeth every day for 2 minutes, could prolong his life by 3 years? (or some similar text)</string>
     <string name="no_activities_yet">No activities yet</string>
     <string name="watch_short_tutorial">Watch short tutorial</string>
+    <string name="start_brushing">Start brushing</string>
+    <string name="pause">Pause</string>
+    <string name="finish_brushing">Finish brushing</string>
+    <string name="paused">Paused</string>
+    <string name="brushing_timer">Brushing timer</string>
+    <string name="btn_continue">Continue</string>
 
 </resources>

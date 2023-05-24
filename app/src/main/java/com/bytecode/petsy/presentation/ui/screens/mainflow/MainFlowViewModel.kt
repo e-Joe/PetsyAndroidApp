@@ -67,6 +67,12 @@ class MainFlowViewModel @Inject constructor() : MvvmViewModel() {
         _times.value = 0
     }
 
+    fun formatTime(value: Int): String {
+        val minutes = value / 60
+        val seconds = value % 60
+
+        return minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0')
+    }
 }
 
 

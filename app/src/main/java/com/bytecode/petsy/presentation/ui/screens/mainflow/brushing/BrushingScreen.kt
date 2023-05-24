@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
@@ -41,137 +42,142 @@ fun BrushingScreen(
 
     Scaffold { paddingValues ->
 
-        val times by viewModel.times.collectAsState()
+
         Box(
             modifier = Modifier
                 .padding(paddingValues = paddingValues)
                 .fillMaxSize()
         ) {
-
-
             PetsyImageBackground()
             HeaderOnboarding()
+            BrushingTimerScreen(viewModel)
+        }
+    }
+}
 
-            Text(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 110.dp),
-                text = "Brushing timer",
-                style = MaterialTheme.typography.h2
-            )
+@Composable
+fun BrushingTimerScreen(viewModel: MainFlowViewModel) {
+    val times by viewModel.times.collectAsState()
 
-            Image(
-                modifier = Modifier
-                    .padding(bottom = 40.dp)
-                    .size(350.dp)
-                    .align(Alignment.Center),
-                painter = painterResource(id = R.drawable.img_gradient),
-                contentDescription = "",
-                contentScale = ContentScale.FillBounds
-            )
+    Box(modifier = Modifier.fillMaxSize()) {
+        Text(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 110.dp),
+            text = stringResource(R.string.brushing_timer),
+            style = MaterialTheme.typography.h2
+        )
 
-            CircularProgressBar(
-                modifier = Modifier
-                    .padding(bottom = 40.dp)
-                    .size(220.dp)
-                    .align(Alignment.Center),
-                progress = times.toFloat(),
-                progressMax = 120f,
-                progressBarColor = ProgressColor,
-                progressBarWidth = 15.dp,
-                backgroundProgressBarColor = Color.White,
-                backgroundProgressBarWidth = 15.dp,
-                roundBorder = true,
-                startAngle = 0f
-            )
+        Image(
+            modifier = Modifier
+                .padding(bottom = 40.dp)
+                .size(350.dp)
+                .align(Alignment.Center),
+            painter = painterResource(id = R.drawable.img_gradient),
+            contentDescription = "",
+            contentScale = ContentScale.FillBounds
+        )
 
+        CircularProgressBar(
+            modifier = Modifier
+                .padding(bottom = 40.dp)
+                .size(220.dp)
+                .align(Alignment.Center),
+            progress = times.toFloat(),
+            progressMax = 120f,
+            progressBarColor = ProgressColor,
+            progressBarWidth = 15.dp,
+            backgroundProgressBarColor = Color.White,
+            backgroundProgressBarWidth = 15.dp,
+            roundBorder = true,
+            startAngle = 0f
+        )
+
+        Text(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(bottom = 40.dp),
+            text = viewModel.formatTime(times),
+            style = ticker_text,
+        )
+
+
+        if (viewModel.state.brushingPhase == BrushingState.PAUSED)
             Text(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(bottom = 40.dp),
-                text = "$times",
-                style = ticker_text,
+                    .padding(bottom = 110.dp),
+                text = stringResource(R.string.paused),
+                style = paused_text,
             )
 
-
-            if (viewModel.state.brushingPhase == BrushingState.PAUSED)
-                Text(
+        when (viewModel.state.brushingPhase) {
+            BrushingState.NOT_STARTED -> {
+                GradientButton(
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(bottom = 110.dp),
-                    text = "Paused",
-                    style = paused_text,
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 125.dp),
+                    text = stringResource(R.string.start_brushing),
+                    onClick = {
+                        viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.IN_PROGRESS))
+                    }
                 )
+            }
 
-            when (viewModel.state.brushingPhase) {
-                BrushingState.NOT_STARTED -> {
+            BrushingState.IN_PROGRESS,
+            BrushingState.PAUSED -> {
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 125.dp),
+                ) {
+
+                    if (viewModel.state.brushingPhase == BrushingState.IN_PROGRESS) {
+                        TextButton(
+                            modifier = Modifier
+                                .height(70.dp)
+                                .align(Alignment.CenterHorizontally),
+                            contentPadding = PaddingValues(0.dp),
+                            onClick = {
+                                viewModel.onEvent(
+                                    MainFlowEvent.BrushingStateEvent(
+                                        BrushingState.PAUSED
+                                    )
+                                )
+                            }) {
+                            Text(
+                                text = stringResource(R.string.pause),
+                                style = button_primary_text
+                            )
+                        }
+                    } else {
+                        TextButton(
+                            modifier = Modifier
+                                .height(70.dp)
+                                .align(Alignment.CenterHorizontally),
+                            contentPadding = PaddingValues(0.dp),
+                            onClick = {
+                                viewModel.onEvent(
+                                    MainFlowEvent.BrushingStateEvent(
+                                        BrushingState.IN_PROGRESS
+                                    )
+                                )
+                            }) {
+                            Text(
+                                text = stringResource(R.string.btn_continue),
+                                style = button_primary_text
+                            )
+                        }
+                    }
+
                     GradientButton(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 125.dp),
-                        text = "Start brushing",
+                        text = stringResource(R.string.finish_brushing),
                         onClick = {
-                            viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.IN_PROGRESS))
+                            viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.NOT_STARTED))
                         }
                     )
                 }
-
-                BrushingState.IN_PROGRESS,
-                BrushingState.PAUSED -> {
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 125.dp),
-                    ) {
-
-                        if (viewModel.state.brushingPhase == BrushingState.IN_PROGRESS) {
-                            TextButton(
-                                modifier = Modifier
-                                    .height(70.dp)
-                                    .align(Alignment.CenterHorizontally),
-                                contentPadding = PaddingValues(0.dp),
-                                onClick = {
-                                    viewModel.onEvent(
-                                        MainFlowEvent.BrushingStateEvent(
-                                            BrushingState.PAUSED
-                                        )
-                                    )
-                                }) {
-                                Text(
-                                    text = "Pause",
-                                    style = button_primary_text
-                                )
-                            }
-                        } else {
-                            TextButton(
-                                modifier = Modifier
-                                    .height(70.dp)
-                                    .align(Alignment.CenterHorizontally),
-                                contentPadding = PaddingValues(0.dp),
-                                onClick = {
-                                    viewModel.onEvent(
-                                        MainFlowEvent.BrushingStateEvent(
-                                            BrushingState.IN_PROGRESS
-                                        )
-                                    )
-                                }) {
-                                Text(
-                                    text = "Continue",
-                                    style = button_primary_text
-                                )
-                            }
-                        }
-
-                        GradientButton(
-                            text = "Finish brushing",
-                            onClick = {
-                                viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.NOT_STARTED))
-                            }
-                        )
-                    }
-                }
             }
-
         }
     }
 }
