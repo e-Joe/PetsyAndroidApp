@@ -42,5 +42,8 @@ instrunctions.</string>
     <string name="reset_your_password_explanation">Please chosse a new password to finish signing in.</string>
     <string name="btn_change_password">Change password</string>
     <string name="new_password">New Password</string>
+    <string name="washing_teets_description">Did you know that by brushing your dog’s teeth every day for 2 minutes, could prolong his life by 3 years? (or some similar text)</string>
+    <string name="no_activities_yet">No activities yet</string>
+    <string name="watch_short_tutorial">Watch short tutorial</string>
 
 </resources>

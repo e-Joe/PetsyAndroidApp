@@ -1,6 +1,5 @@
 package com.bytecode.petsy.presentation.ui.screens.mainflow.dashboard
 
-import android.widget.ImageView.ScaleType
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,19 +15,20 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
+import com.bytecode.petsy.presentation.ui.screens.mainflow.BrushingState
+import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
+import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(viewModel: MainFlowViewModel) {
 
     Scaffold { paddingValues ->
         Box(
@@ -37,48 +37,71 @@ fun DashboardScreen() {
                 .fillMaxSize()
         ) {
             PetsyImageBackground()
+            EmptyStateDashboard(viewModel)
             HeaderOnboarding()
-            EmptyStateDashboard()
+
 
         }
     }
 }
 
 @Composable
-private fun EmptyStateDashboard() {
+private fun EmptyStateDashboard(viewModel: MainFlowViewModel) {
+
     Column(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, bottom = 110.dp)
-            .verticalScroll(rememberScrollState())
     ) {
-        Spacer(modifier = Modifier.height(100.dp))
-        Text(
-            text = "Watch short tutorial",
-            style = MaterialTheme.typography.h1,
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Image(
+
+        Column(
             modifier = Modifier
-                .aspectRatio(ratio = 1f)
-                .fillMaxWidth(),
-            painter = painterResource(id = R.drawable.img_video_tutorial),
-            contentDescription = ""
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(modifier = Modifier.height(100.dp))
+            Text(
+                text = stringResource(R.string.watch_short_tutorial),
+                style = MaterialTheme.typography.h1,
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Image(
+                modifier = Modifier
+                    .aspectRatio(ratio = 1f)
+                    .fillMaxWidth(),
+                painter = painterResource(id = R.drawable.img_video_tutorial),
+                contentDescription = ""
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = stringResource(R.string.no_activities_yet),
+                style = MaterialTheme.typography.h1,
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(R.string.washing_teets_description),
+                style = MaterialTheme.typography.h4,
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+
+        GradientButton(
+            modifier = Modifier.padding(bottom = 15.dp, top = 15.dp),
+            paddingEnd = 0.dp,
+            paddingStart = 0.dp,
+            text = if (viewModel.state.brushingPhase == BrushingState.IN_PROGRESS)
+                "Started"
+            else
+                "Start brushing",
+            onClick = {
+                viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.IN_PROGRESS))
+            }
         )
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "No activities yet",
-            style = MaterialTheme.typography.h1,
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = "Did you know that by brushing your dog’s teeth every day for 2 minutes, could prolong his life by 3 years? (or some similar text)",
-            style = MaterialTheme.typography.h4,
-        )
+
     }
 }
 
-@Preview
-@Composable
-fun DashboardScreenPreview() {
-    DashboardScreen()
-}
+//@Preview
+//@Composable
+//fun DashboardScreenPreview() {
+//    DashboardScreen()
+//}

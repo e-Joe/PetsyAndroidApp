@@ -18,7 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.bytecode.petsy.presentation.ui.theme.ButtonColorGradient1
 import com.bytecode.petsy.presentation.ui.theme.ButtonColorGradient2
 import com.bytecode.petsy.presentation.ui.theme.button_gradient_text
@@ -37,13 +40,15 @@ fun GradientButton(
     onClick: () -> Unit,
     alpha: Float = 1f,
     enabled : Boolean = true,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    paddingStart : Dp = 20.dp,
+    paddingEnd : Dp = 20.dp,
 ) {
     Button(
         modifier = modifier
             .height(50.dp)
             .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp)
+            .padding(start = paddingStart, end = paddingEnd)
             .alpha(alpha),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Transparent,
@@ -68,9 +73,13 @@ fun GradientButton(
                 )
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            Text(
-                text = text, style = button_gradient_text
-            )
+
+            Row{
+                Text(
+                    text = text, style = button_gradient_text
+                )
+            }
+
         }
     }
 }

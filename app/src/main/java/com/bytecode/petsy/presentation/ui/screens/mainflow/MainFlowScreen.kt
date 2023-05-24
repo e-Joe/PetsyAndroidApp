@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -40,7 +41,7 @@ fun MainFlowScreen(navController: NavHostController = rememberNavController()) {
 
     Scaffold(bottomBar = { BottomBar(navController = navController) }) {
         it
-        MainFlowNavGraph(navController)
+        MainFlowNavGraph(navController, mainFlowViewModel = viewModel())
     }
 }
 

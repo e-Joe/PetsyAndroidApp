@@ -16,7 +16,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowScreen
 import com.bytecode.petsy.presentation.ui.theme.PetsyTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PetsyActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
