@@ -1,6 +1,7 @@
 package com.bytecode.petsy.presentation.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,7 +24,7 @@ import com.bytecode.petsy.presentation.ui.screens.loginflow.splash.SplashScreen
  * @author Ilija Vucetic
  */
 @Composable
-fun LoginFlowGraph(navController: NavHostController) {
+fun LoginFlowGraph(navController: NavHostController, registerViewModel: RegisterViewModel) {
     NavHost(
         navController = navController,
         startDestination = LoginFlowScreen.LandingScreen.route
@@ -38,18 +39,15 @@ fun LoginFlowGraph(navController: NavHostController) {
         }
 
         composable(route = LoginFlowScreen.RegisterFirstScreen.route) {
-            val viewModel: RegisterViewModel = hiltViewModel(it)
-            RegisterFirstScreen(navController = navController, viewModel)
+            RegisterFirstScreen(navController = navController, registerViewModel)
         }
 
         composable(route = LoginFlowScreen.RegisterSecondScreen.route) {
-            val viewModel: RegisterViewModel = hiltViewModel(navController.previousBackStackEntry!!)
-            RegisterSecondScreen(navController = navController, viewModel)
+            RegisterSecondScreen(navController = navController, registerViewModel)
         }
 
         composable(route = LoginFlowScreen.DogsNameScreen.route) {
-            val viewModel: RegisterViewModel = hiltViewModel(navController.previousBackStackEntry!!)
-            DogsNameScreen(navController = navController, viewModel)
+            DogsNameScreen(navController = navController, registerViewModel)
         }
 
         composable(route = LoginFlowScreen.VerifyEmailScreen.route) {

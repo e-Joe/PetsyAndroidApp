@@ -2,6 +2,8 @@ package com.bytecode.petsy.data.repository.di
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.bytecode.petsy.data.local.dao.UserDao
+import com.bytecode.petsy.data.repository.user.UserRepository
 import com.bytecode.petsy.data.repository.welcome.WelcomeRepository
 import dagger.Module
 import dagger.Provides
@@ -20,5 +22,10 @@ class RepositoryModule {
         @ApplicationContext context: Context
     ) = WelcomeRepository(context)
 
+    @Singleton
+    @Provides
+    fun provideUserRepository(
+        dao : UserDao
+    ) = UserRepository(dao)
 
 }

@@ -1,22 +1,16 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.passwordscreens.resetpassword
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
-import com.bytecode.petsy.data.model.dto.Dog
 import com.bytecode.petsy.domain.usecase.validation.*
-import com.bytecode.petsy.domain.usecase.welcome.SaveOnBoardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class ResetPasswordViewModel @Inject constructor(

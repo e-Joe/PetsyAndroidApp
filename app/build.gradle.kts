@@ -113,4 +113,6 @@ dependencies {
     implementation("com.github.hitanshu-dhawan:CircularProgressBar-Compose:1.0.0-rc01")
 
     implementation("com.google.code.gson:gson:2.8.7")
+
+    implementation(ComposeLib.Paging)
 }

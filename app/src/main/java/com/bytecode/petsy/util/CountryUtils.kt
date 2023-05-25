@@ -1,14 +1,14 @@
 package com.bytecode.petsy.util
 
 import android.content.Context
-import com.bytecode.petsy.data.model.dto.Country
+import com.bytecode.petsy.data.model.dto.CountryDto
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.IOException
 
-fun countryList(context: Context): MutableList<Country> {
+fun countryList(context: Context): MutableList<CountryDto> {
     val jsonFileString = getJsonDataFromAsset(context, "Countries.json")
-    val type = object : TypeToken<List<Country>>() {}.type
+    val type = object : TypeToken<List<CountryDto>>() {}.type
     return Gson().fromJson(jsonFileString, type)
 }
 
@@ -29,8 +29,8 @@ fun getJsonDataFromAsset(context: Context, fileName: String): String? {
     return jsonString
 }
 
-fun List<Country>.searchCountryList(countryName: String): MutableList<Country> {
-    val countryList = mutableListOf<Country>()
+fun List<CountryDto>.searchCountryList(countryName: String): MutableList<CountryDto> {
+    val countryList = mutableListOf<CountryDto>()
     this.forEach {
         if (it.name.lowercase().contains(countryName.lowercase()) ||
             it.dial_code.contains(countryName.lowercase())

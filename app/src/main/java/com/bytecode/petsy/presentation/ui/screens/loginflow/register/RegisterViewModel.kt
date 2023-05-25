@@ -1,14 +1,17 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
-import com.bytecode.petsy.data.model.dto.Dog
+import com.bytecode.petsy.data.model.dto.DogDto
+import com.bytecode.petsy.data.model.dto.user.UserDto
+import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserCase
+import com.bytecode.petsy.domain.usecase.user.GetUsersUserCase
+import com.bytecode.petsy.domain.usecase.user.SaveUserUserCase
+import com.bytecode.petsy.domain.usecase.user.SaveUsersUserCase
 import com.bytecode.petsy.domain.usecase.validation.*
 import com.bytecode.petsy.domain.usecase.welcome.SaveOnBoardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +19,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
@@ -30,7 +32,11 @@ class RegisterViewModel @Inject constructor(
     private val validateFirstName: ValidateFirstName,
     private val validateSecondName: ValidateSecondName,
     private val validateCountry: ValidateCountry,
-    private val validatePhoneNumber: ValidatePhoneNumber
+    private val validatePhoneNumber: ValidatePhoneNumber,
+    private val saveUserUserCase: SaveUserUserCase,
+    private val saveUsersUserCase: SaveUsersUserCase,
+    private val getUsersUseCase: GetUsersUserCase,
+    private val getLoggedInUserCase: GetLoggedInUserCase
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(RegisterFormState())
@@ -44,14 +50,59 @@ class RegisterViewModel @Inject constructor(
     private val countryChangeChannel = Channel<CountryEvent>()
     val countryChangeEvents = countryChangeChannel.receiveAsFlow()
 
-    private var dogsList = mutableStateListOf<Dog>(Dog(""))
+    private var dogsList = mutableStateListOf<DogDto>(DogDto(""))
     private val _dogsListFlow = MutableStateFlow(dogsList)
 
-    val dogsListFlow: StateFlow<List<Dog>> get() = _dogsListFlow
+    lateinit var user: UserDto
 
-    fun saveOnBoardingState(completed: Boolean) = viewModelScope.launch(Dispatchers.IO) {
+    val dogsListFlow: StateFlow<List<DogDto>> get() = _dogsListFlow
+
+    private fun saveOnBoardingState(completed: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         val params = SaveOnBoardingUseCase.Params(completed)
         call(saveOnBoarding(params))
+    }
+
+    private fun saveUser() = safeLaunch {
+        val user = UserDto(
+            0,
+            state.email,
+            state.password,
+            state.firstName,
+            state.lastName,
+            state.country,
+            true
+        )
+        val params = SaveUserUserCase.Params(user)
+        call(saveUserUserCase(params))
+        getLoggedInUser()
+    }
+
+    private fun saveUsers(users: List<UserDto>) = safeLaunch {
+        var loggedOutUsers = users.map { user -> user.copy(isLoggedIn = false) }
+        val params = SaveUsersUserCase.Params(loggedOutUsers)
+        call(saveUsersUserCase(params))
+        saveUser()
+    }
+
+    private fun logOutAllUsersAndSaveLastOne() = safeLaunch {
+        call(getUsersUseCase(Unit)) {
+            if (it.isEmpty()) {
+                saveUser()
+            } else {
+                saveUsers(it)
+            }
+        }
+    }
+
+    private fun getLoggedInUser() = safeLaunch {
+        call(getLoggedInUserCase(Unit)) {
+            if (it.isLoggedIn) {
+                user = it
+                viewModelScope.launch {
+                    validationChannel.send(ValidationEvent.Success)
+                }
+            }
+        }
     }
 
     fun onEvent(event: RegisterFormEvent) {
@@ -191,9 +242,8 @@ class RegisterViewModel @Inject constructor(
             )
         }
 
-        viewModelScope.launch {
-            validationChannel.send(ValidationEvent.Success)
-        }
+        logOutAllUsersAndSaveLastOne()
+
     }
 
     private fun validateThirdStep() {
@@ -216,7 +266,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun addDog(name: String) {
-        dogsList.add(Dog(name))
+        dogsList.add(DogDto(name))
     }
 }
 

@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.bytecode.petsy.data.model.dto.Country
+import com.bytecode.petsy.data.model.dto.CountryDto
 import com.bytecode.petsy.util.countryList
 import com.bytecode.petsy.util.localeToEmoji
 import com.bytecode.petsy.util.searchCountryList
@@ -24,7 +24,7 @@ import com.bytecode.petsy.util.searchCountryList
 fun CountryPickerBottomSheet(
     title: @Composable () -> Unit,
     show: Boolean,
-    onItemSelected: (country: Country) -> Unit,
+    onItemSelected: (country: CountryDto) -> Unit,
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit
 ) {

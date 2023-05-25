@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.bytecode.petsy.R
-import com.bytecode.petsy.data.model.dto.Country
+import com.bytecode.petsy.data.model.dto.CountryDto
 import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
@@ -194,7 +194,7 @@ fun CountryPickerDialog(viewModel: RegisterViewModel) {
     Box {
         val context = LocalContext.current
         var expanded by remember { mutableStateOf(false) }
-        var selectedCountry by remember { mutableStateOf<Country?>(null) }
+        var selectedCountry by remember { mutableStateOf<CountryDto?>(null) }
         val focusManager = LocalFocusManager.current
 
 

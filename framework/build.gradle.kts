@@ -3,6 +3,7 @@ import com.bytecode.buildsrc.*
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -51,4 +52,10 @@ dependencies {
     testImplementation(TestingLib.Junit)
     androidTestImplementation(AndroidTestingLib.JunitExt)
     androidTestImplementation(AndroidTestingLib.EspressoCore)
+
+    // Storage
+    implementation(StorageLib.RoomKtx)
+    ksp(StorageLib.RoomCompiler)
+
+    implementation("androidx.paging:paging-runtime-ktx:3.1.1")
 }
