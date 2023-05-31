@@ -1,5 +1,6 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register.dogs
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -22,7 +23,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.bytecode.framework.extension.getActivity
+import com.bytecode.framework.extension.launchActivity
 import com.bytecode.petsy.R
+import com.bytecode.petsy.presentation.ui.activities.petsy.PetsyActivity
 import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.IconTextButton
@@ -91,7 +95,9 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
             viewModel.validationEvents.collect { event ->
                 when (event) {
                     is ValidationEvent.Success -> {
-                        navController.navigate(LoginFlowScreen.VerifyEmailScreen.route)
+                        // TODO remove navigation to main flow
+                        launchPetsyActivity(context)
+//                        navController.navigate(LoginFlowScreen.VerifyEmailScreen.route)
                     }
 
                     is ValidationEvent.Fail -> {
@@ -154,6 +160,12 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
                 onClick = { viewModel.onEvent(RegisterFormEvent.AddNewDogClicked()) }
             )
     }
+}
+
+private fun launchPetsyActivity(context: Context) {
+    context.launchActivity<PetsyActivity> { }
+    val activity = context.getActivity()
+    activity?.finish()
 }
 
 

@@ -6,8 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
-import com.bytecode.petsy.data.model.dto.DogDto
+import com.bytecode.petsy.data.model.dto.dog.DogDto
 import com.bytecode.petsy.data.model.dto.user.UserDto
+import com.bytecode.petsy.domain.usecase.dog.SaveDogsUserCase
 import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserCase
 import com.bytecode.petsy.domain.usecase.user.GetUsersUserCase
 import com.bytecode.petsy.domain.usecase.user.SaveUserUserCase
@@ -36,7 +37,8 @@ class RegisterViewModel @Inject constructor(
     private val saveUserUserCase: SaveUserUserCase,
     private val saveUsersUserCase: SaveUsersUserCase,
     private val getUsersUseCase: GetUsersUserCase,
-    private val getLoggedInUserCase: GetLoggedInUserCase
+    private val getLoggedInUserCase: GetLoggedInUserCase,
+    private val saveDogsUserCase: SaveDogsUserCase
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(RegisterFormState())
@@ -50,7 +52,7 @@ class RegisterViewModel @Inject constructor(
     private val countryChangeChannel = Channel<CountryEvent>()
     val countryChangeEvents = countryChangeChannel.receiveAsFlow()
 
-    private var dogsList = mutableStateListOf<DogDto>(DogDto(""))
+    private var dogsList = mutableStateListOf(DogDto())
     private val _dogsListFlow = MutableStateFlow(dogsList)
 
     lateinit var user: UserDto
@@ -103,6 +105,17 @@ class RegisterViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun saveDogs() = safeLaunch {
+        dogsList.forEachIndexed { index, dog ->
+            dogsList.takeIf { dog.ownerId != user.id }?.let {
+                dogsList[index] = dog.copy(ownerId = user.id)
+            }
+        }
+        val params = SaveDogsUserCase.Params(dogsList.toList())
+        call(saveDogsUserCase(params))
+        validationChannel.send(ValidationEvent.Success)
     }
 
     fun onEvent(event: RegisterFormEvent) {
@@ -243,7 +256,6 @@ class RegisterViewModel @Inject constructor(
         }
 
         logOutAllUsersAndSaveLastOne()
-
     }
 
     private fun validateThirdStep() {
@@ -256,7 +268,7 @@ class RegisterViewModel @Inject constructor(
 
         if (isValid)
             viewModelScope.launch {
-                validationChannel.send(ValidationEvent.Success)
+                saveDogs()
             }
         else
             viewModelScope.launch {
@@ -265,8 +277,8 @@ class RegisterViewModel @Inject constructor(
 
     }
 
-    fun addDog(name: String) {
-        dogsList.add(DogDto(name))
+    private fun addDog(name: String) {
+        dogsList.add(DogDto(name = name, ownerId = user.id))
     }
 }
 
