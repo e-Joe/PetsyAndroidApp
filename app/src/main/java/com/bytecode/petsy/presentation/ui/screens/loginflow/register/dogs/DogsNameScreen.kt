@@ -95,9 +95,7 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
             viewModel.validationEvents.collect { event ->
                 when (event) {
                     is ValidationEvent.Success -> {
-                        // TODO remove navigation to main flow
-                        launchPetsyActivity(context)
-//                        navController.navigate(LoginFlowScreen.VerifyEmailScreen.route)
+                        navController.navigate(LoginFlowScreen.VerifyEmailScreen.route)
                     }
 
                     is ValidationEvent.Fail -> {

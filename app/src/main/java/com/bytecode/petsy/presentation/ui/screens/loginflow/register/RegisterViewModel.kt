@@ -9,12 +9,11 @@ import com.bytecode.framework.base.MvvmViewModel
 import com.bytecode.petsy.data.model.dto.dog.DogDto
 import com.bytecode.petsy.data.model.dto.user.UserDto
 import com.bytecode.petsy.domain.usecase.dog.SaveDogsUserCase
-import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserCase
+import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserUseCase
 import com.bytecode.petsy.domain.usecase.user.GetUsersUserCase
 import com.bytecode.petsy.domain.usecase.user.SaveUserUserCase
 import com.bytecode.petsy.domain.usecase.user.SaveUsersUserCase
 import com.bytecode.petsy.domain.usecase.validation.*
-import com.bytecode.petsy.domain.usecase.welcome.SaveOnBoardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -23,7 +22,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val saveOnBoarding: SaveOnBoardingUseCase,
     private val validateEmail: ValidateEmail,
     private val validatePassword: ValidatePassword,
     private val validatePasswordDigit: ValidatePasswordDigit,
@@ -37,7 +35,7 @@ class RegisterViewModel @Inject constructor(
     private val saveUserUserCase: SaveUserUserCase,
     private val saveUsersUserCase: SaveUsersUserCase,
     private val getUsersUseCase: GetUsersUserCase,
-    private val getLoggedInUserCase: GetLoggedInUserCase,
+    private val getLoggedInUserUseCase: GetLoggedInUserUseCase,
     private val saveDogsUserCase: SaveDogsUserCase
 ) : MvvmViewModel() {
 
@@ -58,11 +56,6 @@ class RegisterViewModel @Inject constructor(
     lateinit var user: UserDto
 
     val dogsListFlow: StateFlow<List<DogDto>> get() = _dogsListFlow
-
-    private fun saveOnBoardingState(completed: Boolean) = viewModelScope.launch(Dispatchers.IO) {
-        val params = SaveOnBoardingUseCase.Params(completed)
-        call(saveOnBoarding(params))
-    }
 
     private fun saveUser() = safeLaunch {
         val user = UserDto(
@@ -97,7 +90,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun getLoggedInUser() = safeLaunch {
-        call(getLoggedInUserCase(Unit)) {
+        call(getLoggedInUserUseCase(Unit)) {
             if (it.isLoggedIn) {
                 user = it
                 viewModelScope.launch {

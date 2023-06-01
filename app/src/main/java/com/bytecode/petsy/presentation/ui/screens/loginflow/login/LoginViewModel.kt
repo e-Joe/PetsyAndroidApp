@@ -5,31 +5,30 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
+import com.bytecode.petsy.data.model.dto.user.UserDto
+import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserByEmailUseCase
+import com.bytecode.petsy.domain.usecase.user.SaveUserUserCase
 import com.bytecode.petsy.domain.usecase.validation.ValidateEmail
 import com.bytecode.petsy.domain.usecase.validation.ValidatePassword
-import com.bytecode.petsy.domain.usecase.welcome.SaveOnBoardingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val saveOnBoarding: SaveOnBoardingUseCase,
     private val validateEmail: ValidateEmail,
     private val validatePassword: ValidatePassword,
+    private val getLoggedInUserByEmailUseCase: GetLoggedInUserByEmailUseCase,
+    private val saveUserUserCase: SaveUserUserCase,
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(LoginState())
+    private lateinit var user: UserDto
 
     private val validationChannel = Channel<ValidationEvent>()
     val validationEvents = validationChannel.receiveAsFlow()
-
-    fun saveOnBoardingState(completed: Boolean) = viewModelScope.launch(Dispatchers.IO) {
-        val params = SaveOnBoardingUseCase.Params(completed)
-        call(saveOnBoarding(params))
-    }
 
     fun onEvent(event: LoginFormEvent) {
         when (event) {
@@ -43,6 +42,24 @@ class LoginViewModel @Inject constructor(
 
             is LoginFormEvent.Submit -> {
                 submitData()
+            }
+        }
+    }
+
+    private fun saveUser() = safeLaunch {
+        val user = user.copy(isLoggedIn = true)
+        val params = SaveUserUserCase.Params(user)
+        call(saveUserUserCase(params))
+        viewModelScope.launch {
+            validationChannel.send(ValidationEvent.Success)
+        }
+    }
+
+    private fun checkIfUserExist() = safeLaunch {
+        call(getLoggedInUserByEmailUseCase(Pair(state.email, state.password))) {
+            if (it.id > -1) {
+                user = it
+                saveUser()
             }
         }
     }
@@ -71,12 +88,7 @@ class LoginViewModel @Inject constructor(
                 passwordError = null
             )
         }
-
-        saveOnBoardingState(true)
-        viewModelScope.launch {
-            validationChannel.send(ValidationEvent.Success)
-        }
-
+        checkIfUserExist()
     }
 
     sealed class ValidationEvent {

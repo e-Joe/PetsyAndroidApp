@@ -12,10 +12,8 @@ constructor(
     internal val dao: UserDao
 ) {
     suspend fun saveUser(userEntity: UserEntity) = dao.insert(userEntity)
-
     suspend fun saveUsers(users: List<UserEntity>) = dao.insert(users)
-
     suspend fun getUsers() = dao.getUsers()
-
     suspend fun getLoggedInUser() = dao.getLoggedInUser()
+    suspend fun getLoggedInUserByEmail(email:String, password:String) = dao.getLoggedInUserByEmail(email,password)
 }

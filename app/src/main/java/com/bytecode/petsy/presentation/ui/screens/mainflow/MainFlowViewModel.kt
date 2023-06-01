@@ -8,8 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
 import com.bytecode.petsy.data.model.dto.user.UserDto
 import com.bytecode.petsy.domain.usecase.dog.GetDogsUseCase
-import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserCase
-import com.bytecode.petsy.presentation.ui.screens.loginflow.register.ValidationEvent
+import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -22,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainFlowViewModel @Inject constructor(
-    private val getLoggedInUserCase: GetLoggedInUserCase,
+    private val getLoggedInUserUseCase: GetLoggedInUserUseCase,
     private val getDogsUseCase: GetDogsUseCase,
 ) : MvvmViewModel() {
 
@@ -88,7 +87,7 @@ class MainFlowViewModel @Inject constructor(
     }
 
     private fun getLoggedInUser() = safeLaunch {
-        call(getLoggedInUserCase(Unit)) {
+        call(getLoggedInUserUseCase(Unit)) {
             if (it.isLoggedIn) {
                 user = it
                 getDogs()
