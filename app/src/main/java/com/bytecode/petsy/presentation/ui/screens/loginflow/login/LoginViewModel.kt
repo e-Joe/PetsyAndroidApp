@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
 import com.bytecode.petsy.data.model.dto.user.UserDto
-import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserByEmailUseCase
-import com.bytecode.petsy.domain.usecase.user.SaveUserUserCase
+import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserByCredentialsUseCase
+import com.bytecode.petsy.domain.usecase.user.SaveUserUseCase
 import com.bytecode.petsy.domain.usecase.validation.ValidateEmail
 import com.bytecode.petsy.domain.usecase.validation.ValidatePassword
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,8 +20,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val validateEmail: ValidateEmail,
     private val validatePassword: ValidatePassword,
-    private val getLoggedInUserByEmailUseCase: GetLoggedInUserByEmailUseCase,
-    private val saveUserUserCase: SaveUserUserCase,
+    private val getLoggedInUserByCredentialsUseCase: GetLoggedInUserByCredentialsUseCase,
+    private val saveUserUserCase: SaveUserUseCase,
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(LoginState())
@@ -48,7 +48,7 @@ class LoginViewModel @Inject constructor(
 
     private fun saveUser() = safeLaunch {
         val user = user.copy(isLoggedIn = true)
-        val params = SaveUserUserCase.Params(user)
+        val params = SaveUserUseCase.Params(user)
         call(saveUserUserCase(params))
         viewModelScope.launch {
             validationChannel.send(ValidationEvent.Success)
@@ -56,7 +56,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun checkIfUserExist() = safeLaunch {
-        call(getLoggedInUserByEmailUseCase(Pair(state.email, state.password))) {
+        call(getLoggedInUserByCredentialsUseCase(Pair(state.email, state.password))) {
             if (it.id > -1) {
                 user = it
                 saveUser()

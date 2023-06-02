@@ -21,7 +21,6 @@ class SplashActivityViewModel @Inject constructor(
 
     private fun readOnBoardingState() = safeLaunch {
         call(getLoggedInUserUseCase(Unit)) { user ->
-
             _startWelcome.value = !user.isLoggedIn
         }
     }

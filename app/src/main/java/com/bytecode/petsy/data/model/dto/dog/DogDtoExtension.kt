@@ -4,13 +4,15 @@ import com.bytecode.petsy.data.model.local.dog.DogEntity
 
 fun DogDto.toDogEntity() = DogEntity(
     name = name,
-    ownerId = ownerId
+    ownerId = ownerId,
+    color = color
 )
 
 fun DogEntity.toUserDto() = DogDto(
     id = id,
     name = name,
-    ownerId = ownerId
+    ownerId = ownerId,
+    color = color
 )
 
 fun List<DogEntity>.toDogDtoList() = map { it.toUserDto() }

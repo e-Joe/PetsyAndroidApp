@@ -18,5 +18,8 @@ interface UserDao : BaseDao<UserEntity> {
     suspend fun getLoggedInUser(): UserEntity?
 
     @Query("SELECT * FROM ${UserEntity.TABLE_NAME} WHERE ${UserEntity.COLUMN_PASSWORD} = :password AND ${UserEntity.COLUMN_EMAIL}= :email")
-    suspend fun getLoggedInUserByEmail(email: String, password:String): UserEntity?
+    suspend fun getLoggedInUserByCredentials(email: String, password:String): UserEntity?
+
+    @Query("SELECT * FROM ${UserEntity.TABLE_NAME} WHERE ${UserEntity.COLUMN_EMAIL} = :email")
+    suspend fun getUserByEmail(email: String): UserEntity?
 }

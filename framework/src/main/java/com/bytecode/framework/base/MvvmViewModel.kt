@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.network.DataState
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -23,9 +24,10 @@ abstract class MvvmViewModel : ViewModel() {
 
     open fun startLoading() {}
 
-    protected fun safeLaunch(block: suspend CoroutineScope.() -> Unit) {
-        viewModelScope.launch(handler, block = block)
+    protected fun safeLaunch(block: suspend CoroutineScope.() -> Unit) : Job{
+        return viewModelScope.launch(handler, block = block)
     }
+
 
     protected suspend fun <T> call(
         callFlow: Flow<T>,

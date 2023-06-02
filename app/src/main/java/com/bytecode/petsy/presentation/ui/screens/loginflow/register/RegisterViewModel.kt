@@ -1,23 +1,40 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
+import com.bytecode.petsy.data.model.dto.color.ColorDto
 import com.bytecode.petsy.data.model.dto.dog.DogDto
 import com.bytecode.petsy.data.model.dto.user.UserDto
-import com.bytecode.petsy.domain.usecase.dog.SaveDogsUserCase
-import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserUseCase
-import com.bytecode.petsy.domain.usecase.user.GetUsersUserCase
-import com.bytecode.petsy.domain.usecase.user.SaveUserUserCase
-import com.bytecode.petsy.domain.usecase.user.SaveUsersUserCase
-import com.bytecode.petsy.domain.usecase.validation.*
+import com.bytecode.petsy.domain.usecase.color.SaveColorsUseCase
+import com.bytecode.petsy.domain.usecase.dog.GetDogsUseCase
+import com.bytecode.petsy.domain.usecase.dog.SaveDogsUseCase
+import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserByCredentialsUseCase
+import com.bytecode.petsy.domain.usecase.user.GetUserByEmailUseCase
+import com.bytecode.petsy.domain.usecase.user.GetUsersUseCase
+import com.bytecode.petsy.domain.usecase.user.SaveUserUseCase
+import com.bytecode.petsy.domain.usecase.user.SaveUsersUseCase
+import com.bytecode.petsy.domain.usecase.validation.ValidateCountry
+import com.bytecode.petsy.domain.usecase.validation.ValidateEmail
+import com.bytecode.petsy.domain.usecase.validation.ValidateFirstName
+import com.bytecode.petsy.domain.usecase.validation.ValidatePassword
+import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordDigit
+import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordLength
+import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordLowerCase
+import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordUpperCase
+import com.bytecode.petsy.domain.usecase.validation.ValidatePhoneNumber
+import com.bytecode.petsy.domain.usecase.validation.ValidateSecondName
+import com.bytecode.petsy.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,11 +49,14 @@ class RegisterViewModel @Inject constructor(
     private val validateSecondName: ValidateSecondName,
     private val validateCountry: ValidateCountry,
     private val validatePhoneNumber: ValidatePhoneNumber,
-    private val saveUserUserCase: SaveUserUserCase,
-    private val saveUsersUserCase: SaveUsersUserCase,
-    private val getUsersUseCase: GetUsersUserCase,
-    private val getLoggedInUserUseCase: GetLoggedInUserUseCase,
-    private val saveDogsUserCase: SaveDogsUserCase
+    private val saveUserUserCase: SaveUserUseCase,
+    private val saveUsersUserCase: SaveUsersUseCase,
+    private val getUsersUseCase: GetUsersUseCase,
+    private val getLoggedInUserByCredentialsUseCase: GetLoggedInUserByCredentialsUseCase,
+    private val getUserByEmailUseCase: GetUserByEmailUseCase,
+    private val saveDogsUserCase: SaveDogsUseCase,
+    private val saveColorsUseCase: SaveColorsUseCase,
+    private val getDogsUseCase: GetDogsUseCase,
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(RegisterFormState())
@@ -52,7 +72,6 @@ class RegisterViewModel @Inject constructor(
 
     private var dogsList = mutableStateListOf(DogDto())
     private val _dogsListFlow = MutableStateFlow(dogsList)
-
     lateinit var user: UserDto
 
     val dogsListFlow: StateFlow<List<DogDto>> get() = _dogsListFlow
@@ -65,16 +84,16 @@ class RegisterViewModel @Inject constructor(
             state.firstName,
             state.lastName,
             state.country,
-            true
+            false
         )
-        val params = SaveUserUserCase.Params(user)
+        val params = SaveUserUseCase.Params(user)
         call(saveUserUserCase(params))
-        getLoggedInUser()
+        getLoggedInUserForNextStep()
     }
 
     private fun saveUsers(users: List<UserDto>) = safeLaunch {
         var loggedOutUsers = users.map { user -> user.copy(isLoggedIn = false) }
-        val params = SaveUsersUserCase.Params(loggedOutUsers)
+        val params = SaveUsersUseCase.Params(loggedOutUsers)
         call(saveUsersUserCase(params))
         saveUser()
     }
@@ -89,10 +108,13 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    private fun getLoggedInUser() = safeLaunch {
-        call(getLoggedInUserUseCase(Unit)) {
-            if (it.isLoggedIn) {
-                user = it
+    private fun checkIfUserExist() = safeLaunch {
+        call(getUserByEmailUseCase(state.email)) {
+            if (it.id > -1) {
+                viewModelScope.launch {
+                    validationChannel.send(ValidationEvent.UserExist)
+                }
+            } else {
                 viewModelScope.launch {
                     validationChannel.send(ValidationEvent.Success)
                 }
@@ -100,16 +122,59 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    private fun saveDogs() = safeLaunch {
-        dogsList.forEachIndexed { index, dog ->
-            dogsList.takeIf { dog.ownerId != user.id }?.let {
-                dogsList[index] = dog.copy(ownerId = user.id)
+    private fun getLoggedInUserForNextStep() = safeLaunch {
+        call(getLoggedInUserByCredentialsUseCase(Pair(state.email, state.password))) {
+            user = it
+            viewModelScope.launch {
+                validationChannel.send(ValidationEvent.Success)
             }
         }
-        val params = SaveDogsUserCase.Params(dogsList.toList())
-        call(saveDogsUserCase(params))
+    }
+
+    private fun saveColors(colors: List<ColorDto>) = safeLaunch {
+        Log.d("Dogs", "saveDogs ")
+        call(saveColorsUseCase(SaveColorsUseCase.Params(colors)))
+        Log.d("Dogs", "saveDogs after")
+        resetState()
         validationChannel.send(ValidationEvent.Success)
     }
+
+    private fun getColorForDog(index: Int): String {
+        Log.d("Dogs", "Index is $index")
+        return Constants.colors[index]
+    }
+
+    private fun saveDogs() = safeLaunch {
+        Log.d("Dogs", "saveDogs 1")
+        var dogs = arrayListOf<DogDto>()
+        dogsList.forEachIndexed { index, dog ->
+            dogs.add(DogDto(ownerId = user.id, color = getColorForDog(index), name = dog.name))
+        }
+
+        Log.d("Dogs", "saveDogs 2 $dogs")
+        val params = SaveDogsUseCase.Params(dogs)
+        call(saveDogsUserCase(params))
+        updateColorsState()
+    }
+
+    private fun updateColorsState() = safeLaunch {
+        Log.d("Dogs", "getDogs ")
+        call(getDogsUseCase(user.id)) {
+            if (it.isNotEmpty()) {
+                dogsList.clear()
+                dogsList.addAll(it)
+
+                var colors = arrayListOf<ColorDto>()
+
+                dogsList.forEach {
+                    val color = ColorDto(value = it.color, dogId = it.id, ownerId = user.id)
+                    colors.add(color)
+                }
+                saveColors(colors)
+            }
+        }
+    }
+
 
     fun onEvent(event: RegisterFormEvent) {
         when (event) {
@@ -212,10 +277,7 @@ class RegisterViewModel @Inject constructor(
             )
         }
 
-        viewModelScope.launch {
-            validationChannel.send(ValidationEvent.Success)
-        }
-
+        checkIfUserExist()
     }
 
     private fun validateSecondStep() {
@@ -273,6 +335,11 @@ class RegisterViewModel @Inject constructor(
     private fun addDog(name: String) {
         dogsList.add(DogDto(name = name, ownerId = user.id))
     }
+
+
+    private fun resetState() {
+        state = RegisterFormState()
+    }
 }
 
 enum class RegistrationStep {
@@ -283,6 +350,8 @@ enum class RegistrationStep {
 
 sealed class ValidationEvent {
     object Success : ValidationEvent()
+
+    object UserExist : ValidationEvent()
 
     object Fail : ValidationEvent()
 }

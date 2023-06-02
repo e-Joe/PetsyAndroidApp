@@ -1,5 +1,6 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -20,6 +21,7 @@ import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
+import com.bytecode.petsy.presentation.ui.navigation.LoginFlowScreen
 
 
 @Composable
@@ -48,6 +50,14 @@ fun VerifyEmailScreen(navController: NavHostController) {
 
             Form()
             BottomPart(navController)
+
+            BackHandler {
+                navController.navigate(LoginFlowScreen.LandingScreen.route) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
+                }
+            }
         }
     }
 }

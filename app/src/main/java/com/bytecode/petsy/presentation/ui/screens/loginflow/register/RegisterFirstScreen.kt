@@ -1,5 +1,6 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -123,6 +124,10 @@ private fun BoxScope.Form(navController: NavHostController, viewModel: RegisterV
                     }
 
                     is ValidationEvent.Fail -> {}
+
+                    is ValidationEvent.UserExist -> {
+                        Toast.makeText(context, "User already exist", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

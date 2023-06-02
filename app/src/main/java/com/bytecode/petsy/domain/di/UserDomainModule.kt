@@ -3,9 +3,9 @@ package com.bytecode.petsy.domain.di
 import android.annotation.SuppressLint
 import com.bytecode.petsy.data.repository.user.UserRepository
 import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserUseCase
-import com.bytecode.petsy.domain.usecase.user.GetUsersUserCase
-import com.bytecode.petsy.domain.usecase.user.SaveUserUserCase
-import com.bytecode.petsy.domain.usecase.user.SaveUsersUserCase
+import com.bytecode.petsy.domain.usecase.user.GetUsersUseCase
+import com.bytecode.petsy.domain.usecase.user.SaveUserUseCase
+import com.bytecode.petsy.domain.usecase.user.SaveUsersUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,14 +19,14 @@ class UserDomainModule {
 
     @Singleton
     @Provides
-    fun provideSaveUser(repository: UserRepository): SaveUserUserCase {
-        return SaveUserUserCase(repository)
+    fun provideSaveUser(repository: UserRepository): SaveUserUseCase {
+        return SaveUserUseCase(repository)
     }
 
     @Singleton
     @Provides
-    fun provideSaveUsers(repository: UserRepository): SaveUsersUserCase {
-        return SaveUsersUserCase(repository)
+    fun provideSaveUsers(repository: UserRepository): SaveUsersUseCase {
+        return SaveUsersUseCase(repository)
     }
 
     @Singleton
@@ -37,7 +37,7 @@ class UserDomainModule {
 
     @Singleton
     @Provides
-    fun provideGetUsers(repository: UserRepository): GetUsersUserCase {
-        return GetUsersUserCase(repository)
+    fun provideGetUsers(repository: UserRepository): GetUsersUseCase {
+        return GetUsersUseCase(repository)
     }
 }

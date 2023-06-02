@@ -71,6 +71,8 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
                 }
 
                 is ValidationEvent.Fail -> {}
+
+                is ValidationEvent.UserExist -> {}
             }
         }
     }

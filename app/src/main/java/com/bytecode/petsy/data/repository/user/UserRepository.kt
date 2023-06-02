@@ -15,5 +15,6 @@ constructor(
     suspend fun saveUsers(users: List<UserEntity>) = dao.insert(users)
     suspend fun getUsers() = dao.getUsers()
     suspend fun getLoggedInUser() = dao.getLoggedInUser()
-    suspend fun getLoggedInUserByEmail(email:String, password:String) = dao.getLoggedInUserByEmail(email,password)
+    suspend fun getLoggedInUserByCredentials(email:String, password:String) = dao.getLoggedInUserByCredentials(email,password)
+    suspend fun getUserByEmail(email:String) = dao.getUserByEmail(email)
 }

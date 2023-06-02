@@ -3,6 +3,7 @@ package com.bytecode.petsy.data.local.di
 import android.content.Context
 import androidx.room.Room
 import com.bytecode.petsy.BuildConfig
+import com.bytecode.petsy.data.local.dao.ColorDao
 import com.bytecode.petsy.data.local.dao.DogDao
 import com.bytecode.petsy.data.local.dao.UserDao
 import com.bytecode.petsy.data.local.db.PetsyDatabase
@@ -48,5 +49,11 @@ class LocalModule {
     @Singleton
     fun provideDogDao(appDatabase: PetsyDatabase): DogDao {
         return appDatabase.dogDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideColorDao(appDatabase: PetsyDatabase): ColorDao {
+        return appDatabase.colorDao()
     }
 }

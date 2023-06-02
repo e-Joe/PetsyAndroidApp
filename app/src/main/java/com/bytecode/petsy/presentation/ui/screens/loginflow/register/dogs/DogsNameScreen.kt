@@ -105,6 +105,8 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+
+                    is ValidationEvent.UserExist ->{}
                 }
             }
         }

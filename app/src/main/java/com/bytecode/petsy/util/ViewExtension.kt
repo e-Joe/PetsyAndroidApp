@@ -5,6 +5,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.toColorInt
 
 
 inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier =
@@ -14,3 +16,8 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier
             onClick()
         }
     }
+
+
+fun String.toColor(): Color {
+    return Color(this.toColorInt())
+}
