@@ -1,7 +1,6 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register.dogs
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -79,7 +78,7 @@ private fun BoxScope.BottomPart(viewModel: RegisterViewModel) {
 
 @Composable
 private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHostController) {
-    val todoListState = viewModel.dogsListFlow.collectAsState()
+    val dogsListState = viewModel.dogsListFlow.collectAsState()
     val lazyListState = rememberLazyListState()
     val context = LocalContext.current
 
@@ -126,7 +125,7 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
         Spacer(modifier = Modifier.height(20.dp))
 
         LazyColumn(modifier = Modifier.fillMaxWidth(), state = lazyListState) {
-            items(items = todoListState.value,
+            items(items = dogsListState.value,
                 itemContent = { dog ->
                     var name = remember { mutableStateOf(dog.name) }
                     RoundedInput(
@@ -137,7 +136,7 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
                         onValueChange = {
                             viewModel.onEvent(
                                 RegisterFormEvent.OnDogNameChanged(
-                                    todoListState.value.indexOf(
+                                    dogsListState.value.indexOf(
                                         dog
                                     ), it
                                 )
@@ -152,7 +151,7 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        if (todoListState.value.size < 3)
+        if (dogsListState.value.size < 3)
             IconTextButton(
                 modifier = Modifier
                     .align(Alignment.End)

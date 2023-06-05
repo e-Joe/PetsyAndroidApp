@@ -72,9 +72,8 @@ class RegisterViewModel @Inject constructor(
 
     private var dogsList = mutableStateListOf(DogDto())
     private val _dogsListFlow = MutableStateFlow(dogsList)
-    lateinit var user: UserDto
-
     val dogsListFlow: StateFlow<List<DogDto>> get() = _dogsListFlow
+    lateinit var user: UserDto
 
     private fun saveUser() = safeLaunch {
         val user = UserDto(

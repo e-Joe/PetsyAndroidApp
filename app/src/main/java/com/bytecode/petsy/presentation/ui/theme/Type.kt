@@ -94,7 +94,7 @@ val button_text_inverse: TextStyle
         return TextStyle(
             fontFamily = PetsyDefaultFontBold,
             color = TextPrimary,
-            fontSize = 14.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
         )
     }
@@ -146,6 +146,17 @@ val paused_text: TextStyle
             fontFamily = PetsyDefaultFont,
             color = TextSecondary,
             fontSize = 18.sp,
+            fontWeight = FontWeight.Normal,
+            letterSpacing = 2.sp
+        )
+    }
+
+val brushing_time_text: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFont,
+            color = TextSecondary,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Normal,
             letterSpacing = 2.sp
         )

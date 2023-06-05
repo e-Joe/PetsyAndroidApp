@@ -1,13 +1,26 @@
 package com.bytecode.petsy.presentation.ui.screens.mainflow.brushing
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -15,21 +28,31 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
+import com.bytecode.petsy.presentation.ui.commonui.buttons.IconTextButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
+import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
+import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterFormEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.BrushingState
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 import com.bytecode.petsy.presentation.ui.theme.ProgressColor
+import com.bytecode.petsy.presentation.ui.theme.ScreenBackgroundColor
+import com.bytecode.petsy.presentation.ui.theme.brushing_time_text
 import com.bytecode.petsy.presentation.ui.theme.button_primary_text
 import com.bytecode.petsy.presentation.ui.theme.paused_text
 import com.bytecode.petsy.presentation.ui.theme.ticker_text
@@ -50,8 +73,21 @@ fun BrushingScreen(
         ) {
             PetsyImageBackground()
             HeaderOnboarding()
-            BrushingTimerScreen(viewModel)
+
+
+            when (viewModel.state.brushingPhase) {
+                BrushingState.NOT_STARTED,
+                BrushingState.IN_PROGRESS,
+                BrushingState.PAUSED -> {
+                    BrushingTimerScreen(viewModel)
+                }
+
+                BrushingState.FINISHED -> {
+                    BrushingFinishedDogScreen(viewModel)
+                }
+            }
         }
+
     }
 }
 
@@ -173,17 +209,146 @@ fun BrushingTimerScreen(viewModel: MainFlowViewModel) {
                     GradientButton(
                         text = stringResource(R.string.finish_brushing),
                         onClick = {
-                            viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.NOT_STARTED))
+                            viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.FINISHED))
                         }
                     )
                 }
+            }
+
+            BrushingState.FINISHED -> {
+
             }
         }
     }
 }
 
-//@Preview
-//@Composable
-//fun DashboardScreenPreview() {
-//    BrushingScreen()
-//}
+//BrushingFinishedDogScreen
+@Composable
+fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
+    val dogsListState = viewModel.dogsFlow.collectAsState()
+    val lazyListState = rememberLazyListState()
+
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+
+        val (
+            titleText,
+            brushingTime,
+            saveButton,
+            backToBrushingButton,
+            mainPart
+        ) = createRefs()
+
+        val topGuideline = createGuidelineFromTop(110.dp)
+        val bottomGuideline = createGuidelineFromBottom(120.dp)
+
+        Text(
+            modifier = Modifier
+                .constrainAs(titleText) {
+                    top.linkTo(topGuideline)
+                    start.linkTo(parent.start)
+                }
+                .padding(horizontal = 20.dp),
+            text = "Choose the dog whose teeth you brushed \uD83D\uDC47",
+            style = MaterialTheme.typography.h1
+        )
+
+        Text(
+            modifier = Modifier
+                .constrainAs(brushingTime) {
+                    top.linkTo(titleText.bottom)
+                    start.linkTo(parent.start)
+                }
+                .padding(horizontal = 20.dp)
+                .padding(top = 10.dp),
+            text = "Brushing time: 02:34",
+            style = brushing_time_text
+        )
+
+        Column(
+            modifier = Modifier
+                .constrainAs(mainPart) {
+                    top.linkTo(brushingTime.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(saveButton.top)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                }
+                .padding(horizontal = 20.dp)
+                .padding(top = 30.dp)
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                state = lazyListState,
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                contentPadding = PaddingValues(
+                    top = 5.dp,
+                    bottom = 5.dp
+                )
+            ) {
+                items(items = dogsListState.value,
+                    itemContent = { dog ->
+                        var name = remember { mutableStateOf(dog.name) }
+                        DogItem(dog = dog, onClick = {
+                            viewModel.onEvent(MainFlowEvent.DogClickedEvent(dog.id))
+                        })
+                    }
+                )
+            }
+
+            IconTextButton(
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(top = 20.dp),
+                onClick = {
+
+                }
+            )
+        }
+
+        TextButton(
+            modifier = Modifier
+                .constrainAs(backToBrushingButton) {
+                    bottom.linkTo(saveButton.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            contentPadding = PaddingValues(0.dp),
+            onClick = {
+                viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.NOT_STARTED))
+            }) {
+            Text(
+                text = "Back to brushing",
+                style = button_primary_text
+            )
+        }
+
+        GradientButton(
+            modifier = Modifier
+                .constrainAs(saveButton) {
+                    bottom.linkTo(bottomGuideline)
+                    start.linkTo(parent.start)
+                }
+                .height(70.dp),
+            text = "Save",
+            onClick = {
+
+            },
+            alpha = if (viewModel.state.isDogSelected) 1f else 0.3f,
+        )
+
+    }
+}
+
+
+@Preview
+@Composable
+fun FinishedScreenPreview() {
+//    BrushingFinishedDogScreen()
+}
+

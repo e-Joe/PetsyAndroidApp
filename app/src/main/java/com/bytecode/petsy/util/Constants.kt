@@ -3,9 +3,9 @@ package com.bytecode.petsy.util
 object Constants {
 
     val colors = arrayListOf(
-        "#FF0000",
-        "#00FF00",
-        "#0000FF",
+        "#6BA6FF",
+        "#E9C46A",
+        "#63C4AF",
         "#FFFF00",
         "#FF00FF",
         "#00FFFF",
