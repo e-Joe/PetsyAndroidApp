@@ -8,8 +8,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
+import com.bytecode.petsy.data.model.dto.brushing.BrushingTimeDto
 import com.bytecode.petsy.data.model.dto.dog.DogDto
 import com.bytecode.petsy.data.model.dto.user.UserDto
+import com.bytecode.petsy.domain.usecase.brushingtime.SaveBrushingTimeUseCase
 import com.bytecode.petsy.domain.usecase.dog.GetDogsUseCase
 import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,12 +23,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.chrono.ChronoLocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class MainFlowViewModel @Inject constructor(
     private val getLoggedInUserUseCase: GetLoggedInUserUseCase,
     private val getDogsUseCase: GetDogsUseCase,
+    private val saveBrushingTimeUseCase: SaveBrushingTimeUseCase
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(MainFlowState())
@@ -39,6 +45,8 @@ class MainFlowViewModel @Inject constructor(
     private var dogs = mutableStateListOf(DogDto())
     private val _dogsFlow = MutableStateFlow(dogs)
     val dogsFlow: StateFlow<List<DogDto>> get() = _dogsFlow
+
+    private lateinit var startBrushingDateTime: ZonedDateTime
 
     init {
         getLoggedInUser()
@@ -56,6 +64,11 @@ class MainFlowViewModel @Inject constructor(
                     }
 
                     BrushingState.IN_PROGRESS -> {
+                        startBrushingDateTime = ZonedDateTime.now()
+                        startBrushing()
+                    }
+
+                    BrushingState.CONTINUE -> {
                         startBrushing()
                     }
 
@@ -64,7 +77,7 @@ class MainFlowViewModel @Inject constructor(
                     }
 
                     BrushingState.FINISHED -> {
-                        stopBrushing()
+                        pauseBrushing()
                     }
                 }
 
@@ -85,9 +98,13 @@ class MainFlowViewModel @Inject constructor(
                 state = state.copy(
                     isDogSelected = dog?.isSelected ?: false
                 )
-
-
             }
+
+            is MainFlowEvent.SaveBrushingTimeEvent -> {
+                saveBrushingTime()
+            }
+
+
         }
     }
 
@@ -99,6 +116,10 @@ class MainFlowViewModel @Inject constructor(
                 _times.value += 1
             }
         }
+    }
+
+    private fun continueBrushing() {
+        startBrushing()
     }
 
     private fun pauseBrushing() {
@@ -136,6 +157,29 @@ class MainFlowViewModel @Inject constructor(
             }
         }
     }
+
+    private fun saveBrushingTime() = safeLaunch {
+
+        val time = times.value.toLong()
+        val startTime = startBrushingDateTime
+        val endTime = startTime.plusSeconds(time)
+        var dogId: Long = 0
+        dogs.find { it.isSelected }?.let {
+            dogId = it.id
+        }
+        val userId = user.id
+
+        val brushingTime = BrushingTimeDto(
+            duration = time,
+            startDateTime = startTime,
+            endDateTime = endTime,
+            dogId = dogId,
+            ownerId = userId
+        )
+
+        val params = SaveBrushingTimeUseCase.Params(brushingTime)
+        call(saveBrushingTimeUseCase(params))
+    }
 }
 
 
@@ -149,11 +193,14 @@ sealed class MainFlowEvent() {
     data class BrushingStateEvent(val brushingState: BrushingState) : MainFlowEvent()
 
     data class DogClickedEvent(val dogId: Long) : MainFlowEvent()
+
+    data class SaveBrushingTimeEvent(val time: String) : MainFlowEvent()
 }
 
 enum class BrushingState {
     NOT_STARTED,
     IN_PROGRESS,
+    CONTINUE,
     PAUSED,
     FINISHED
 }

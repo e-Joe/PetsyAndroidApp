@@ -78,6 +78,7 @@ fun BrushingScreen(
             when (viewModel.state.brushingPhase) {
                 BrushingState.NOT_STARTED,
                 BrushingState.IN_PROGRESS,
+                BrushingState.CONTINUE,
                 BrushingState.PAUSED -> {
                     BrushingTimerScreen(viewModel)
                 }
@@ -161,6 +162,7 @@ fun BrushingTimerScreen(viewModel: MainFlowViewModel) {
             }
 
             BrushingState.IN_PROGRESS,
+            BrushingState.CONTINUE,
             BrushingState.PAUSED -> {
                 Column(
                     modifier = Modifier
@@ -227,6 +229,7 @@ fun BrushingTimerScreen(viewModel: MainFlowViewModel) {
 fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
     val dogsListState = viewModel.dogsFlow.collectAsState()
     val lazyListState = rememberLazyListState()
+    val times by viewModel.times.collectAsState()
 
     ConstraintLayout(
         modifier = Modifier
@@ -264,7 +267,7 @@ fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
                 }
                 .padding(horizontal = 20.dp)
                 .padding(top = 10.dp),
-            text = "Brushing time: 02:34",
+            text = "Brushing time:" + viewModel.formatTime(times),
             style = brushing_time_text
         )
 
@@ -337,7 +340,7 @@ fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
                 .height(70.dp),
             text = "Save",
             onClick = {
-
+                viewModel.onEvent(MainFlowEvent.SaveBrushingTimeEvent(""))
             },
             alpha = if (viewModel.state.isDogSelected) 1f else 0.3f,
         )

@@ -2,9 +2,11 @@ package com.bytecode.petsy.data.repository.di
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.bytecode.petsy.data.local.dao.BrushingTimeDao
 import com.bytecode.petsy.data.local.dao.ColorDao
 import com.bytecode.petsy.data.local.dao.DogDao
 import com.bytecode.petsy.data.local.dao.UserDao
+import com.bytecode.petsy.data.repository.brushingtime.BrushingTimeRepository
 import com.bytecode.petsy.data.repository.color.ColorRepository
 import com.bytecode.petsy.data.repository.dog.DogRepository
 import com.bytecode.petsy.data.repository.user.UserRepository
@@ -43,5 +45,11 @@ class RepositoryModule {
     fun provideColorRepository(
         dao: ColorDao
     ) = ColorRepository(dao)
+
+    @Singleton
+    @Provides
+    fun provideBrushingTimeRepository(
+        dao: BrushingTimeDao
+    ) = BrushingTimeRepository(dao)
 
 }

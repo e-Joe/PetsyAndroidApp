@@ -3,6 +3,7 @@ package com.bytecode.petsy.data.local.di
 import android.content.Context
 import androidx.room.Room
 import com.bytecode.petsy.BuildConfig
+import com.bytecode.petsy.data.local.dao.BrushingTimeDao
 import com.bytecode.petsy.data.local.dao.ColorDao
 import com.bytecode.petsy.data.local.dao.DogDao
 import com.bytecode.petsy.data.local.dao.UserDao
@@ -55,5 +56,11 @@ class LocalModule {
     @Singleton
     fun provideColorDao(appDatabase: PetsyDatabase): ColorDao {
         return appDatabase.colorDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideBrushingTimeDao(appDatabase: PetsyDatabase): BrushingTimeDao {
+        return appDatabase.brushingTimeDao()
     }
 }
