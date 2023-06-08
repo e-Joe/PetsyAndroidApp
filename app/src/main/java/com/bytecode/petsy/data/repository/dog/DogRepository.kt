@@ -1,6 +1,8 @@
 package com.bytecode.petsy.data.repository.dog
 
 import androidx.annotation.VisibleForTesting
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import com.bytecode.petsy.data.local.dao.DogDao
 import com.bytecode.petsy.data.local.dao.UserDao
 import com.bytecode.petsy.data.model.local.dog.DogEntity
@@ -18,4 +20,6 @@ constructor(
     suspend fun saveDogs(dogs: List<DogEntity>) = dao.insert(dogs)
 
     suspend fun getDogs(ownerId: Long) = dao.getDogs(ownerId)
+
+    fun insertDogWithId(dogEntity: DogEntity) : Long = dao.insertDog(dogEntity)
 }

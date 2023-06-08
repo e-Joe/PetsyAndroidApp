@@ -1,20 +1,15 @@
 package com.bytecode.petsy.presentation.ui.screens.mainflow.brushing
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,10 +25,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,18 +42,17 @@ import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.buttons.IconTextButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
-import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
-import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterFormEvent
+import com.bytecode.petsy.presentation.ui.commonui.modals.AddDogDialog
 import com.bytecode.petsy.presentation.ui.screens.mainflow.BrushingState
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 import com.bytecode.petsy.presentation.ui.theme.ProgressColor
-import com.bytecode.petsy.presentation.ui.theme.ScreenBackgroundColor
 import com.bytecode.petsy.presentation.ui.theme.brushing_time_text
 import com.bytecode.petsy.presentation.ui.theme.button_primary_text
 import com.bytecode.petsy.presentation.ui.theme.paused_text
 import com.bytecode.petsy.presentation.ui.theme.ticker_text
 import com.hitanshudhawan.circularprogressbar.CircularProgressBar
+import kotlinx.coroutines.launch
 
 @Composable
 fun BrushingScreen(
@@ -228,7 +224,8 @@ fun BrushingTimerScreen(viewModel: MainFlowViewModel) {
 @Composable
 fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
     val dogsListState = viewModel.dogsFlow.collectAsState()
-    val lazyListState = rememberLazyListState()
+    val lazyColumnListState = rememberLazyListState()
+    val corroutineScope = rememberCoroutineScope()
     val times by viewModel.times.collectAsState()
 
     ConstraintLayout(
@@ -236,6 +233,18 @@ fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
+        val context = LocalContext.current
+        val showDialog = remember { mutableStateOf(false) }
+
+        if (showDialog.value)
+            AddDogDialog(
+                dogs = viewModel.getDogNames(),
+                setShowDialog = {
+                    showDialog.value = it
+                },
+                setValue = {
+                    viewModel.onEvent(MainFlowEvent.SaveNewDog(it))
+                })
 
         val (
             titleText,
@@ -271,47 +280,57 @@ fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
             style = brushing_time_text
         )
 
-        Column(
+
+
+        LazyColumn(
             modifier = Modifier
                 .constrainAs(mainPart) {
                     top.linkTo(brushingTime.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    bottom.linkTo(saveButton.top)
+                    bottom.linkTo(backToBrushingButton.top)
                     width = Dimension.fillToConstraints
                     height = Dimension.fillToConstraints
                 }
                 .padding(horizontal = 20.dp)
-                .padding(top = 30.dp)
+                .padding(top = 30.dp),
+            state = lazyColumnListState,
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            contentPadding = PaddingValues(
+                top = 5.dp,
+                bottom = 5.dp
+            )
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                state = lazyListState,
-                verticalArrangement = Arrangement.spacedBy(20.dp),
-                contentPadding = PaddingValues(
-                    top = 5.dp,
-                    bottom = 5.dp
-                )
-            ) {
-                items(items = dogsListState.value,
-                    itemContent = { dog ->
-                        var name = remember { mutableStateOf(dog.name) }
-                        DogItem(dog = dog, onClick = {
-                            viewModel.onEvent(MainFlowEvent.DogClickedEvent(dog.id))
-                        })
-                    }
-                )
+
+            if (viewModel.state.shouldScrollList) {
+                corroutineScope.launch {
+                    lazyColumnListState.scrollToItem(viewModel.getDogNames().size, 0)
+                }
             }
-
-            IconTextButton(
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(top = 20.dp),
-                onClick = {
-
+            items(items = dogsListState.value,
+                itemContent = { dog ->
+                    DogItem(dog = dog, onClick = {
+                        viewModel.onEvent(MainFlowEvent.DogClickedEvent(dog.id))
+                    })
                 }
             )
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                )
+                {
+                    IconTextButton(
+                        modifier = Modifier
+                            .padding(top = 5.dp),
+                        onClick = {
+                            showDialog.value = true
+                        }
+                    )
+                }
+            }
         }
 
         TextButton(

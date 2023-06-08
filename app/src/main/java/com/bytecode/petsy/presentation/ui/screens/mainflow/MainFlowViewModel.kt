@@ -9,10 +9,14 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
 import com.bytecode.petsy.data.model.dto.brushing.BrushingTimeDto
+import com.bytecode.petsy.data.model.dto.color.ColorDto
 import com.bytecode.petsy.data.model.dto.dog.DogDto
 import com.bytecode.petsy.data.model.dto.user.UserDto
 import com.bytecode.petsy.domain.usecase.brushingtime.SaveBrushingTimeUseCase
+import com.bytecode.petsy.domain.usecase.color.GetColorForNewDogUseCase
+import com.bytecode.petsy.domain.usecase.color.SaveColorUseCase
 import com.bytecode.petsy.domain.usecase.dog.GetDogsUseCase
+import com.bytecode.petsy.domain.usecase.dog.SaveDogUseCase
 import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -32,11 +36,17 @@ import javax.inject.Inject
 class MainFlowViewModel @Inject constructor(
     private val getLoggedInUserUseCase: GetLoggedInUserUseCase,
     private val getDogsUseCase: GetDogsUseCase,
-    private val saveBrushingTimeUseCase: SaveBrushingTimeUseCase
+    private val saveBrushingTimeUseCase: SaveBrushingTimeUseCase,
+    private val getColorForNewDogUseCase: GetColorForNewDogUseCase,
+    private val saveDogUseCase: SaveDogUseCase,
+    private val saveColorUseCase: SaveColorUseCase,
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(MainFlowState())
-    lateinit var user: UserDto
+    private lateinit var user: UserDto
+    private lateinit var newColor: String
+    private lateinit var newDogName: String
+    private var insertedDogId: Long = -1
 
     private var job: Job? = null
     private val _times = MutableStateFlow(0)
@@ -80,7 +90,6 @@ class MainFlowViewModel @Inject constructor(
                         pauseBrushing()
                     }
                 }
-
             }
 
             is MainFlowEvent.DogClickedEvent -> {
@@ -102,6 +111,11 @@ class MainFlowViewModel @Inject constructor(
 
             is MainFlowEvent.SaveBrushingTimeEvent -> {
                 saveBrushingTime()
+            }
+
+            is MainFlowEvent.SaveNewDog -> {
+                newDogName = event.name
+                getColorForNewDog()
             }
 
 
@@ -154,7 +168,42 @@ class MainFlowViewModel @Inject constructor(
             } else {
                 dogs.clear()
                 dogs.addAll(it)
+
+
+                if (insertedDogId > -1) {
+                    dogs.find { it.id == insertedDogId }?.let {
+                        it.isSelected = true
+                    }
+                }
+
+                insertedDogId = -1
             }
+        }
+    }
+
+    private fun getColorForNewDog() = safeLaunch {
+        call(getColorForNewDogUseCase(user.id)) {
+            newColor = it.value
+            saveDog()
+        }
+    }
+
+    private fun saveDog() = safeLaunch {
+        var dog = DogDto(name = newDogName, ownerId = user.id, color = newColor)
+
+        call(saveDogUseCase(SaveDogUseCase.Params(dog))) {
+            insertedDogId = it
+            saveColor()
+        }
+    }
+
+    private fun saveColor() = safeLaunch {
+        val color = ColorDto(value = newColor, ownerId = user.id, dogId = insertedDogId)
+        call(saveColorUseCase(SaveColorUseCase.Params(color))) {
+            getDogs()
+            state = state.copy(
+                shouldScrollList = true
+            )
         }
     }
 
@@ -180,12 +229,17 @@ class MainFlowViewModel @Inject constructor(
         val params = SaveBrushingTimeUseCase.Params(brushingTime)
         call(saveBrushingTimeUseCase(params))
     }
+
+    fun getDogNames(): List<String> {
+        return dogs.map { it.name.lowercase().trim() }
+    }
 }
 
 
 data class MainFlowState(
     val brushingPhase: BrushingState = BrushingState.NOT_STARTED,
-    val isDogSelected: Boolean = false
+    val isDogSelected: Boolean = false,
+    val shouldScrollList: Boolean = false
 )
 
 sealed class MainFlowEvent() {
@@ -195,6 +249,8 @@ sealed class MainFlowEvent() {
     data class DogClickedEvent(val dogId: Long) : MainFlowEvent()
 
     data class SaveBrushingTimeEvent(val time: String) : MainFlowEvent()
+
+    data class SaveNewDog(val name: String) : MainFlowEvent()
 }
 
 enum class BrushingState {

@@ -11,15 +11,15 @@ import javax.inject.Inject
 class SaveDogUseCase @Inject constructor(
     @get:VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     internal val repository: DogRepository
-) : LocalUseCase<SaveDogUseCase.Params, Unit>() {
+) : LocalUseCase<SaveDogUseCase.Params, Long>() {
 
     data class Params(
         val dog: DogDto
     )
 
-    override suspend fun FlowCollector<Unit>.execute(params: Params) {
+    override suspend fun FlowCollector<Long>.execute(params: Params) {
         val dto = params.dog
-        repository.saveDog(dto.toDogEntity())
-        emit(Unit)
+        val a = repository.insertDogWithId(dto.toDogEntity())
+        emit(a)
     }
 }
