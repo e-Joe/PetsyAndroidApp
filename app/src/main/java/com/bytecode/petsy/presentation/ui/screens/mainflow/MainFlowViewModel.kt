@@ -169,7 +169,6 @@ class MainFlowViewModel @Inject constructor(
                 dogs.clear()
                 dogs.addAll(it)
 
-
                 if (insertedDogId > -1) {
                     dogs.find { it.id == insertedDogId }?.let {
                         it.isSelected = true
@@ -232,6 +231,10 @@ class MainFlowViewModel @Inject constructor(
 
     fun getDogNames(): List<String> {
         return dogs.map { it.name.lowercase().trim() }
+    }
+
+    fun getSelectedDog(): DogDto? {
+        return dogs.find { it.isSelected }
     }
 }
 

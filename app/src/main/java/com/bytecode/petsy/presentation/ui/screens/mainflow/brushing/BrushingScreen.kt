@@ -1,6 +1,8 @@
 package com.bytecode.petsy.presentation.ui.screens.mainflow.brushing
 
+import android.content.Intent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -33,6 +36,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -49,6 +53,7 @@ import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 import com.bytecode.petsy.presentation.ui.theme.ProgressColor
 import com.bytecode.petsy.presentation.ui.theme.brushing_time_text
 import com.bytecode.petsy.presentation.ui.theme.button_primary_text
+import com.bytecode.petsy.presentation.ui.theme.paragraph_text
 import com.bytecode.petsy.presentation.ui.theme.paused_text
 import com.bytecode.petsy.presentation.ui.theme.ticker_text
 import com.hitanshudhawan.circularprogressbar.CircularProgressBar
@@ -69,20 +74,20 @@ fun BrushingScreen(
         ) {
             PetsyImageBackground()
             HeaderOnboarding()
+            BrushingShareScreen(viewModel)
 
-
-            when (viewModel.state.brushingPhase) {
-                BrushingState.NOT_STARTED,
-                BrushingState.IN_PROGRESS,
-                BrushingState.CONTINUE,
-                BrushingState.PAUSED -> {
-                    BrushingTimerScreen(viewModel)
-                }
-
-                BrushingState.FINISHED -> {
-                    BrushingFinishedDogScreen(viewModel)
-                }
-            }
+//            when (viewModel.state.brushingPhase) {
+//                BrushingState.NOT_STARTED,
+//                BrushingState.IN_PROGRESS,
+//                BrushingState.CONTINUE,
+//                BrushingState.PAUSED -> {
+//                    BrushingTimerScreen(viewModel)
+//                }
+//
+//                BrushingState.FINISHED -> {
+//                    BrushingFinishedDogScreen(viewModel)
+//                }
+//            }
         }
 
     }
@@ -233,7 +238,6 @@ fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        val context = LocalContext.current
         val showDialog = remember { mutableStateOf(false) }
 
         if (showDialog.value)
@@ -364,6 +368,144 @@ fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
             alpha = if (viewModel.state.isDogSelected) 1f else 0.3f,
         )
 
+    }
+}
+
+@Composable
+fun BrushingShareScreen(viewModel: MainFlowViewModel) {
+    val times by viewModel.times.collectAsState()
+
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+
+    ) {
+
+        val (
+            dogScoreView,
+            gradientView,
+            celebrateImage,
+            titleText,
+            descriptionText,
+            btnShare,
+            btnHome
+        ) = createRefs()
+
+        val topGuideline = createGuidelineFromTop(70.dp)
+        val topGuidelineGradient = createGuidelineFromTop(20.dp)
+        val topGuidelineForCelebration = createGuidelineFromTop(110.dp)
+        val bottomGuideline = createGuidelineFromBottom(120.dp)
+
+        Image(
+            modifier = Modifier
+                .constrainAs(gradientView) {
+                    top.linkTo(topGuidelineGradient)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .height(400.dp)
+                .fillMaxWidth(),
+            painter = painterResource(id = R.drawable.img_gradient),
+            contentDescription = "",
+            contentScale = ContentScale.FillBounds
+        )
+
+        Image(
+            modifier = Modifier
+                .constrainAs(celebrateImage) {
+                    top.linkTo(topGuidelineForCelebration)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .height(290.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
+            painter = painterResource(id = R.drawable.img_celebration),
+            contentDescription = "",
+            contentScale = ContentScale.FillHeight
+        )
+
+        viewModel.getSelectedDog()?.let {
+            Column(
+                modifier = Modifier
+                    .constrainAs(dogScoreView) {
+                        top.linkTo(topGuideline)
+                        centerHorizontallyTo(parent)
+                    }
+                    .padding(top = 30.dp)
+            ) {
+                DogShareView(
+                    dog = it
+                )
+            }
+        }
+
+        Text(
+            modifier = Modifier
+                .constrainAs(titleText) {
+                    top.linkTo(celebrateImage.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(horizontal = 20.dp),
+            text = "Keep up the good work",
+            style = MaterialTheme.typography.h2
+        )
+
+        Text(
+            modifier = Modifier
+                .constrainAs(descriptionText) {
+                    top.linkTo(titleText.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(horizontal = 20.dp)
+                .padding(top = 15.dp),
+            text = "Thank you for looking up for your dog\n" +
+                    "and brushing his/her teeth.\n" +
+                    "Have a a great day",
+            textAlign = TextAlign.Center,
+            style = paragraph_text
+        )
+
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "This is my dog.")
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        val context = LocalContext.current
+
+
+        TextButton(
+            modifier = Modifier
+                .constrainAs(btnShare) {
+                    bottom.linkTo(btnHome.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                },
+            contentPadding = PaddingValues(0.dp),
+            onClick = {
+                context.startActivity(shareIntent)
+            }) {
+            Text(
+                text = "Share",
+                style = button_primary_text
+            )
+        }
+
+        GradientButton(
+            modifier = Modifier
+                .constrainAs(btnHome) {
+                    bottom.linkTo(bottomGuideline)
+                    start.linkTo(parent.start)
+                }
+                .height(70.dp),
+            text = "Home",
+            onClick = {
+//                viewModel.onEvent(MainFlowEvent.SaveBrushingTimeEvent(""))
+            }
+        )
     }
 }
 

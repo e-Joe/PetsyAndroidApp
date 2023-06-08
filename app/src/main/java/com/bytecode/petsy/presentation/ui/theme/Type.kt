@@ -171,3 +171,25 @@ val brushing_time_text: TextStyle
             letterSpacing = 2.sp
         )
     }
+
+val paragraph_text: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFont,
+            color = TextSecondary,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Normal,
+            letterSpacing = 1.sp
+        )
+    }
+
+val share_time_text: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFontBold,
+            color = TextSecondary,
+            fontSize = 36.sp,
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 1.sp
+        )
+    }
