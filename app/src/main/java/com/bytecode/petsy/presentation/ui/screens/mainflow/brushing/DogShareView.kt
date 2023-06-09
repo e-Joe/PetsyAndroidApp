@@ -37,7 +37,8 @@ import com.bytecode.petsy.util.toLighterColor
 fun DogShareView(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
-    dog: DogDto
+    dog: DogDto,
+    time: String
 ) {
     var background = Color.White.copy()
     var border = Color.Transparent
@@ -86,7 +87,7 @@ fun DogShareView(
                     )
                 }
                 Text(
-                    text = "02:34",
+                    text = time,
                     style = share_time_text
                 )
             }

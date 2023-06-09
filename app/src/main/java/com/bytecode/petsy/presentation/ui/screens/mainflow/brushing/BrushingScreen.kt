@@ -2,7 +2,6 @@ package com.bytecode.petsy.presentation.ui.screens.mainflow.brushing
 
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -74,20 +72,23 @@ fun BrushingScreen(
         ) {
             PetsyImageBackground()
             HeaderOnboarding()
-            BrushingShareScreen(viewModel)
 
-//            when (viewModel.state.brushingPhase) {
-//                BrushingState.NOT_STARTED,
-//                BrushingState.IN_PROGRESS,
-//                BrushingState.CONTINUE,
-//                BrushingState.PAUSED -> {
-//                    BrushingTimerScreen(viewModel)
-//                }
-//
-//                BrushingState.FINISHED -> {
-//                    BrushingFinishedDogScreen(viewModel)
-//                }
-//            }
+            when (viewModel.state.brushingPhase) {
+                BrushingState.NOT_STARTED,
+                BrushingState.IN_PROGRESS,
+                BrushingState.CONTINUE,
+                BrushingState.PAUSED -> {
+                    BrushingTimerScreen(viewModel)
+                }
+
+                BrushingState.SAVING -> {
+                    SaveBrushingScreen(viewModel)
+                }
+
+                BrushingState.SHARING -> {
+                    ShareBrushingScreen(viewModel)
+                }
+            }
         }
 
     }
@@ -198,7 +199,7 @@ fun BrushingTimerScreen(viewModel: MainFlowViewModel) {
                             onClick = {
                                 viewModel.onEvent(
                                     MainFlowEvent.BrushingStateEvent(
-                                        BrushingState.IN_PROGRESS
+                                        BrushingState.CONTINUE
                                     )
                                 )
                             }) {
@@ -212,22 +213,22 @@ fun BrushingTimerScreen(viewModel: MainFlowViewModel) {
                     GradientButton(
                         text = stringResource(R.string.finish_brushing),
                         onClick = {
-                            viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.FINISHED))
+                            viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.SAVING))
                         }
                     )
                 }
             }
 
-            BrushingState.FINISHED -> {
+            BrushingState.SAVING -> {}
 
-            }
+            BrushingState.SHARING -> {}
         }
     }
 }
 
 //BrushingFinishedDogScreen
 @Composable
-fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
+fun SaveBrushingScreen(viewModel: MainFlowViewModel) {
     val dogsListState = viewModel.dogsFlow.collectAsState()
     val lazyColumnListState = rememberLazyListState()
     val corroutineScope = rememberCoroutineScope()
@@ -346,7 +347,7 @@ fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
                 },
             contentPadding = PaddingValues(0.dp),
             onClick = {
-                viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.NOT_STARTED))
+                viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.PAUSED))
             }) {
             Text(
                 text = "Back to brushing",
@@ -372,8 +373,8 @@ fun BrushingFinishedDogScreen(viewModel: MainFlowViewModel) {
 }
 
 @Composable
-fun BrushingShareScreen(viewModel: MainFlowViewModel) {
-    val times by viewModel.times.collectAsState()
+fun ShareBrushingScreen(viewModel: MainFlowViewModel) {
+    val time by viewModel.finishedTime.collectAsState()
 
     ConstraintLayout(
         modifier = Modifier
@@ -435,7 +436,8 @@ fun BrushingShareScreen(viewModel: MainFlowViewModel) {
                     .padding(top = 30.dp)
             ) {
                 DogShareView(
-                    dog = it
+                    dog = it,
+                    time = viewModel.formatTime(time),
                 )
             }
         }
@@ -503,7 +505,7 @@ fun BrushingShareScreen(viewModel: MainFlowViewModel) {
                 .height(70.dp),
             text = "Home",
             onClick = {
-//                viewModel.onEvent(MainFlowEvent.SaveBrushingTimeEvent(""))
+                viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.NOT_STARTED))
             }
         )
     }

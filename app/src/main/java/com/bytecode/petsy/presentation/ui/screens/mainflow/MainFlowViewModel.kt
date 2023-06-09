@@ -52,6 +52,9 @@ class MainFlowViewModel @Inject constructor(
     private val _times = MutableStateFlow(0)
     val times = _times.asStateFlow()
 
+    private val _finishedTime = MutableStateFlow(0)
+    val finishedTime = _finishedTime.asStateFlow()
+
     private var dogs = mutableStateListOf(DogDto())
     private val _dogsFlow = MutableStateFlow(dogs)
     val dogsFlow: StateFlow<List<DogDto>> get() = _dogsFlow
@@ -70,6 +73,7 @@ class MainFlowViewModel @Inject constructor(
 
                 when (event.brushingState) {
                     BrushingState.NOT_STARTED -> {
+                        _finishedTime.value = 0
                         stopBrushing()
                     }
 
@@ -86,8 +90,13 @@ class MainFlowViewModel @Inject constructor(
                         pauseBrushing()
                     }
 
-                    BrushingState.FINISHED -> {
+                    BrushingState.SAVING -> {
                         pauseBrushing()
+                    }
+
+                    BrushingState.SHARING -> {
+                        _finishedTime.value = _times.value
+                        stopBrushing()
                     }
                 }
             }
@@ -226,7 +235,9 @@ class MainFlowViewModel @Inject constructor(
         )
 
         val params = SaveBrushingTimeUseCase.Params(brushingTime)
-        call(saveBrushingTimeUseCase(params))
+        call(saveBrushingTimeUseCase(params)){
+            onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.SHARING))
+        }
     }
 
     fun getDogNames(): List<String> {
@@ -261,5 +272,6 @@ enum class BrushingState {
     IN_PROGRESS,
     CONTINUE,
     PAUSED,
-    FINISHED
+    SAVING,
+    SHARING
 }
