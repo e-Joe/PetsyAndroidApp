@@ -39,12 +39,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavController
 import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.buttons.IconTextButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.commonui.modals.AddDogDialog
+import com.bytecode.petsy.presentation.ui.navigation.BottomBarScreen
 import com.bytecode.petsy.presentation.ui.screens.mainflow.BrushingState
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
@@ -59,12 +61,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun BrushingScreen(
-    viewModel: MainFlowViewModel
+    viewModel: MainFlowViewModel,
+    navController: NavController
 ) {
 
     Scaffold { paddingValues ->
-
-
         Box(
             modifier = Modifier
                 .padding(paddingValues = paddingValues)
@@ -86,7 +87,7 @@ fun BrushingScreen(
                 }
 
                 BrushingState.SHARING -> {
-                    ShareBrushingScreen(viewModel)
+                    ShareBrushingScreen(viewModel, navController)
                 }
             }
         }
@@ -373,7 +374,7 @@ fun SaveBrushingScreen(viewModel: MainFlowViewModel) {
 }
 
 @Composable
-fun ShareBrushingScreen(viewModel: MainFlowViewModel) {
+fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavController) {
     val time by viewModel.finishedTime.collectAsState()
 
     ConstraintLayout(
@@ -506,6 +507,7 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel) {
             text = "Home",
             onClick = {
                 viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.NOT_STARTED))
+                navController.navigate(BottomBarScreen.DashboardScreen.route)
             }
         )
     }

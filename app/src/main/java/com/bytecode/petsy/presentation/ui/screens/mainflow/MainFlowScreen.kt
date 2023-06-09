@@ -37,16 +37,17 @@ import com.bytecode.petsy.presentation.ui.theme.NavigationItemActiveColor
 
 @Composable
 fun MainFlowScreen(navController: NavHostController = rememberNavController()) {
-    val navController: NavHostController = rememberNavController()
 
-    Scaffold(bottomBar = { BottomBar(navController = navController) }) {
+    var mainFlowViewModel: MainFlowViewModel = viewModel()
+
+    Scaffold(bottomBar = { BottomBar(navController = navController, mainFlowViewModel) }) {
         it
-        MainFlowNavGraph(navController, mainFlowViewModel = viewModel())
+        MainFlowNavGraph(navController, mainFlowViewModel)
     }
 }
 
 @Composable
-fun BottomBar(navController: NavHostController) {
+fun BottomBar(navController: NavHostController, mainFlowViewModel: MainFlowViewModel) {
     val screens = listOf(
         BottomBarScreen.DashboardScreen,
         BottomBarScreen.BrushingScreen,
@@ -72,7 +73,8 @@ fun BottomBar(navController: NavHostController) {
                 AddItem(
                     screen = screen,
                     currentDestination = currentDestination,
-                    navController = navController
+                    navController = navController,
+                    mainFlowViewModel
                 )
             }
         }
@@ -83,11 +85,16 @@ fun BottomBar(navController: NavHostController) {
 fun RowScope.AddItem(
     screen: BottomBarScreen,
     currentDestination: NavDestination?,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: MainFlowViewModel
 ) {
     val isSelected = currentDestination?.hierarchy?.any {
         it.route == screen.route
     } == true
+
+    var unSelectedColor = Color.Black
+    if (viewModel.state.brushingPhase != BrushingState.NOT_STARTED)
+        unSelectedColor = Color.Black.copy(alpha = 0.5f)
 
     BottomNavigationItem(
         modifier = Modifier
@@ -122,12 +129,13 @@ fun RowScope.AddItem(
         },
         selected = isSelected,
         selectedContentColor = Color.White,
-        unselectedContentColor = Color.Black,
+        unselectedContentColor = unSelectedColor,
         onClick = {
-            navController.navigate(screen.route) {
-                popUpTo(navController.graph.findStartDestination().id)
-                launchSingleTop = true
-            }
+            if (viewModel.state.brushingPhase == BrushingState.NOT_STARTED)
+                navController.navigate(screen.route) {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
         }
     )
 }

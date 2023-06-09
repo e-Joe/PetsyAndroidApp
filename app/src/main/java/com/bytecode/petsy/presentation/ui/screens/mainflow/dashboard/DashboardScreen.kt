@@ -19,16 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
+import com.bytecode.petsy.presentation.ui.navigation.BottomBarScreen
+import com.bytecode.petsy.presentation.ui.navigation.LoginFlowScreen
 import com.bytecode.petsy.presentation.ui.screens.mainflow.BrushingState
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 
 @Composable
-fun DashboardScreen(viewModel: MainFlowViewModel) {
+fun DashboardScreen(viewModel: MainFlowViewModel, navController: NavHostController) {
 
     Scaffold { paddingValues ->
         Box(
@@ -37,16 +40,14 @@ fun DashboardScreen(viewModel: MainFlowViewModel) {
                 .fillMaxSize()
         ) {
             PetsyImageBackground()
-            EmptyStateDashboard(viewModel)
+            EmptyStateDashboard(viewModel, navController)
             HeaderOnboarding()
-
-
         }
     }
 }
 
 @Composable
-private fun EmptyStateDashboard(viewModel: MainFlowViewModel) {
+private fun EmptyStateDashboard(viewModel: MainFlowViewModel, navController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -94,6 +95,7 @@ private fun EmptyStateDashboard(viewModel: MainFlowViewModel) {
                 "Start brushing",
             onClick = {
                 viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.IN_PROGRESS))
+                navController.navigate(BottomBarScreen.BrushingScreen.route)
             }
         )
 

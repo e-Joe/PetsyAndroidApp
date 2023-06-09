@@ -17,10 +17,10 @@ fun MainFlowNavGraph(navController: NavHostController, mainFlowViewModel: MainFl
     ) {
 
         composable(route = BottomBarScreen.DashboardScreen.route) {
-            DashboardScreen(mainFlowViewModel)
+            DashboardScreen(mainFlowViewModel, navController)
         }
         composable(route = BottomBarScreen.BrushingScreen.route) {
-            BrushingScreen(mainFlowViewModel)
+            BrushingScreen(mainFlowViewModel,navController)
         }
         composable(route = BottomBarScreen.ProfileScreen.route) {
             ProfileScreen()
