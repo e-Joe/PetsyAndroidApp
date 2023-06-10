@@ -1,5 +1,6 @@
 package com.bytecode.petsy.util
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
@@ -19,6 +20,7 @@ inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier
 
 
 fun String.toColor(): Color {
+    Log.d("Colors", this)
     return Color(this.toColorInt())
 }
 

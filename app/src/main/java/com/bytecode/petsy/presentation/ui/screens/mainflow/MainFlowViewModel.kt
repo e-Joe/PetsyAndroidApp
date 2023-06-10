@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
 import com.bytecode.petsy.data.model.dto.brushing.BrushingTimeDto
@@ -17,6 +16,7 @@ import com.bytecode.petsy.domain.usecase.color.GetColorForNewDogUseCase
 import com.bytecode.petsy.domain.usecase.color.SaveColorUseCase
 import com.bytecode.petsy.domain.usecase.dog.GetDogsUseCase
 import com.bytecode.petsy.domain.usecase.dog.SaveDogUseCase
+import com.bytecode.petsy.domain.usecase.dog.UpdateDogUseCase
 import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,9 +27,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
-import java.time.chrono.ChronoLocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +38,7 @@ class MainFlowViewModel @Inject constructor(
     private val getColorForNewDogUseCase: GetColorForNewDogUseCase,
     private val saveDogUseCase: SaveDogUseCase,
     private val saveColorUseCase: SaveColorUseCase,
+    private val updateDogUseCase: UpdateDogUseCase
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(MainFlowState())
@@ -48,14 +47,14 @@ class MainFlowViewModel @Inject constructor(
     private lateinit var newDogName: String
     private var insertedDogId: Long = -1
 
-    private var job: Job? = null
-    private val _times = MutableStateFlow(0)
-    val times = _times.asStateFlow()
+    private var brushingJob: Job? = null
+    private val _brushingTime = MutableStateFlow(0)
+    val brushingTime = _brushingTime.asStateFlow()
 
-    private val _finishedTime = MutableStateFlow(0)
-    val finishedTime = _finishedTime.asStateFlow()
+    private val _finishedBrushingTime = MutableStateFlow(0)
+    val finishedBrushingTime = _finishedBrushingTime.asStateFlow()
 
-    private var dogs = mutableStateListOf(DogDto())
+    private var dogs = mutableStateListOf<DogDto>()
     private val _dogsFlow = MutableStateFlow(dogs)
     val dogsFlow: StateFlow<List<DogDto>> get() = _dogsFlow
 
@@ -73,7 +72,7 @@ class MainFlowViewModel @Inject constructor(
 
                 when (event.brushingState) {
                     BrushingState.NOT_STARTED -> {
-                        _finishedTime.value = 0
+                        _finishedBrushingTime.value = 0
                         stopBrushing()
                     }
 
@@ -95,7 +94,7 @@ class MainFlowViewModel @Inject constructor(
                     }
 
                     BrushingState.SHARING -> {
-                        _finishedTime.value = _times.value
+                        _finishedBrushingTime.value = _brushingTime.value
                         stopBrushing()
                     }
                 }
@@ -118,6 +117,17 @@ class MainFlowViewModel @Inject constructor(
                 )
             }
 
+            is MainFlowEvent.ChartDogClickedEvent -> {
+                val updatedList = dogs.map {
+                    if (event.dogId == it.id) {
+                        it.copy(isSelectedForChart = !it.isSelectedForChart)
+                    } else
+                        it.copy(isSelectedForChart = false)
+                }
+                dogs.clear()
+                dogs.addAll(updatedList)
+            }
+
             is MainFlowEvent.SaveBrushingTimeEvent -> {
                 saveBrushingTime()
             }
@@ -126,39 +136,26 @@ class MainFlowViewModel @Inject constructor(
                 newDogName = event.name
                 getColorForNewDog()
             }
-
-
         }
     }
 
     private fun startBrushing() {
-        job?.cancel()
-        job = viewModelScope.launch(Dispatchers.IO) {
+        brushingJob?.cancel()
+        brushingJob = viewModelScope.launch(Dispatchers.IO) {
             while (isActive) {
                 delay(timeMillis = 1000)
-                _times.value += 1
+                _brushingTime.value += 1
             }
         }
     }
 
-    private fun continueBrushing() {
-        startBrushing()
-    }
-
     private fun pauseBrushing() {
-        job?.cancel()
+        brushingJob?.cancel()
     }
 
     private fun stopBrushing() {
-        job?.cancel()
-        _times.value = 0
-    }
-
-    fun formatTime(value: Int): String {
-        val minutes = value / 60
-        val seconds = value % 60
-
-        return minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0')
+        brushingJob?.cancel()
+        _brushingTime.value = 0
     }
 
     private fun getLoggedInUser() = safeLaunch {
@@ -216,14 +213,15 @@ class MainFlowViewModel @Inject constructor(
     }
 
     private fun saveBrushingTime() = safeLaunch {
-
-        val time = times.value.toLong()
+        val time = brushingTime.value.toLong()
         val startTime = startBrushingDateTime
         val endTime = startTime.plusSeconds(time)
         var dogId: Long = 0
-        dogs.find { it.isSelected }?.let {
-            dogId = it.id
-        }
+
+        var dog = dogs.find { it.isSelected }
+        dogId = dog?.id ?: 0
+        dog = dog?.copy(lastBrushingDate = endTime, lastBrushingPeriod = time)
+
         val userId = user.id
 
         val brushingTime = BrushingTimeDto(
@@ -234,10 +232,26 @@ class MainFlowViewModel @Inject constructor(
             ownerId = userId
         )
 
-        val params = SaveBrushingTimeUseCase.Params(brushingTime)
-        call(saveBrushingTimeUseCase(params)){
+        val paramsDogSaving = dog?.let { UpdateDogUseCase.Params(it) }
+        paramsDogSaving?.let {
+            call(updateDogUseCase(it))
+            {
+                Log.d("Keric", it.toString())
+            }
+        }
+
+        val paramsBrushing = SaveBrushingTimeUseCase.Params(brushingTime)
+        call(saveBrushingTimeUseCase(paramsBrushing)) {
             onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.SHARING))
         }
+    }
+
+
+    fun formatTime(value: Int): String {
+        val minutes = value / 60
+        val seconds = value % 60
+
+        return minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0')
     }
 
     fun getDogNames(): List<String> {
@@ -265,6 +279,8 @@ sealed class MainFlowEvent() {
     data class SaveBrushingTimeEvent(val time: String) : MainFlowEvent()
 
     data class SaveNewDog(val name: String) : MainFlowEvent()
+
+    data class ChartDogClickedEvent(val dogId: Long) : MainFlowEvent()
 }
 
 enum class BrushingState {

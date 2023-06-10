@@ -97,7 +97,7 @@ fun BrushingScreen(
 
 @Composable
 fun BrushingTimerScreen(viewModel: MainFlowViewModel) {
-    val times by viewModel.times.collectAsState()
+    val times by viewModel.brushingTime.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Text(
@@ -233,7 +233,7 @@ fun SaveBrushingScreen(viewModel: MainFlowViewModel) {
     val dogsListState = viewModel.dogsFlow.collectAsState()
     val lazyColumnListState = rememberLazyListState()
     val corroutineScope = rememberCoroutineScope()
-    val times by viewModel.times.collectAsState()
+    val times by viewModel.brushingTime.collectAsState()
 
     ConstraintLayout(
         modifier = Modifier
@@ -375,7 +375,7 @@ fun SaveBrushingScreen(viewModel: MainFlowViewModel) {
 
 @Composable
 fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavController) {
-    val time by viewModel.finishedTime.collectAsState()
+    val time by viewModel.finishedBrushingTime.collectAsState()
 
     ConstraintLayout(
         modifier = Modifier

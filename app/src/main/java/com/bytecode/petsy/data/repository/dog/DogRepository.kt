@@ -22,4 +22,6 @@ constructor(
     suspend fun getDogs(ownerId: Long) = dao.getDogs(ownerId)
 
     fun insertDogWithId(dogEntity: DogEntity) : Long = dao.insertDog(dogEntity)
+
+    fun updateDog(dogEntity: DogEntity) : Int = dao.updateDog(dogEntity)
 }

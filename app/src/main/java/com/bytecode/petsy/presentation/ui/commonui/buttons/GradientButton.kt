@@ -39,10 +39,10 @@ fun GradientButton(
     text: String,
     onClick: () -> Unit,
     alpha: Float = 1f,
-    enabled : Boolean = true,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
-    paddingStart : Dp = 20.dp,
-    paddingEnd : Dp = 20.dp,
+    paddingStart: Dp = 20.dp,
+    paddingEnd: Dp = 20.dp,
 ) {
     Button(
         modifier = modifier
@@ -74,7 +74,7 @@ fun GradientButton(
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
 
-            Row{
+            Row {
                 Text(
                     text = text, style = button_gradient_text
                 )
