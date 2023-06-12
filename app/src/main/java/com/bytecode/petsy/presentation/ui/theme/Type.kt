@@ -193,3 +193,44 @@ val share_time_text: TextStyle
             letterSpacing = 1.sp
         )
     }
+
+val brushingCardText: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFont,
+            color = TextSecondary,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+        )
+    }
+
+val brushingCardTextBold: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFontBold,
+            color = TextSecondary,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+        )
+    }
+
+val brushingCardPercentageText: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFontBold,
+            color = TextSecondary,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+        )
+    }
+
+
+val brushingCardTimeText: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFont,
+            color = TextSecondary,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal
+        )
+    }

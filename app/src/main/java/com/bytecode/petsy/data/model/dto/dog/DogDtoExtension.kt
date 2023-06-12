@@ -9,6 +9,7 @@ fun DogDto.toDogEntity() = DogEntity(
     lastBrushingDate = lastBrushingDate,
     lastBrushingPeriod = lastBrushingPeriod
 )
+
 fun DogDto.toDogEntityId() = DogEntity(
     id = id,
     name = name,
@@ -31,3 +32,16 @@ fun DogEntity.toUserDto() = DogDto(
 fun List<DogEntity>.toDogDtoList() = map { it.toUserDto() }
 
 fun List<DogDto>.toDogEntityList() = map { it.toDogEntity() }
+
+fun DogDto.calculatePercentage(): Double {
+    return this.lastBrushingPeriod.toDouble() / 120
+}
+
+fun DogDto.calculatePercentageRounded(): Int {
+    val percentage = ((this.lastBrushingPeriod / 120.toDouble()) * 100).toInt()
+
+    return if (percentage > 100)
+        100
+    else
+        percentage
+}

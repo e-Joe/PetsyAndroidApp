@@ -11,7 +11,7 @@ import com.bytecode.petsy.data.model.local.dog.DogEntity
 @Dao
 interface DogDao : BaseDao<DogEntity> {
 
-    @Query("SELECT * FROM ${DogEntity.TABLE_NAME} WHERE ${DogEntity.COLUMN_OWNER_ID} = :ownerId")
+    @Query("SELECT * FROM ${DogEntity.TABLE_NAME} WHERE ${DogEntity.COLUMN_OWNER_ID} = :ownerId ORDER BY ${DogEntity.COLUMN_LAST_BRUSHING_DATE} DESC")
     suspend fun getDogs(ownerId: Long): List<DogEntity>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)

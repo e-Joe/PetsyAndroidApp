@@ -158,7 +158,7 @@ class MainFlowViewModel @Inject constructor(
         _brushingTime.value = 0
     }
 
-    private fun getLoggedInUser() = safeLaunch {
+     fun getLoggedInUser() = safeLaunch {
         call(getLoggedInUserUseCase(Unit)) {
             if (it.isLoggedIn) {
                 user = it

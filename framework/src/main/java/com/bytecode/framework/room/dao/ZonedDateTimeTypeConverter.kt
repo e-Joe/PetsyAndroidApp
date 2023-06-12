@@ -10,7 +10,7 @@ class ZonedDateTimeTypeConverter {
     fun toZonedDateTime(value: Long?): ZonedDateTime? {
         return if (value == null) null else ZonedDateTime.ofInstant(
             Instant.ofEpochMilli(value),
-            ZoneOffset.UTC
+            ZoneOffset.systemDefault()
         )
     }
 

@@ -507,6 +507,7 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavControll
             text = "Home",
             onClick = {
                 viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.NOT_STARTED))
+                viewModel.getLoggedInUser() // TODO
                 navController.navigate(BottomBarScreen.DashboardScreen.route)
             }
         )
