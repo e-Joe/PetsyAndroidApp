@@ -11,6 +11,7 @@ val white = Color(0xFFFFFFFF)
 val StatusBarColorLight = Color(0xFFF6FAFF)
 val TextSecondary = Color(0xFF231F20)
 val TextPrimary = Color(0xFF63C4AF)
+val TextSecondary2 = Color(0xFFA7A5A6)
 
 val ButtonColorGradient1 = Color(0xFF63C4AF)
 val ButtonColorGradient2 = Color(0xFF25cdf0)

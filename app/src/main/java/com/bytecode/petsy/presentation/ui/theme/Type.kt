@@ -234,3 +234,23 @@ val brushingCardTimeText: TextStyle
             fontWeight = FontWeight.Normal
         )
     }
+
+val chartTitle: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFontBold,
+            color = TextSecondary2,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        )
+    }
+
+val chartNavigationDates: TextStyle
+    @Composable get() {
+        return TextStyle(
+            fontFamily = PetsyDefaultFontBold,
+            color = TextSecondary,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }

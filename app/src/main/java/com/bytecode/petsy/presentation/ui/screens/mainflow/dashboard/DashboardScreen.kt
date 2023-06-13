@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,11 +18,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
@@ -37,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -59,10 +63,13 @@ import com.bytecode.petsy.presentation.ui.navigation.BottomBarScreen
 import com.bytecode.petsy.presentation.ui.screens.mainflow.BrushingState
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
+import com.bytecode.petsy.presentation.ui.theme.TextSecondary2
 import com.bytecode.petsy.presentation.ui.theme.brushingCardPercentageText
 import com.bytecode.petsy.presentation.ui.theme.brushingCardText
 import com.bytecode.petsy.presentation.ui.theme.brushingCardTextBold
 import com.bytecode.petsy.presentation.ui.theme.brushingCardTimeText
+import com.bytecode.petsy.presentation.ui.theme.chartNavigationDates
+import com.bytecode.petsy.presentation.ui.theme.chartTitle
 import com.bytecode.petsy.util.toColor
 import com.bytecode.petsy.util.toLighterColor
 import com.bytecode.petsy.util.toMediumColor
@@ -170,12 +177,89 @@ private fun ChartAreaView() {
         modifier = Modifier
             .fillMaxWidth()
             .height(288.dp),
-        backgroundColor = Color.White,
         shape = RoundedCornerShape(size = 15.dp),
+        backgroundColor = Color.White,
         elevation = 2.dp
-
     ) {
+        Column(
+            modifier = Modifier
+                .padding(15.dp)
+                .padding(bottom = 25.dp)
 
+        ) {
+
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                val (title, previousButton, datesView, nextButton) = createRefs()
+
+                Text(
+                    modifier = Modifier
+                        .constrainAs(title) {
+                            top.linkTo(previousButton.top)
+                            start.linkTo(parent.start)
+                            bottom.linkTo(previousButton.bottom)
+                        },
+                    text = "Seconds",
+                    style = chartTitle
+                )
+
+                Image(
+                    painter = painterResource(R.drawable.ic_next),
+                    contentDescription = "next",
+                    contentScale = ContentScale.Inside,
+                    modifier = Modifier
+                        .size(31.dp)
+                        .clip(CircleShape)
+                        .background(Color.White)
+                        .border(0.5.dp, TextSecondary2, CircleShape)
+                        .constrainAs(nextButton) {
+                            top.linkTo(parent.top)
+                            end.linkTo(parent.end)
+                        }
+                )
+
+                Column(
+                    modifier = Modifier
+                        .padding(end = 10.dp)
+                        .height(31.dp)
+                        .width(98.dp)
+                        .clip(CircleShape)
+                        .background(Color.White)
+                        .border(0.5.dp, TextSecondary2, CircleShape)
+                        .constrainAs(datesView) {
+                            top.linkTo(parent.top)
+                            end.linkTo(nextButton.start)
+                        },
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "24.7 - 30.7",
+                        style = chartNavigationDates
+                    )
+                }
+
+                Image(
+                    painter = painterResource(R.drawable.ic_previous),
+                    contentDescription = "previous",
+                    contentScale = ContentScale.Inside,
+                    modifier = Modifier
+                        .padding(end = 10.dp)
+                        .size(31.dp)
+                        .clip(CircleShape)
+                        .background(Color.White)
+                        .border(0.5.dp, TextSecondary2, CircleShape)
+                        .constrainAs(previousButton) {
+                            top.linkTo(parent.top)
+                            end.linkTo(datesView.start)
+                        }
+                )
+            }
+
+
+        }
     }
 }
 
@@ -345,7 +429,7 @@ fun TodayDogView(
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = dog.name, style = MaterialTheme.typography.h2
+                    text = dog.name, style = MaterialTheme.typography.h2, color = textColor
                 )
             }
         }
@@ -398,53 +482,39 @@ fun RecentActivityView(dog: DogDto) {
 
 
             ConstraintLayout(
-                modifier =
-                Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
-                val (
-                    brushingTextFirstPart,
-                    brushingTextSecondPart,
-                    dogView,
-                    progress,
-                    spacer,
-                    progressText,
-                    time
-                ) = createRefs()
+                val (brushingTextFirstPart, brushingTextSecondPart, dogView, progress, spacer, progressText, time) = createRefs()
 
                 Text(
                     text = "Brushing duration:",
                     style = brushingCardText,
-                    modifier = Modifier
-                        .constrainAs(brushingTextFirstPart) {
-                            top.linkTo(parent.top)
-                            bottom.linkTo(dogView.bottom)
-                            start.linkTo(parent.start)
-                        },
+                    modifier = Modifier.constrainAs(brushingTextFirstPart) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(dogView.bottom)
+                        start.linkTo(parent.start)
+                    },
                     textAlign = TextAlign.Left
                 )
 
                 Text(
                     text = "${dog.lastBrushingPeriod} seconds",
                     style = brushingCardTextBold,
-                    modifier = Modifier
-                        .constrainAs(brushingTextSecondPart) {
-                            top.linkTo(dogView.top)
-                            bottom.linkTo(dogView.bottom)
-                            start.linkTo(brushingTextFirstPart.end)
-                        },
+                    modifier = Modifier.constrainAs(brushingTextSecondPart) {
+                        top.linkTo(dogView.top)
+                        bottom.linkTo(dogView.bottom)
+                        start.linkTo(brushingTextFirstPart.end)
+                    },
                     textAlign = TextAlign.Left
                 )
 
                 Box(
-                    modifier = Modifier
-                        .constrainAs(dogView) {
-                            top.linkTo(parent.top)
-                            start.linkTo(brushingTextSecondPart.end)
-                            end.linkTo(parent.end)
-                            width = Dimension.fillToConstraints
-                        },
-                    contentAlignment = Alignment.CenterEnd
+                    modifier = Modifier.constrainAs(dogView) {
+                        top.linkTo(parent.top)
+                        start.linkTo(brushingTextSecondPart.end)
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
+                    }, contentAlignment = Alignment.CenterEnd
                 ) {
                     RecentDogView(
                         dog = dog
@@ -461,28 +531,25 @@ fun RecentActivityView(dog: DogDto) {
                     .height(25.dp))
 
 
-                CustomLinearProgressIndicator(
-                    modifier = Modifier
-                        .constrainAs(progress) {
-                            top.linkTo(progressText.top)
-                            bottom.linkTo(progressText.bottom)
-                            start.linkTo(brushingTextFirstPart.start)
-                            end.linkTo(brushingTextSecondPart.end)
-                            width = Dimension.fillToConstraints
-                        }
-                        .padding(end = 10.dp, top = 2.dp),
+                CustomLinearProgressIndicator(modifier = Modifier
+                    .constrainAs(progress) {
+                        top.linkTo(progressText.top)
+                        bottom.linkTo(progressText.bottom)
+                        start.linkTo(brushingTextFirstPart.start)
+                        end.linkTo(brushingTextSecondPart.end)
+                        width = Dimension.fillToConstraints
+                    }
+                    .padding(end = 10.dp, top = 2.dp),
                     progressColor = dog.color.toColor(),
-                    progress = dog.calculatePercentage().toFloat()
-                )
+                    progress = dog.calculatePercentage().toFloat())
 
                 Text(
                     text = "${dog.calculatePercentageRounded()}%",
                     style = brushingCardPercentageText,
-                    modifier = Modifier
-                        .constrainAs(progressText) {
-                            top.linkTo(spacer.bottom)
-                            start.linkTo(progress.end)
-                        },
+                    modifier = Modifier.constrainAs(progressText) {
+                        top.linkTo(spacer.bottom)
+                        start.linkTo(progress.end)
+                    },
                     textAlign = TextAlign.Left,
                     color = dog.color.toColor()
                 )
@@ -490,11 +557,10 @@ fun RecentActivityView(dog: DogDto) {
                 Text(
                     text = dog.lastBrushingDate.formatDateTimeShortMonth(),
                     style = brushingCardTimeText,
-                    modifier = Modifier
-                        .constrainAs(time) {
-                            top.linkTo(progressText.top)
-                            end.linkTo(parent.end)
-                        },
+                    modifier = Modifier.constrainAs(time) {
+                        top.linkTo(progressText.top)
+                        end.linkTo(parent.end)
+                    },
                     textAlign = TextAlign.Left,
                     color = dog.color.toColor()
                 )
