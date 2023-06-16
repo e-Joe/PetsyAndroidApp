@@ -60,6 +60,12 @@ class MainFlowViewModel @Inject constructor(
 
     private lateinit var startBrushingDateTime: ZonedDateTime
 
+    private var firstChartDog: DogDto? = null
+    private var secondChartDog: DogDto? = null
+
+    private var lastChanged = 1
+
+
     init {
         getLoggedInUser()
     }
@@ -118,14 +124,53 @@ class MainFlowViewModel @Inject constructor(
             }
 
             is MainFlowEvent.ChartDogClickedEvent -> {
-                val updatedList = dogs.map {
-                    if (event.dogId == it.id) {
-                        it.copy(isSelectedForChart = !it.isSelectedForChart)
-                    } else
-                        it.copy(isSelectedForChart = false)
+
+                val dogToSelect = dogs.find { it.id == event.dogId }
+
+                if (dogToSelect != null) {
+                    val selectedDogs = dogs.filter { it.isSelectedForChart }
+
+                    if (selectedDogs.isEmpty()) {
+                        dogToSelect.isSelectedForChart = true
+                    } else if (dogToSelect.isSelectedForChart) {
+                        dogToSelect.isSelectedForChart = false
+                    } else if (selectedDogs.size == 2) {
+                        selectedDogs[1].isSelectedForChart = false
+                        dogToSelect.isSelectedForChart = true
+                    } else {
+                        dogToSelect.isSelectedForChart = true
+                    }
                 }
+
+                var tempDogs = dogs.map { it }
+                var counterOfSelectedDogs = tempDogs.count { it.isSelectedForChart }
+
+                if (counterOfSelectedDogs == 0) {
+                    tempDogs[0].isSelectedForChart = true
+                }
+
+                val selectedDogs = tempDogs.filter { it.isSelectedForChart }
+
+                if(selectedDogs.size == 1)
+                {
+                    firstChartDog = selectedDogs[0]
+                    secondChartDog = null
+                }
+
+                if(selectedDogs.size > 1)
+                {
+                    firstChartDog = selectedDogs[0]
+                    secondChartDog = selectedDogs[1]
+                }
+
+
+                firstChartDog?.let { Log.d("Selected", it.name) }
+                secondChartDog?.let { Log.d("Selected", it.name) }
+
                 dogs.clear()
-                dogs.addAll(updatedList)
+                dogs.addAll(tempDogs)
+
+
             }
 
             is MainFlowEvent.SaveBrushingTimeEvent -> {
@@ -158,7 +203,7 @@ class MainFlowViewModel @Inject constructor(
         _brushingTime.value = 0
     }
 
-     fun getLoggedInUser() = safeLaunch {
+    fun getLoggedInUser() = safeLaunch {
         call(getLoggedInUserUseCase(Unit)) {
             if (it.isLoggedIn) {
                 user = it
@@ -169,11 +214,20 @@ class MainFlowViewModel @Inject constructor(
 
     private fun getDogs() = safeLaunch {
         call(getDogsUseCase(user.id)) {
+            dogs.clear()
+
             if (it.isEmpty()) {
                 Log.d("Dogs", "empty")
             } else {
-                dogs.clear()
                 dogs.addAll(it)
+
+                dogs[0] = dogs[0].copy(isSelectedForChart = true)
+                firstChartDog = dogs[0]
+
+                if (dogs.size > 1) {
+                    dogs[1] = dogs[1].copy(isSelectedForChart = true)
+                    secondChartDog = dogs[1]
+                }
 
                 if (insertedDogId > -1) {
                     dogs.find { it.id == insertedDogId }?.let {
