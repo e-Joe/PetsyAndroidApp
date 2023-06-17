@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bytecode.framework.extension.formatDateTimeShortMonth
 import com.bytecode.framework.extension.isToday
@@ -158,7 +159,7 @@ private fun PetsDataScreen(viewModel: MainFlowViewModel) {
         Spacer(modifier = Modifier.height(20.dp))
         YourPetsView(viewModel)
         Spacer(modifier = Modifier.height(20.dp))
-        ChartAreaView()
+        ChartAreaView(viewModel)
         Spacer(modifier = Modifier.height(20.dp))
         TodaysBrushingView(viewModel)
         Spacer(modifier = Modifier.height(20.dp))
@@ -172,7 +173,9 @@ private fun PetsDataScreen(viewModel: MainFlowViewModel) {
 }
 
 @Composable
-private fun ChartAreaView() {
+private fun ChartAreaView(mainFlowViewModel: MainFlowViewModel) {
+    val chartPeriodDates = mainFlowViewModel.formattedChartPeriodFlow.collectAsState()
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -218,6 +221,9 @@ private fun ChartAreaView() {
                             top.linkTo(parent.top)
                             end.linkTo(parent.end)
                         }
+                        .clickable {
+                            mainFlowViewModel.onEvent(MainFlowEvent.NextPeriodClick(""))
+                        }
                 )
 
                 Column(
@@ -236,7 +242,7 @@ private fun ChartAreaView() {
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "24.7 - 30.7",
+                        text = chartPeriodDates.value,
                         style = chartNavigationDates
                     )
                 }
@@ -254,6 +260,9 @@ private fun ChartAreaView() {
                         .constrainAs(previousButton) {
                             top.linkTo(parent.top)
                             end.linkTo(datesView.start)
+                        }
+                        .clickable {
+                            mainFlowViewModel.onEvent(MainFlowEvent.PreviousPeriodClick(""))
                         }
                 )
             }

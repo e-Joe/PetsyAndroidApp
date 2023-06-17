@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
+import com.bytecode.framework.extension.formatDateDayMonth
 import com.bytecode.petsy.data.model.dto.brushing.BrushingTimeDto
 import com.bytecode.petsy.data.model.dto.color.ColorDto
 import com.bytecode.petsy.data.model.dto.dog.DogDto
@@ -63,11 +64,17 @@ class MainFlowViewModel @Inject constructor(
     private var firstChartDog: DogDto? = null
     private var secondChartDog: DogDto? = null
 
-    private var lastChanged = 1
+    private var endDate = ZonedDateTime.now().withHour(23).withMinute(59).withSecond(59)
+    private var startDate = ZonedDateTime.now().minusDays(7).withHour(0).withMinute(0).withSecond(0)
+
+    private var formattedChartPeriod: String = ""
+    private val _formattedChartPeriodFLow = MutableStateFlow(formattedChartPeriod)
+    val formattedChartPeriodFlow: StateFlow<String> get() = _formattedChartPeriodFLow
 
 
     init {
         getLoggedInUser()
+        updateChardPeriod()
     }
 
     fun onEvent(event: MainFlowEvent) {
@@ -151,26 +158,18 @@ class MainFlowViewModel @Inject constructor(
 
                 val selectedDogs = tempDogs.filter { it.isSelectedForChart }
 
-                if(selectedDogs.size == 1)
-                {
+                if (selectedDogs.size == 1) {
                     firstChartDog = selectedDogs[0]
                     secondChartDog = null
                 }
 
-                if(selectedDogs.size > 1)
-                {
+                if (selectedDogs.size > 1) {
                     firstChartDog = selectedDogs[0]
                     secondChartDog = selectedDogs[1]
                 }
 
-
-                firstChartDog?.let { Log.d("Selected", it.name) }
-                secondChartDog?.let { Log.d("Selected", it.name) }
-
                 dogs.clear()
                 dogs.addAll(tempDogs)
-
-
             }
 
             is MainFlowEvent.SaveBrushingTimeEvent -> {
@@ -181,7 +180,28 @@ class MainFlowViewModel @Inject constructor(
                 newDogName = event.name
                 getColorForNewDog()
             }
+
+            is MainFlowEvent.PreviousPeriodClick -> {
+                endDate = endDate.minusDays(7)
+                startDate = startDate.minusDays(7)
+                updateChardPeriod()
+                Log.d("Vremena", "Start: $startDate End: $endDate")
+            }
+
+            is MainFlowEvent.NextPeriodClick -> {
+                endDate = endDate.plusDays(7)
+                startDate = startDate.plusDays(7)
+                updateChardPeriod()
+                Log.d("Vremena", "Start: $startDate End: $endDate")
+            }
         }
+    }
+
+    private fun updateChardPeriod() {
+        val formatedTime =
+            startDate.formatDateDayMonth() + "-" + endDate.formatDateDayMonth()
+
+        _formattedChartPeriodFLow.value = formatedTime
     }
 
     private fun startBrushing() {
@@ -335,6 +355,10 @@ sealed class MainFlowEvent() {
     data class SaveNewDog(val name: String) : MainFlowEvent()
 
     data class ChartDogClickedEvent(val dogId: Long) : MainFlowEvent()
+
+    data class PreviousPeriodClick(val nothing: String) : MainFlowEvent()
+
+    data class NextPeriodClick(val nothing: String) : MainFlowEvent()
 }
 
 enum class BrushingState {

@@ -15,3 +15,8 @@ fun ZonedDateTime.formatDateTimeShortMonth(): String {
     val formatter = DateTimeFormatter.ofPattern("dd MMM HH:mm", Locale.ENGLISH)
     return this.format(formatter)
 }
+
+fun ZonedDateTime.formatDateDayMonth(): String {
+    val formatter = DateTimeFormatter.ofPattern("dd.MM", Locale.ENGLISH)
+    return this.format(formatter)
+}
