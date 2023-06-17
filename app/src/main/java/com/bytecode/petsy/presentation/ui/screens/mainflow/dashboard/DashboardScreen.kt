@@ -74,6 +74,7 @@ import com.bytecode.petsy.presentation.ui.theme.chartTitle
 import com.bytecode.petsy.util.toColor
 import com.bytecode.petsy.util.toLighterColor
 import com.bytecode.petsy.util.toMediumColor
+import com.patrykandpatrick.vico.core.entry.ChartEntry
 
 @Composable
 fun DashboardScreen(viewModel: MainFlowViewModel, navController: NavHostController) {

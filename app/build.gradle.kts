@@ -116,4 +116,10 @@ dependencies {
 
     implementation(ComposeLib.Paging)
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
+    // Includes the core logic for charts and other elements.
+    implementation("com.patrykandpatrick.vico:core:1.6.5")
+
+    // For Jetpack Compose.
+    implementation("com.patrykandpatrick.vico:compose:1.6.5")
 }
