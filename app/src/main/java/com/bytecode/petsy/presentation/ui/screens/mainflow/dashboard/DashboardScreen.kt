@@ -59,6 +59,7 @@ import com.bytecode.petsy.data.model.dto.dog.calculatePercentageRounded
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.custom.CustomLinearProgressIndicator
+import com.bytecode.petsy.presentation.ui.commonui.custom.chart.Chart6
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.navigation.BottomBarScreen
 import com.bytecode.petsy.presentation.ui.screens.mainflow.BrushingState
@@ -196,7 +197,7 @@ private fun ChartAreaView(mainFlowViewModel: MainFlowViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                val (title, previousButton, datesView, nextButton) = createRefs()
+                val (title, previousButton, datesView, nextButton, chart) = createRefs()
 
                 Text(
                     modifier = Modifier
@@ -266,9 +267,18 @@ private fun ChartAreaView(mainFlowViewModel: MainFlowViewModel) {
                             mainFlowViewModel.onEvent(MainFlowEvent.PreviousPeriodClick(""))
                         }
                 )
+
+                Box(modifier = Modifier
+                    .padding(end = 10.dp)
+                    .constrainAs(chart) {
+                        top.linkTo(datesView.bottom)
+                        end.linkTo(parent.end)
+                        start.linkTo(parent.start)
+                        bottom.linkTo(parent.bottom)
+                    }) {
+                    Chart6(mainFlowViewModel.multiDataSetChartEntryModelProducer)
+                }
             }
-
-
         }
     }
 }
