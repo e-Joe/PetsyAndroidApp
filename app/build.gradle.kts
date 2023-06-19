@@ -82,6 +82,7 @@ dependencies {
     implementation(ComposeLib.Ui)
     implementation(ComposeLib.Preview)
     implementation(ComposeLib.Material)
+    implementation ("androidx.compose.material3:material3:1.1.0")
     implementation(ComposeLib.MaterialIconCore)
     implementation(ComposeLib.MaterialIconExtended)
     androidTestImplementation(AndroidTestingLib.ComposeTestJunit)
@@ -122,4 +123,7 @@ dependencies {
 
     // For Jetpack Compose.
     implementation("com.patrykandpatrick.vico:compose:1.6.5")
+
+    // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
+    implementation ("com.patrykandpatrick.vico:compose-m3:1.6.5")
 }
