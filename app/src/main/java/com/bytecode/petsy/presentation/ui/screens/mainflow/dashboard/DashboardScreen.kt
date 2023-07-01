@@ -269,14 +269,14 @@ private fun ChartAreaView(mainFlowViewModel: MainFlowViewModel) {
                 )
 
                 Box(modifier = Modifier
-                    .padding(end = 10.dp)
+                    .padding(top = 18.dp)
                     .constrainAs(chart) {
-                        top.linkTo(datesView.bottom)
+                        top.linkTo(previousButton.bottom)
                         end.linkTo(parent.end)
                         start.linkTo(parent.start)
                         bottom.linkTo(parent.bottom)
                     }) {
-                    Chart6(mainFlowViewModel.multiDataSetChartEntryModelProducer)
+                    Chart6(mainFlowViewModel.composedChartEntryModelProducer)
                 }
             }
         }

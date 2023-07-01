@@ -20,10 +20,10 @@ fun MainFlowNavGraph(navController: NavHostController, mainFlowViewModel: MainFl
             DashboardScreen(mainFlowViewModel, navController)
         }
         composable(route = BottomBarScreen.BrushingScreen.route) {
-            BrushingScreen(mainFlowViewModel,navController)
+            BrushingScreen(mainFlowViewModel, navController)
         }
         composable(route = BottomBarScreen.ProfileScreen.route) {
-            ProfileScreen()
+            ProfileScreen(mainFlowViewModel, navController)
         }
 //        detailsNavGraph(navController = navController) //TODO add profile graph
     }

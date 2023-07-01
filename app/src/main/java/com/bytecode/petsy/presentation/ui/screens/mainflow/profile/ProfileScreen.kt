@@ -18,6 +18,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,13 +29,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
+import com.bytecode.petsy.data.model.dto.user.UserDto
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
+import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 import com.bytecode.petsy.presentation.ui.theme.ScreenBackgroundColor
 import com.bytecode.petsy.presentation.ui.theme.h4bold
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    viewModel: MainFlowViewModel,
+    navController: NavHostController = rememberNavController()
+) {
+
+    val userState = viewModel.userFLow.collectAsState(UserDto())
+
     Scaffold { paddingValues ->
         Box(
             modifier = Modifier
@@ -41,6 +53,8 @@ fun ProfileScreen() {
                 .fillMaxSize()
                 .background(ScreenBackgroundColor)
         ) {
+
+
             Column(
                 modifier = Modifier
                     .padding(start = 20.dp, end = 20.dp, bottom = 130.dp)
@@ -51,12 +65,12 @@ fun ProfileScreen() {
                 Spacer(modifier = Modifier.height(100.dp))
 
                 Text(
-                    text = "Ime i prezime",
+                    text = userState.value.firstName + " " + userState.value.lastName,
                     style = MaterialTheme.typography.h1,
                 )
 
                 Text(
-                    text = "marko,maric@gmail.com",
+                    text = userState.value.email,
                     style = MaterialTheme.typography.h4,
                 )
 
@@ -142,10 +156,4 @@ private fun ProfileOptionCard(optionName: String, optionIcon: ImageVector, onCli
             contentDescription = "Navigation Icon"
         )
     }
-}
-
-@Preview
-@Composable
-fun DashboardScreenPreview() {
-    ProfileScreen()
 }

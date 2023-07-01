@@ -14,7 +14,7 @@ android {
     compileSdk = Configs.CompileSdk
 
     defaultConfig {
-        applicationId = "com.bytecode.petsy"
+        applicationId = "pet.petsie.app.android"
         minSdk = Configs.MinSdk
         targetSdk = Configs.TargetSdk
         versionCode = Configs.VersionCode
