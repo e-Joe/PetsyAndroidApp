@@ -19,7 +19,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,13 +26,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
 import com.bytecode.petsy.data.model.dto.user.UserDto
+import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
+import com.bytecode.petsy.presentation.ui.navigation.DeleteScreenNav
+import com.bytecode.petsy.presentation.ui.navigation.ProfileScreenNav
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 import com.bytecode.petsy.presentation.ui.theme.ScreenBackgroundColor
 import com.bytecode.petsy.presentation.ui.theme.h4bold
@@ -51,10 +52,9 @@ fun ProfileScreen(
             modifier = Modifier
                 .padding(paddingValues = paddingValues)
                 .fillMaxSize()
-                .background(ScreenBackgroundColor)
         ) {
 
-
+            PetsyImageBackground()
             Column(
                 modifier = Modifier
                     .padding(start = 20.dp, end = 20.dp, bottom = 130.dp)
@@ -79,14 +79,19 @@ fun ProfileScreen(
                 ProfileOptionCard(
                     "My Pets",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_my_pets)
-                ) { Toast.makeText(context, "My Pets", Toast.LENGTH_SHORT).show() }
+                ) {
+                    navController.navigate(ProfileScreenNav.MyPets.route)
+
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 ProfileOptionCard(
                     "Tutorials/Education",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_tutorials_education),
-                ) { Toast.makeText(context, "Tutorials/Education", Toast.LENGTH_SHORT).show() }
+                ) {
+                    navController.navigate(ProfileScreenNav.Tutorials.route)
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -94,21 +99,27 @@ fun ProfileScreen(
                     "Change password",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_change_password),
                 )
-                { Toast.makeText(context, "Change password", Toast.LENGTH_SHORT).show() }
+                {
+                    navController.navigate(ProfileScreenNav.ChangePassword.route)
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 ProfileOptionCard(
                     "Privacy",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_privacy),
-                ) { Toast.makeText(context, "Privacy", Toast.LENGTH_SHORT).show() }
+                ) {
+                    navController.navigate(ProfileScreenNav.ChangePassword.route)
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 ProfileOptionCard(
                     "Delete account",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_delete_account),
-                ) { Toast.makeText(context, "Delete account", Toast.LENGTH_SHORT).show() }
+                ) {
+                    navController.navigate(DeleteScreenNav.DeleteAccReasonScreen.route)
+                }
 
                 Spacer(modifier = Modifier.height(10.dp))
 

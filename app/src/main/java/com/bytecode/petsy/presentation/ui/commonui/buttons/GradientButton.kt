@@ -69,7 +69,7 @@ fun GradientButton(
                 .fillMaxWidth()
                 .paint(
                     painterResource(id = R.drawable.bck_button_gradient),
-                    contentScale = ContentScale.FillWidth
+                    contentScale = ContentScale.FillHeight
                 )
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
