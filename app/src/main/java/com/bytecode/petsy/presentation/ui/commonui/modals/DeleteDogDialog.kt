@@ -26,7 +26,7 @@ import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.theme.button_primary_text
 
 @Composable
-fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit) {
+fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit, deleteDog: () -> Unit) {
 
     Dialog(
         onDismissRequest = { setShowDialog(false) },
@@ -73,8 +73,9 @@ fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit) {
                             .fillMaxWidth()
                     ) {
 
-                        Box(modifier = Modifier
-                            .weight(1f)
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
                         ) {
                             TextButton(
                                 modifier = Modifier
@@ -96,7 +97,8 @@ fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit) {
                             GradientButton(
                                 text = "Delete",
                                 onClick = {
-
+                                    deleteDog()
+                                    setShowDialog(false)
                                 },
                                 paddingStart = 0.dp,
                                 paddingEnd = 0.dp

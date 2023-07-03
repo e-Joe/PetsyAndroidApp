@@ -1,6 +1,7 @@
 package com.bytecode.petsy.data.local.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -19,4 +20,7 @@ interface DogDao : BaseDao<DogEntity> {
 
     @Insert
     fun insertDog(dogEntity: DogEntity): Long
+
+    @Delete
+    fun deleteDog(dogEntity: DogEntity): Int
 }

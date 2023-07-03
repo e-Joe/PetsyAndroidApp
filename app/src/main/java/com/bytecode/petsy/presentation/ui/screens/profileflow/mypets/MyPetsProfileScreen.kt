@@ -1,5 +1,6 @@
 package com.bytecode.petsy.presentation.ui.screens.profileflow.mypets
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -87,7 +88,11 @@ fun DogsList(viewModel: MainFlowViewModel) {
             DeleteDogDialog(
                 setShowDialog = {
                     showDeleteDialog.value = it
-                })
+                },
+                deleteDog = {
+                    viewModel.onEvent(MainFlowEvent.DeleteDogConfirmedEvent(""))
+                }
+            )
 
         val (
             titleText,
@@ -137,6 +142,7 @@ fun DogsList(viewModel: MainFlowViewModel) {
                 itemContent = { dog ->
                     DogItemMyPets(dog = dog, onClick = {
                         showDeleteDialog.value = true
+                        viewModel.onEvent(MainFlowEvent.DeleteDogClickEvent(dog))
                     })
                 }
             )

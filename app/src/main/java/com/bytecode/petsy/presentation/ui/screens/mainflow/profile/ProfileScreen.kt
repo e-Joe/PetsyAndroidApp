@@ -1,5 +1,7 @@
 package com.bytecode.petsy.presentation.ui.screens.mainflow.profile
 
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +21,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -77,6 +80,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(70.dp))
 
                 ProfileOptionCard(
+                    isVisibleRightIcon = true,
                     "My Pets",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_my_pets)
                 ) {
@@ -87,6 +91,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 ProfileOptionCard(
+                    isVisibleRightIcon = true,
                     "Tutorials/Education",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_tutorials_education),
                 ) {
@@ -96,6 +101,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 ProfileOptionCard(
+                    isVisibleRightIcon = true,
                     "Change password",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_change_password),
                 )
@@ -105,16 +111,20 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                val privacyLink = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/")) }
+
                 ProfileOptionCard(
+                    isVisibleRightIcon = true,
                     "Privacy",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_privacy),
                 ) {
-                    navController.navigate(ProfileScreenNav.ChangePassword.route)
+                    context.startActivity(privacyLink)
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 ProfileOptionCard(
+                    isVisibleRightIcon = true,
                     "Delete account",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_delete_account),
                 ) {
@@ -124,6 +134,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 ProfileOptionCard(
+                    isVisibleRightIcon = true,
                     "Logout",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_logout),
                 ) { Toast.makeText(context, "Logout", Toast.LENGTH_SHORT).show() }
@@ -136,7 +147,12 @@ fun ProfileScreen(
 }
 
 @Composable
-private fun ProfileOptionCard(optionName: String, optionIcon: ImageVector, onClick: () -> Unit) {
+fun ProfileOptionCard(
+    isVisibleRightIcon: Boolean = true,
+    optionName: String,
+    optionIcon: ImageVector,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(15.dp))
@@ -145,6 +161,7 @@ private fun ProfileOptionCard(optionName: String, optionIcon: ImageVector, onCli
             .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         Icon(
             imageVector = optionIcon,
             contentDescription = "Navigation Icon"
@@ -162,9 +179,10 @@ private fun ProfileOptionCard(optionName: String, optionIcon: ImageVector, onCli
                 .background(Color.Red)
         )
 
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
-            contentDescription = "Navigation Icon"
-        )
+        if (isVisibleRightIcon)
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
+                contentDescription = "Navigation Icon"
+            )
     }
 }

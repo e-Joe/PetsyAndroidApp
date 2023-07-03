@@ -12,9 +12,11 @@ import com.bytecode.petsy.data.model.dto.brushing.BrushingTimeDto
 import com.bytecode.petsy.data.model.dto.color.ColorDto
 import com.bytecode.petsy.data.model.dto.dog.DogDto
 import com.bytecode.petsy.data.model.dto.user.UserDto
+import com.bytecode.petsy.domain.usecase.brushingtime.DeleteTimeForDogUseCase
 import com.bytecode.petsy.domain.usecase.brushingtime.SaveBrushingTimeUseCase
 import com.bytecode.petsy.domain.usecase.color.GetColorForNewDogUseCase
 import com.bytecode.petsy.domain.usecase.color.SaveColorUseCase
+import com.bytecode.petsy.domain.usecase.dog.DeleteDogUseCase
 import com.bytecode.petsy.domain.usecase.dog.GetDogsUseCase
 import com.bytecode.petsy.domain.usecase.dog.SaveDogUseCase
 import com.bytecode.petsy.domain.usecase.dog.UpdateDogUseCase
@@ -46,7 +48,9 @@ class MainFlowViewModel @Inject constructor(
     private val getColorForNewDogUseCase: GetColorForNewDogUseCase,
     private val saveDogUseCase: SaveDogUseCase,
     private val saveColorUseCase: SaveColorUseCase,
-    private val updateDogUseCase: UpdateDogUseCase
+    private val updateDogUseCase: UpdateDogUseCase,
+    private val deleteDogUseCase: DeleteDogUseCase,
+    private val deleteTimeForDogUseCase: DeleteTimeForDogUseCase
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(MainFlowState())
@@ -80,6 +84,8 @@ class MainFlowViewModel @Inject constructor(
     private var formattedChartPeriod: String = ""
     private val _formattedChartPeriodFLow = MutableStateFlow(formattedChartPeriod)
     val formattedChartPeriodFlow: StateFlow<String> get() = _formattedChartPeriodFLow
+
+    var deleteDog: DogDto = DogDto()
 
 
     internal val chartEntryModelProducer: ChartEntryModelProducer = ChartEntryModelProducer()
@@ -231,6 +237,14 @@ class MainFlowViewModel @Inject constructor(
                 state = state.copy(
                     isDogSelected = dog?.isSelected ?: false
                 )
+            }
+
+            is MainFlowEvent.DeleteDogClickEvent -> {
+                deleteDog = event.dog
+            }
+
+            is MainFlowEvent.DeleteDogConfirmedEvent -> {
+                deleteDog()
             }
 
             is MainFlowEvent.ChartDogClickedEvent -> {
@@ -390,6 +404,24 @@ class MainFlowViewModel @Inject constructor(
         }
     }
 
+    private fun deleteDog() = safeLaunch {
+        val deleteDogParams = deleteDog?.let { DeleteDogUseCase.Params(it) }
+        deleteDogParams?.let {
+            call(deleteDogUseCase(it)) {
+                deleteTimesForDog()
+            }
+        }
+    }
+
+    private fun deleteTimesForDog() = safeLaunch {
+        val deleteTimesParams = deleteDog?.let { DeleteTimeForDogUseCase.Params(it.id) }
+        deleteTimesParams?.let {
+            call(deleteTimeForDogUseCase(it)) {
+               getDogs()
+            }
+        }
+    }
+
     private fun saveBrushingTime() = safeLaunch {
         val time = brushingTime.value.toLong()
         val startTime = startBrushingDateTime
@@ -414,7 +446,7 @@ class MainFlowViewModel @Inject constructor(
         paramsDogSaving?.let {
             call(updateDogUseCase(it))
             {
-                Log.d("Keric", it.toString())
+                getDogs()
             }
         }
 
@@ -453,6 +485,10 @@ sealed class MainFlowEvent() {
     data class BrushingStateEvent(val brushingState: BrushingState) : MainFlowEvent()
 
     data class DogClickedEvent(val dogId: Long) : MainFlowEvent()
+
+    data class DeleteDogClickEvent(val dog: DogDto) : MainFlowEvent()
+
+    data class DeleteDogConfirmedEvent(val temp: String) : MainFlowEvent()
 
     data class SaveBrushingTimeEvent(val time: String) : MainFlowEvent()
 

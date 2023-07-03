@@ -23,4 +23,8 @@ constructor(
     suspend fun getTimesForUser(ownerId: Long) = dao.getTimesForUser(ownerId)
 
     suspend fun getTimesForDog(dogId: Long) = dao.getTimesForDog(dogId)
+
+    suspend fun deleteTimesForDog(dogId: Long) = dao.deleteTimesForDog(dogId)
+
+
 }
