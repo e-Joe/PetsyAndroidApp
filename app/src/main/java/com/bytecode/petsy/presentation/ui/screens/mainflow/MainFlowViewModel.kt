@@ -21,6 +21,11 @@ import com.bytecode.petsy.domain.usecase.dog.GetDogsUseCase
 import com.bytecode.petsy.domain.usecase.dog.SaveDogUseCase
 import com.bytecode.petsy.domain.usecase.dog.UpdateDogUseCase
 import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserUseCase
+import com.bytecode.petsy.domain.usecase.user.UpdateUserUseCase
+import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordDigit
+import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordLength
+import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordLowerCase
+import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordUpperCase
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
@@ -50,7 +55,12 @@ class MainFlowViewModel @Inject constructor(
     private val saveColorUseCase: SaveColorUseCase,
     private val updateDogUseCase: UpdateDogUseCase,
     private val deleteDogUseCase: DeleteDogUseCase,
-    private val deleteTimeForDogUseCase: DeleteTimeForDogUseCase
+    private val deleteTimeForDogUseCase: DeleteTimeForDogUseCase,
+    private val validatePasswordDigit: ValidatePasswordDigit,
+    private val validatePasswordLowerCase: ValidatePasswordLowerCase,
+    private val validatePasswordLength: ValidatePasswordLength,
+    private val validatePasswordUpperCase: ValidatePasswordUpperCase,
+    private val updateUserUseCase: UpdateUserUseCase
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(MainFlowState())
@@ -86,6 +96,9 @@ class MainFlowViewModel @Inject constructor(
     val formattedChartPeriodFlow: StateFlow<String> get() = _formattedChartPeriodFLow
 
     var deleteDog: DogDto = DogDto()
+
+    val _passwordChanged = MutableStateFlow(false)
+    val passwordChanged = _passwordChanged.asStateFlow()
 
 
     internal val chartEntryModelProducer: ChartEntryModelProducer = ChartEntryModelProducer()
@@ -168,7 +181,7 @@ class MainFlowViewModel @Inject constructor(
 
     init {
         getLoggedInUser()
-        updateChardPeriod()
+        updateChartPeriod()
 
         viewModelScope.launch {
             while (currentCoroutineContext().isActive) {
@@ -301,20 +314,61 @@ class MainFlowViewModel @Inject constructor(
             is MainFlowEvent.PreviousPeriodClick -> {
                 endDate = endDate.minusDays(7)
                 startDate = startDate.minusDays(7)
-                updateChardPeriod()
+                updateChartPeriod()
                 Log.d("Vremena", "Start: $startDate End: $endDate")
             }
 
             is MainFlowEvent.NextPeriodClick -> {
                 endDate = endDate.plusDays(7)
                 startDate = startDate.plusDays(7)
-                updateChardPeriod()
+                updateChartPeriod()
                 Log.d("Vremena", "Start: $startDate End: $endDate")
+            }
+
+            is MainFlowEvent.OldPasswordChanged -> {
+                state = state.copy(oldPassword = event.oldPassword, oldPasswordError = null)
+
+                if (state.isPasswordDigitValid && state.isPasswordLength && state.isPasswordLowerCaseValid && state.isPasswordUpperCaseValid && state.oldPassword.isNotEmpty())
+                    state = state.copy(isPasswordChangeButtonEnabled = true)
+                else
+                    state = state.copy(isPasswordChangeButtonEnabled = false)
+            }
+
+            is MainFlowEvent.NewPasswordChanged -> {
+                state = state.copy(newPassword = event.newPassword)
+                state =
+                    state.copy(isPasswordDigitValid = validatePasswordDigit.execute(state.newPassword).successful)
+                state =
+                    state.copy(isPasswordLength = validatePasswordLength.execute(state.newPassword).successful)
+                state =
+                    state.copy(isPasswordLowerCaseValid = validatePasswordLowerCase.execute(state.newPassword).successful)
+                state =
+                    state.copy(isPasswordUpperCaseValid = validatePasswordUpperCase.execute(state.newPassword).successful)
+
+                if (state.isPasswordDigitValid && state.isPasswordLength && state.isPasswordLowerCaseValid && state.isPasswordUpperCaseValid && state.oldPassword.isNotEmpty())
+                    state = state.copy(isPasswordChangeButtonEnabled = true)
+                else
+                    state = state.copy(isPasswordChangeButtonEnabled = false)
+            }
+
+            is MainFlowEvent.SavePasswordClicked -> {
+                if (user.password != state.oldPassword) {
+                    state = state.copy(oldPasswordError = "Please check your old password")
+                    return
+                } else {
+                    state = state.copy(oldPasswordError = null)
+                }
+
+                updateUser()
+            }
+
+            is MainFlowEvent.ResetPasswordChangeDialogEvent -> {
+                _passwordChanged.value = false
             }
         }
     }
 
-    private fun updateChardPeriod() {
+    private fun updateChartPeriod() {
         val formatedTime =
             startDate.formatDateDayMonth() + "-" + endDate.formatDateDayMonth()
 
@@ -417,7 +471,18 @@ class MainFlowViewModel @Inject constructor(
         val deleteTimesParams = deleteDog?.let { DeleteTimeForDogUseCase.Params(it.id) }
         deleteTimesParams?.let {
             call(deleteTimeForDogUseCase(it)) {
-               getDogs()
+                getDogs()
+            }
+        }
+    }
+
+    private fun updateUser() = safeLaunch {
+        user = user.copy(password = state.newPassword)
+        val updateUSerParams = user?.let { UpdateUserUseCase.Params(it) }
+        updateUSerParams?.let {
+            call(updateUserUseCase(it)) {
+                state = state.copy(oldPassword = "", newPassword = "")
+                _passwordChanged.value = true
             }
         }
     }
@@ -477,7 +542,15 @@ class MainFlowViewModel @Inject constructor(
 data class MainFlowState(
     val brushingPhase: BrushingState = BrushingState.NOT_STARTED,
     val isDogSelected: Boolean = false,
-    val shouldScrollList: Boolean = false
+    val shouldScrollList: Boolean = false,
+    val oldPassword: String = "",
+    val newPassword: String = "",
+    val oldPasswordError: String? = null,
+    val isPasswordDigitValid: Boolean = false,
+    val isPasswordLength: Boolean = false,
+    val isPasswordUpperCaseValid: Boolean = false,
+    val isPasswordLowerCaseValid: Boolean = false,
+    val isPasswordChangeButtonEnabled: Boolean = false
 )
 
 sealed class MainFlowEvent() {
@@ -499,6 +572,14 @@ sealed class MainFlowEvent() {
     data class PreviousPeriodClick(val nothing: String) : MainFlowEvent()
 
     data class NextPeriodClick(val nothing: String) : MainFlowEvent()
+
+    data class OldPasswordChanged(val oldPassword: String) : MainFlowEvent()
+
+    data class NewPasswordChanged(val newPassword: String) : MainFlowEvent()
+
+    data class SavePasswordClicked(val temp: String) : MainFlowEvent()
+
+    data class ResetPasswordChangeDialogEvent(val temp: String) : MainFlowEvent()
 }
 
 enum class BrushingState {

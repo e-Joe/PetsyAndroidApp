@@ -17,4 +17,5 @@ constructor(
     suspend fun getLoggedInUser() = dao.getLoggedInUser()
     suspend fun getLoggedInUserByCredentials(email:String, password:String) = dao.getLoggedInUserByCredentials(email,password)
     suspend fun getUserByEmail(email:String) = dao.getUserByEmail(email)
+    fun updateUser(userEntity: UserEntity): Int = dao.updateUser(userEntity)
 }

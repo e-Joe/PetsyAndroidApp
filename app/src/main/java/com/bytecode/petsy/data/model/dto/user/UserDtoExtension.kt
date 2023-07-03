@@ -22,6 +22,16 @@ fun UserEntity.toUserDto() = UserDto(
     isLoggedIn = isLoggedIn
 )
 
+fun UserDto.toUserEntityId() = UserEntity(
+    id = id,
+    email = email,
+    password = password,
+    firstName = firstName,
+    lastName = lastName,
+    country = country,
+    isLoggedIn = isLoggedIn
+)
+
 fun List<UserEntity>.toUserDtoList() = map { it.toUserDto() }
 
 fun List<UserDto>.toUserEntityList() = map { it.toUserEntity() }

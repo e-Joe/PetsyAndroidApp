@@ -55,7 +55,7 @@ fun NavGraphBuilder.profileNavGraph(
             TutorialsScreen(viewModel = mainFlowViewModel)
         }
         composable(route = ProfileScreenNav.ChangePassword.route) {
-            ChangePasswordScreen(viewModel = mainFlowViewModel)
+            ChangePasswordScreen(navController = navController,viewModel = mainFlowViewModel)
         }
 
         composable(route = ProfileScreenNav.Privacy.route) {

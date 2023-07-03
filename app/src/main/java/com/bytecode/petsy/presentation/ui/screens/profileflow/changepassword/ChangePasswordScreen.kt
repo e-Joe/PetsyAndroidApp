@@ -13,6 +13,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,7 +32,9 @@ import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.custom.PasswordRules
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
+import com.bytecode.petsy.presentation.ui.commonui.modals.PasswordChangedDialog
 import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterFormEvent
+import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 
 @Composable
@@ -47,20 +51,37 @@ fun ChangePasswordScreen(
         ) {
             PetsyImageBackground()
             HeaderOnboarding()
-            ChangePasswordContent()
+            ChangePasswordContent(viewModel, navController)
         }
     }
 }
 
 @Composable
-fun ChangePasswordContent() {
+fun ChangePasswordContent(viewModel: MainFlowViewModel, navController: NavHostController) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
 
-        var password = remember { mutableStateOf("") }
+        var passwordOld = remember { mutableStateOf(viewModel.state.oldPassword) }
+        var passwordNew = remember { mutableStateOf(viewModel.state.newPassword) }
+
+        val passChanged by viewModel.passwordChanged.collectAsState()
+        val showChangedPassDialog = remember { mutableStateOf(false) }
+
+        if (passChanged) {
+            PasswordChangedDialog(
+                setShowDialog = {
+                    showChangedPassDialog.value = it
+                },
+                onOkPressed = {
+                    viewModel.onEvent(MainFlowEvent.ResetPasswordChangeDialogEvent(""))
+                    navController.popBackStack()
+                }
+            )
+
+        }
 
         val (
             titleText,
@@ -97,27 +118,27 @@ fun ChangePasswordContent() {
 
             RoundedInput(
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                hint = stringResource(R.string.common_password),
+                hint = "Old password",
                 isPassword = true,
                 onValueChange = {
-//                    viewModel.onEvent(RegisterFormEvent.PasswordChanged(it))
+                    viewModel.onEvent(MainFlowEvent.OldPasswordChanged(it))
                 },
-//                isError = state.passwordError != null,
-//                errorMessage = state.passwordError.toString(),
-                textState = password,
+                isError = viewModel.state.oldPasswordError != null,
+                errorMessage = viewModel.state.oldPasswordError.toString(),
+                textState = passwordOld,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
             )
 
             RoundedInput(
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                hint = stringResource(R.string.common_password),
+                hint = "New password",
                 isPassword = true,
                 onValueChange = {
-//                    viewModel.onEvent(RegisterFormEvent.PasswordChanged(it))
+                    viewModel.onEvent(MainFlowEvent.NewPasswordChanged(it))
                 },
-//                isError = state.passwordError != null,
-//                errorMessage = state.passwordError.toString(),
-                textState = password,
+                isError = false,
+                errorMessage = "",
+                textState = passwordNew,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
             )
 
@@ -126,10 +147,10 @@ fun ChangePasswordContent() {
                     .fillMaxWidth()
                     .padding(horizontal = 40.dp)
                     .padding(top = 20.dp),
-//                isLengthRuleValid = viewModel.state.isPasswordLength,
-//                isUpperCaseRuleValid = viewModel.state.isPasswordUpperCaseValid,
-//                isLoweCaseRuleValid = viewModel.state.isPasswordLowerCaseValid,
-//                isDigitRuleValid = viewModel.state.isPasswordDigitValid,
+                isLengthRuleValid = viewModel.state.isPasswordLength,
+                isUpperCaseRuleValid = viewModel.state.isPasswordUpperCaseValid,
+                isLoweCaseRuleValid = viewModel.state.isPasswordLowerCaseValid,
+                isDigitRuleValid = viewModel.state.isPasswordDigitValid,
             )
         }
 
@@ -144,8 +165,10 @@ fun ChangePasswordContent() {
             GradientButton(
                 text = "Save",
                 onClick = {
-
-                }
+                    viewModel.onEvent(MainFlowEvent.SavePasswordClicked(""))
+                },
+                alpha = if (viewModel.state.isPasswordChangeButtonEnabled) 1f else 0.3f,
+                enabled = true //viewModel.state.isPasswordChangeButtonEnabled
             )
         }
     }
