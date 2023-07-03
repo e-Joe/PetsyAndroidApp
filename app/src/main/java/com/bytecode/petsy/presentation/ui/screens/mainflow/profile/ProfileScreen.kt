@@ -1,5 +1,6 @@
 package com.bytecode.petsy.presentation.ui.screens.mainflow.profile
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -21,6 +22,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,12 +34,17 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bytecode.framework.extension.getActivity
+import com.bytecode.framework.extension.launchActivity
 import com.bytecode.petsy.R
 import com.bytecode.petsy.data.model.dto.user.UserDto
+import com.bytecode.petsy.presentation.ui.activities.welcome.WelcomeActivity
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
+import com.bytecode.petsy.presentation.ui.commonui.modals.LogOutDialog
 import com.bytecode.petsy.presentation.ui.navigation.DeleteScreenNav
 import com.bytecode.petsy.presentation.ui.navigation.ProfileScreenNav
+import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 import com.bytecode.petsy.presentation.ui.theme.ScreenBackgroundColor
 import com.bytecode.petsy.presentation.ui.theme.h4bold
@@ -111,7 +118,8 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                val privacyLink = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/")) }
+                val privacyLink =
+                    remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/")) }
 
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
@@ -133,11 +141,30 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                val showLogoutDialog = remember { mutableStateOf(false) }
+
+                if (showLogoutDialog.value) {
+                    val activity = (LocalContext.current as? Activity)
+                    LogOutDialog(
+                        setShowDialog = {
+                            showLogoutDialog.value = it
+                        },
+                        logout = {
+                            viewModel.onEvent(MainFlowEvent.LogoutUserEvent(""))
+                            context.launchActivity<WelcomeActivity> { }
+                            val activity = context.getActivity()
+                            activity?.finish()
+                        }
+                    )
+                }
+
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
                     "Logout",
                     ImageVector.vectorResource(id = R.drawable.ic_profile_logout),
-                ) { Toast.makeText(context, "Logout", Toast.LENGTH_SHORT).show() }
+                ) {
+                    showLogoutDialog.value = true
+                }
             }
 
             HeaderOnboarding()

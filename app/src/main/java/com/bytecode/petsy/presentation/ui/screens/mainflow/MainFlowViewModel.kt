@@ -359,11 +359,15 @@ class MainFlowViewModel @Inject constructor(
                     state = state.copy(oldPasswordError = null)
                 }
 
-                updateUser()
+                updateUserPassword()
             }
 
             is MainFlowEvent.ResetPasswordChangeDialogEvent -> {
                 _passwordChanged.value = false
+            }
+
+            is MainFlowEvent.LogoutUserEvent -> {
+                logoutUser()
             }
         }
     }
@@ -476,13 +480,23 @@ class MainFlowViewModel @Inject constructor(
         }
     }
 
-    private fun updateUser() = safeLaunch {
+    private fun updateUserPassword() = safeLaunch {
         user = user.copy(password = state.newPassword)
         val updateUSerParams = user?.let { UpdateUserUseCase.Params(it) }
         updateUSerParams?.let {
             call(updateUserUseCase(it)) {
                 state = state.copy(oldPassword = "", newPassword = "")
                 _passwordChanged.value = true
+            }
+        }
+    }
+
+    private fun logoutUser() = safeLaunch {
+        user = user.copy(isLoggedIn = false)
+        val updateUSerParams = user?.let { UpdateUserUseCase.Params(it) }
+        updateUSerParams?.let {
+            call(updateUserUseCase(it)) {
+
             }
         }
     }
@@ -580,6 +594,8 @@ sealed class MainFlowEvent() {
     data class SavePasswordClicked(val temp: String) : MainFlowEvent()
 
     data class ResetPasswordChangeDialogEvent(val temp: String) : MainFlowEvent()
+
+    data class LogoutUserEvent(val temp: String) : MainFlowEvent()
 }
 
 enum class BrushingState {
