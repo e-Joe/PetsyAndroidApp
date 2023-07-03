@@ -99,7 +99,7 @@ fun ChangePasswordContent(viewModel: MainFlowViewModel, navController: NavHostCo
                     start.linkTo(parent.start)
                 }
                 .padding(horizontal = 20.dp),
-            text = "Change password",
+            text = stringResource(R.string.change_password_title),
             style = MaterialTheme.typography.h1
         )
 
@@ -118,7 +118,7 @@ fun ChangePasswordContent(viewModel: MainFlowViewModel, navController: NavHostCo
 
             RoundedInput(
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                hint = "Old password",
+                hint = stringResource(R.string.old_password),
                 isPassword = true,
                 onValueChange = {
                     viewModel.onEvent(MainFlowEvent.OldPasswordChanged(it))
@@ -131,7 +131,7 @@ fun ChangePasswordContent(viewModel: MainFlowViewModel, navController: NavHostCo
 
             RoundedInput(
                 modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-                hint = "New password",
+                hint = stringResource(R.string.new_password_hint),
                 isPassword = true,
                 onValueChange = {
                     viewModel.onEvent(MainFlowEvent.NewPasswordChanged(it))
@@ -163,7 +163,7 @@ fun ChangePasswordContent(viewModel: MainFlowViewModel, navController: NavHostCo
             }
             .padding(bottom = 30.dp)) {
             GradientButton(
-                text = "Save",
+                text = stringResource(R.string.btn_Save),
                 onClick = {
                     viewModel.onEvent(MainFlowEvent.SavePasswordClicked(""))
                 },

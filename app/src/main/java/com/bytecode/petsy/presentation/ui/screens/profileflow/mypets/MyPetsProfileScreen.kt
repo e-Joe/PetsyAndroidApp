@@ -91,7 +91,8 @@ fun DogsList(viewModel: MainFlowViewModel) {
                 },
                 deleteDog = {
                     viewModel.onEvent(MainFlowEvent.DeleteDogConfirmedEvent(""))
-                }
+                },
+                dogName = viewModel.deleteDog.name
             )
 
         val (

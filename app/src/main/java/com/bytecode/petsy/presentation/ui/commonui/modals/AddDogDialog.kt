@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -67,7 +68,7 @@ fun AddDogDialog(dogs: List<String>, setShowDialog: (Boolean) -> Unit, setValue:
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Today’s brushing",
+                            text = stringResource(R.string.today_s_brushing),
                             style = MaterialTheme.typography.h2,
                             modifier = Modifier.padding(top = 5.dp)
                         )
@@ -111,13 +112,13 @@ fun AddDogDialog(dogs: List<String>, setShowDialog: (Boolean) -> Unit, setValue:
                             .border(width = 1.dp, OutlineBorder, shape = RoundedCornerShape(50.dp)),
                         enabled = true,
                         placeholder = {
-                            Text(text = "Your dog’s name")
+                            Text(text = stringResource(R.string.your_dog_s_name))
                         }
                     )
 
                     if (txtFieldError.value) {
                         Text(
-                            text = "Dog with name ${txtField.value} already exist.",
+                            text = stringResource(R.string.dog_name_with, txtField.value),
                             style = input_field_error,
                             modifier = Modifier.padding(top = 8.dp)
                         )
@@ -129,10 +130,8 @@ fun AddDogDialog(dogs: List<String>, setShowDialog: (Boolean) -> Unit, setValue:
                         text = "Save",
                         onClick = {
                             if (dogs.contains(txtField.value.lowercase().trim())) {
-                                Log.d("Pas", "Postoji")
                                 txtFieldError.value = true
                             } else {
-                                Log.d("Pas", "Ne postoji")
                                 txtFieldError.value = false
                                 setValue(txtField.value.trim())
                                 setShowDialog(false)

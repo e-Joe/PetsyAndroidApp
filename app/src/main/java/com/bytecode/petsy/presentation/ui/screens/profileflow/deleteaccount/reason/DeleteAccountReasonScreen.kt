@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -73,7 +74,7 @@ fun DeleteAccountContent(navController: NavHostController) {
                 top.linkTo(topGuideline)
                 start.linkTo(parent.start)
             }
-            .padding(horizontal = 20.dp), text = "Account", style = MaterialTheme.typography.h1)
+            .padding(horizontal = 20.dp), text = stringResource(id = R.string.account), style = MaterialTheme.typography.h1)
 
         Column(modifier = Modifier
             .constrainAs(mainPart) {
@@ -88,11 +89,11 @@ fun DeleteAccountContent(navController: NavHostController) {
             .padding(top = 30.dp)) {
             Text(
                 modifier = Modifier.padding(bottom = 20.dp),
-                text = "Why are you deleting your account?", style = MaterialTheme.typography.h4
+                text = stringResource(R.string.why_are_you_deleting_your_account), style = MaterialTheme.typography.h4
             )
 
             DeleteInfoCard(
-                "I don’t need it anymore",
+                stringResource(R.string.i_don_t_need_it_anymore),
                 ImageVector.vectorResource(id = R.drawable.ic_circle_not_selected)
             ) {
                 navController.navigate(DeleteScreenNav.DeleteAccInfoScreen.route)
@@ -101,7 +102,7 @@ fun DeleteAccountContent(navController: NavHostController) {
             Spacer(modifier = Modifier.height(20.dp))
 
             DeleteInfoCard(
-                "App is hard to use",
+                stringResource(R.string.app_is_hard_to_use),
                 ImageVector.vectorResource(id = R.drawable.ic_circle_not_selected)
             ) {
                 navController.navigate(DeleteScreenNav.DeleteAccInfoScreen.route)
@@ -110,7 +111,7 @@ fun DeleteAccountContent(navController: NavHostController) {
             Spacer(modifier = Modifier.height(20.dp))
 
             DeleteInfoCard(
-                "I’m switching to something else",
+                stringResource(R.string.i_m_switching_to_something_else),
                 ImageVector.vectorResource(id = R.drawable.ic_circle_not_selected)
             ) {
                 navController.navigate(DeleteScreenNav.DeleteAccInfoScreen.route)
@@ -119,7 +120,7 @@ fun DeleteAccountContent(navController: NavHostController) {
             Spacer(modifier = Modifier.height(20.dp))
 
             DeleteInfoCard(
-                "Other",
+                stringResource(R.string.other),
                 ImageVector.vectorResource(id = R.drawable.ic_circle_not_selected)
             ) {
                 navController.navigate(DeleteScreenNav.DeleteAccInfoScreen.route)

@@ -116,6 +116,8 @@ private fun BoxScope.Form(navController: NavHostController, viewModel: RegisterV
             .fillMaxWidth()
     ) {
 
+        val text = stringResource(R.string.user_already_exist)
+
         LaunchedEffect(key1 = context) {
             viewModel.validationEvents.collect { event ->
                 when (event) {
@@ -126,7 +128,7 @@ private fun BoxScope.Form(navController: NavHostController, viewModel: RegisterV
                     is ValidationEvent.Fail -> {}
 
                     is ValidationEvent.UserExist -> {
-                        Toast.makeText(context, "User already exist", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                     }
                 }
             }

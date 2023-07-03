@@ -92,7 +92,7 @@ fun countrySearchView(state: ModalBottomSheetState): String {
             )
             if (searchValue.isEmpty()) {
                 Text(
-                    text = stringResource(R.string.search_text),
+                    text = stringResource(R.string.country_title_text),
                     style = MaterialTheme.typography.body1,
                     color = Color.Gray,
                     fontSize = 16.sp,

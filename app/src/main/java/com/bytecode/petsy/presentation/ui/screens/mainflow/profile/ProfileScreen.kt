@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -88,7 +89,7 @@ fun ProfileScreen(
 
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
-                    "My Pets",
+                    stringResource(R.string.my_pets),
                     ImageVector.vectorResource(id = R.drawable.ic_profile_my_pets)
                 ) {
                     navController.navigate(ProfileScreenNav.MyPets.route)
@@ -99,7 +100,7 @@ fun ProfileScreen(
 
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
-                    "Tutorials/Education",
+                    stringResource(R.string.tutorials_education),
                     ImageVector.vectorResource(id = R.drawable.ic_profile_tutorials_education),
                 ) {
                     navController.navigate(ProfileScreenNav.Tutorials.route)
@@ -109,7 +110,7 @@ fun ProfileScreen(
 
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
-                    "Change password",
+                    stringResource(R.string.change_password),
                     ImageVector.vectorResource(id = R.drawable.ic_profile_change_password),
                 )
                 {
@@ -123,7 +124,7 @@ fun ProfileScreen(
 
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
-                    "Privacy",
+                    stringResource(R.string.privacy),
                     ImageVector.vectorResource(id = R.drawable.ic_profile_privacy),
                 ) {
                     context.startActivity(privacyLink)
@@ -133,7 +134,7 @@ fun ProfileScreen(
 
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
-                    "Delete account",
+                    stringResource(R.string.delete_account),
                     ImageVector.vectorResource(id = R.drawable.ic_profile_delete_account),
                 ) {
                     navController.navigate(DeleteScreenNav.DeleteAccReasonScreen.route)
@@ -160,7 +161,7 @@ fun ProfileScreen(
 
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
-                    "Logout",
+                    stringResource(R.string.logout),
                     ImageVector.vectorResource(id = R.drawable.ic_profile_logout),
                 ) {
                     showLogoutDialog.value = true

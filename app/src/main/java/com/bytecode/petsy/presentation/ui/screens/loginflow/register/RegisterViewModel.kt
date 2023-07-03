@@ -131,33 +131,26 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun saveColors(colors: List<ColorDto>) = safeLaunch {
-        Log.d("Dogs", "saveDogs ")
         call(saveColorsUseCase(SaveColorsUseCase.Params(colors)))
-        Log.d("Dogs", "saveDogs after")
         resetState()
         validationChannel.send(ValidationEvent.Success)
     }
 
     private fun getColorForDog(index: Int): String {
-        Log.d("Dogs", "Index is $index")
         return Constants.colors[index]
     }
 
     private fun saveDogs() = safeLaunch {
-        Log.d("Dogs", "saveDogs 1")
         var dogs = arrayListOf<DogDto>()
         dogsList.forEachIndexed { index, dog ->
             dogs.add(DogDto(ownerId = user.id, color = getColorForDog(index), name = dog.name))
         }
-
-        Log.d("Dogs", "saveDogs 2 $dogs")
         val params = SaveDogsUseCase.Params(dogs)
         call(saveDogsUserCase(params))
         updateColorsState()
     }
 
     private fun updateColorsState() = safeLaunch {
-        Log.d("Dogs", "getDogs ")
         call(getDogsUseCase(user.id)) {
             if (it.isNotEmpty()) {
                 dogsList.clear()
@@ -400,23 +393,3 @@ data class RegisterFormState(
     val isPasswordLowerCaseValid: Boolean = false,
     val countryDialogShow: Boolean = false
 )
-
-//data class RegisterFormState(
-//    val email: String = "vu@vu.com",
-//    val password: String = "Ejoe1989",
-//    val firstName: String = "Ilija",
-//    val lastName: String = "Vucetic",
-//    val country: String = "Serbia",
-//    val phoneNumber: String = "",
-//    val emailError: String? = null,
-//    val passwordError: String? = null,
-//    val firstNameError: String? = null,
-//    val lastNameError: String? = null,
-//    val countryError: String? = null,
-//    val phoneNumberError: String? = null,
-//    val isPasswordDigitValid: Boolean = false,
-//    val isPasswordLength: Boolean = false,
-//    val isPasswordUpperCaseValid: Boolean = false,
-//    val isPasswordLowerCaseValid: Boolean = false,
-//    val countryDialogShow: Boolean = false
-//)

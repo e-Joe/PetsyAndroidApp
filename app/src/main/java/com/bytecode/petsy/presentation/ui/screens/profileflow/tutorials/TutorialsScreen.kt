@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -75,7 +76,7 @@ fun TutorialsContent() {
                     start.linkTo(parent.start)
                 }
                 .padding(horizontal = 20.dp),
-            text = "Tutorials",
+            text = stringResource(R.string.tutorials),
             style = MaterialTheme.typography.h1
         )
 
@@ -100,7 +101,7 @@ fun TutorialsContent() {
         ) {
             ProfileOptionCard(
                 isVisibleRightIcon = false,
-                "How to brush you pets teeth",
+                stringResource(R.string.how_to_brush_you_pets_teeth),
                 ImageVector.vectorResource(id = R.drawable.ic_profile_tutorials_education),
             ) {
                 context.startActivity(howToBrush)
@@ -110,7 +111,7 @@ fun TutorialsContent() {
 
             ProfileOptionCard(
                 isVisibleRightIcon = false,
-                "How to maintain dogs teeth ",
+                stringResource(R.string.how_to_maintain_dogs_teeth),
                 ImageVector.vectorResource(id = R.drawable.ic_profile_tutorials_education),
             ) {
                 context.startActivity(howToMaintainDogs)
@@ -120,7 +121,7 @@ fun TutorialsContent() {
 
             ProfileOptionCard(
                 isVisibleRightIcon = false,
-                "Best foods for dogs ",
+                stringResource(R.string.best_foods_for_dogs),
                 ImageVector.vectorResource(id = R.drawable.ic_profile_tutorials_education),
             ) {
                 context.startActivity(bestFood)
@@ -130,7 +131,7 @@ fun TutorialsContent() {
 
             ProfileOptionCard(
                 isVisibleRightIcon = false,
-                "Bad foods for your dog",
+                stringResource(R.string.bad_foods_for_your_dog),
                 ImageVector.vectorResource(id = R.drawable.ic_profile_tutorials_education),
             ) {
                 context.startActivity(badFood)

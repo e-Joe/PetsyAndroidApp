@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -26,6 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bytecode.framework.extension.getActivity
 import com.bytecode.framework.extension.launchActivity
+import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.activities.welcome.WelcomeActivity
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
@@ -96,7 +98,7 @@ fun DeleteAccountContent(navController: NavHostController, viewModel: MainFlowVi
                     start.linkTo(parent.start)
                 }
                 .padding(horizontal = 20.dp),
-            text = "Account",
+            text = stringResource(id = R.string.account),
             style = MaterialTheme.typography.h1
         )
 
@@ -115,7 +117,7 @@ fun DeleteAccountContent(navController: NavHostController, viewModel: MainFlowVi
         ) {
             RoundedInput(
                 modifier = Modifier.padding(start = 0.dp, end = 0.dp),
-                hint = "Password",
+                hint = stringResource(R.string.password_hint),
                 isPassword = true,
                 onValueChange = {
                     viewModel.onEvent(MainFlowEvent.DeletePasswordChanged(it))
@@ -136,7 +138,7 @@ fun DeleteAccountContent(navController: NavHostController, viewModel: MainFlowVi
                     end.linkTo(parent.end)
                 }
                 .height(70.dp),
-            text = "Delete profile",
+            text = stringResource(R.string.btn_delete_profile),
             onClick = {
                 viewModel.onEvent(MainFlowEvent.DeleteUserClicked(""))
             }

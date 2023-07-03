@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.theme.button_primary_text
 
@@ -52,7 +54,7 @@ fun AccountDeletedDialog(setShowDialog: (Boolean) -> Unit, onOkPressed: () -> Un
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Your account is deleted",
+                            text = stringResource(R.string.your_account_is_deleted),
                             style = MaterialTheme.typography.h2,
                             modifier = Modifier.padding(top = 5.dp)
                         )
@@ -61,7 +63,7 @@ fun AccountDeletedDialog(setShowDialog: (Boolean) -> Unit, onOkPressed: () -> Un
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Text(
-                        text = "Thank you for using our product!",
+                        text = stringResource(R.string.thank_you_for_using_our_product),
                         style = MaterialTheme.typography.h4,
                     )
 
@@ -85,7 +87,7 @@ fun AccountDeletedDialog(setShowDialog: (Boolean) -> Unit, onOkPressed: () -> Un
                                     onOkPressed()
                                 }) {
                                 Text(
-                                    text = "Ok",
+                                    text = stringResource(R.string.btn_ok),
                                     style = button_primary_text
                                 )
                             }

@@ -108,7 +108,7 @@ private fun BoxScope.Form() {
 
         Text(
             style = MaterialTheme.typography.h4,
-            text = "In order to start using your Smartbrush account, you need to confirm your email address.",
+            text = stringResource(R.string.in_order),
             modifier = Modifier.padding(start = 20.dp, end = 20.dp)
         )
 

@@ -135,8 +135,8 @@ private fun EmptyStateDashboard(viewModel: MainFlowViewModel, navController: Nav
         GradientButton(modifier = Modifier.padding(bottom = 15.dp, top = 15.dp),
             paddingEnd = 0.dp,
             paddingStart = 0.dp,
-            text = if (viewModel.state.brushingPhase == BrushingState.IN_PROGRESS) "Started"
-            else "Start brushing",
+            text = if (viewModel.state.brushingPhase == BrushingState.IN_PROGRESS) stringResource(R.string.started)
+            else stringResource(R.string.start_brushing_label),
             onClick = {
                 viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.IN_PROGRESS))
                 navController.navigate(BottomBarScreen.BrushingScreen.route)
@@ -155,7 +155,7 @@ private fun PetsDataScreen(viewModel: MainFlowViewModel) {
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "Choose your pet",
+            text = stringResource(R.string.choose_your_pet),
             style = MaterialTheme.typography.h2,
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -166,7 +166,7 @@ private fun PetsDataScreen(viewModel: MainFlowViewModel) {
         TodaysBrushingView(viewModel)
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-            text = "Recent activities",
+            text = stringResource(R.string.recent_activities),
             style = MaterialTheme.typography.h2,
         )
         Spacer(modifier = Modifier.height(20.dp))
@@ -206,7 +206,7 @@ private fun ChartAreaView(mainFlowViewModel: MainFlowViewModel) {
                             start.linkTo(parent.start)
                             bottom.linkTo(previousButton.bottom)
                         },
-                    text = "Seconds",
+                    text = stringResource(R.string.seconds),
                     style = chartTitle
                 )
 
@@ -378,7 +378,7 @@ fun TodaysBrushingView(viewModel: MainFlowViewModel) {
             .background(Color.White.copy(alpha = 0.7f))
     ) {
         Text(
-            text = "Today’s brushing",
+            text = stringResource(R.string.today_s_brushing_text),
             style = MaterialTheme.typography.h2,
             modifier = Modifier.padding(top = 20.dp, start = 20.dp)
         )
@@ -507,7 +507,7 @@ fun RecentActivityView(dog: DogDto) {
                 val (brushingTextFirstPart, brushingTextSecondPart, dogView, progress, spacer, progressText, time) = createRefs()
 
                 Text(
-                    text = "Brushing duration:",
+                    text = stringResource(R.string.brushing_duration),
                     style = brushingCardText,
                     modifier = Modifier.constrainAs(brushingTextFirstPart) {
                         top.linkTo(parent.top)
@@ -518,7 +518,7 @@ fun RecentActivityView(dog: DogDto) {
                 )
 
                 Text(
-                    text = "${dog.lastBrushingPeriod} seconds",
+                    text = stringResource(id = R.string.brushing_duration_time,dog.lastBrushingPeriod),
                     style = brushingCardTextBold,
                     modifier = Modifier.constrainAs(brushingTextSecondPart) {
                         top.linkTo(dogView.top)

@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.theme.button_primary_text
 
@@ -51,7 +53,7 @@ fun LogOutDialog(setShowDialog: (Boolean) -> Unit, logout: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Log out of SmartBrush?",
+                            text = stringResource(R.string.log_out_of_smartbrush),
                             style = MaterialTheme.typography.h2,
                             modifier = Modifier.padding(top = 5.dp)
                         )
@@ -76,7 +78,7 @@ fun LogOutDialog(setShowDialog: (Boolean) -> Unit, logout: () -> Unit) {
                                     setShowDialog(false)
                                 }) {
                                 Text(
-                                    text = "Cancel",
+                                    text = stringResource(R.string.btn_cancel),
                                     style = button_primary_text
                                 )
                             }
@@ -86,7 +88,7 @@ fun LogOutDialog(setShowDialog: (Boolean) -> Unit, logout: () -> Unit) {
 
                         Box(modifier = Modifier.weight(1f)) {
                             GradientButton(
-                                text = "Log out",
+                                text = stringResource(R.string.btn_logout),
                                 onClick = {
                                     logout()
                                     setShowDialog(false)

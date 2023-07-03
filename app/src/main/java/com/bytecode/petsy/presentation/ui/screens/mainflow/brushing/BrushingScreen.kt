@@ -270,7 +270,7 @@ fun SaveBrushingScreen(viewModel: MainFlowViewModel) {
                     start.linkTo(parent.start)
                 }
                 .padding(horizontal = 20.dp),
-            text = "Choose the dog whose teeth you brushed \uD83D\uDC47",
+            text = stringResource(R.string.choose_doog_smiley),
             style = MaterialTheme.typography.h1
         )
 

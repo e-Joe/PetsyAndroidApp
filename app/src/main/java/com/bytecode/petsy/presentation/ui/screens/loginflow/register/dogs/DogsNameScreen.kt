@@ -89,8 +89,11 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
             .fillMaxWidth()
     ) {
         val context = LocalContext.current
+        val text = stringResource(R.string.the_dog_s_name_cannot_be_empty)
 
         LaunchedEffect(key1 = context) {
+
+
             viewModel.validationEvents.collect { event ->
                 when (event) {
                     is ValidationEvent.Success -> {
@@ -100,7 +103,7 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
                     is ValidationEvent.Fail -> {
                         Toast.makeText(
                             context,
-                            "The dog's name cannot be empty",
+                            text,
                             Toast.LENGTH_SHORT
                         ).show()
                     }

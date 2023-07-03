@@ -19,14 +19,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.theme.button_primary_text
 
 @Composable
-fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit, deleteDog: () -> Unit) {
+fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit, deleteDog: () -> Unit, dogName: String) {
 
     Dialog(
         onDismissRequest = { setShowDialog(false) },
@@ -51,8 +53,7 @@ fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit, deleteDog: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Are you sure you want to\n" +
-                                    "delete “Penny” as your pet?",
+                            text = stringResource(R.string.delete_are_you_sure, dogName),
                             style = MaterialTheme.typography.h2,
                             modifier = Modifier.padding(top = 5.dp)
                         )
@@ -61,7 +62,7 @@ fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit, deleteDog: () -> Unit) {
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Text(
-                        text = "You will also delete their statistic.",
+                        text = stringResource(R.string.delete_statistic),
                         style = MaterialTheme.typography.h4,
                         modifier = Modifier.padding(top = 5.dp)
                     )
@@ -85,7 +86,7 @@ fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit, deleteDog: () -> Unit) {
                                     setShowDialog(false)
                                 }) {
                                 Text(
-                                    text = "Cancel",
+                                    text = stringResource(R.string.btn_cancel),
                                     style = button_primary_text
                                 )
                             }
@@ -95,7 +96,7 @@ fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit, deleteDog: () -> Unit) {
 
                         Box(modifier = Modifier.weight(1f)) {
                             GradientButton(
-                                text = "Delete",
+                                text = stringResource(R.string.btn_delete),
                                 onClick = {
                                     deleteDog()
                                     setShowDialog(false)
@@ -104,11 +105,7 @@ fun DeleteDogDialog(setShowDialog: (Boolean) -> Unit, deleteDog: () -> Unit) {
                                 paddingEnd = 0.dp
                             )
                         }
-
-
                     }
-
-
                 }
             }
         }

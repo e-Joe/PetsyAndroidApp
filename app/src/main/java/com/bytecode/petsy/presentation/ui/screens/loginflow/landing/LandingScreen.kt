@@ -51,7 +51,7 @@ fun LandingScreen(navController: NavHostController) {
 @Composable
 private fun RenderTopPart() {
     Text(
-        text = "Welcome to\n" + "smart toothbrush ! \uD83D\uDC3E",
+        text = stringResource(R.string.welcome_to_smart_toothbrush),
         style = MaterialTheme.typography.h1,
         modifier = Modifier
             .padding(top = 150.dp, start = 20.dp, end = 20.dp)

@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.theme.button_primary_text
 
@@ -51,7 +53,7 @@ fun PasswordChangedDialog(setShowDialog: (Boolean) -> Unit, onOkPressed: () -> U
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Your password has been successfully changed",
+                            text = stringResource(R.string.your_password_has_been_successfully_changed),
                             style = MaterialTheme.typography.h2,
                             modifier = Modifier.padding(top = 5.dp)
                         )
@@ -77,7 +79,7 @@ fun PasswordChangedDialog(setShowDialog: (Boolean) -> Unit, onOkPressed: () -> U
                                     onOkPressed()
                                 }) {
                                 Text(
-                                    text = "Ok",
+                                    text = stringResource(id = R.string.btn_ok),
                                     style = button_primary_text
                                 )
                             }

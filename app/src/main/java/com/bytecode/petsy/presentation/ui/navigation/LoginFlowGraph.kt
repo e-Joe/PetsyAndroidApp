@@ -60,7 +60,7 @@ fun LoginFlowGraph(navController: NavHostController, registerViewModel: Register
 
         composable(route = LoginFlowScreen.ForgotPasswordScreen.route) {
             val viewModel: ForgotPasswordViewModel = hiltViewModel(it)
-            ForgotPasswordScreen(navController = navController,viewModel)
+            ForgotPasswordScreen(navController = navController, viewModel)
         }
 
         composable(route = LoginFlowScreen.ForgotPasswordRequestedScreen.route) {
@@ -69,9 +69,7 @@ fun LoginFlowGraph(navController: NavHostController, registerViewModel: Register
 
         composable(route = LoginFlowScreen.ResetPasswordScreen.route) {
             val viewModel: ResetPasswordViewModel = hiltViewModel(it)
-            ResetPasswordScreen(navController = navController,viewModel)
+            ResetPasswordScreen(navController = navController, viewModel)
         }
-
-
     }
 }

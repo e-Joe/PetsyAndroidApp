@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -84,7 +85,7 @@ fun DeleteAccountContent(navController: NavHostController) {
                     start.linkTo(parent.start)
                 }
                 .padding(horizontal = 20.dp),
-            text = "Account",
+            text = stringResource(R.string.account),
             style = MaterialTheme.typography.h1,
         )
 
@@ -104,17 +105,17 @@ fun DeleteAccountContent(navController: NavHostController) {
 
             Text(
                 modifier = Modifier.padding(bottom = 20.dp),
-                text = "Deleting account will do the following", style = MaterialTheme.typography.h4
+                text = stringResource(R.string.deleting_account_will_do_the_following), style = MaterialTheme.typography.h4
             )
 
             DeleteInfoCard(
-                "Log you out on all devices",
+                stringResource(R.string.log_you_out_on_all_devices),
                 ImageVector.vectorResource(id = R.drawable.icon_delete_info)
             )
             Spacer(modifier = Modifier.height(20.dp))
 
             DeleteInfoCard(
-                "Delete all of your account information",
+                stringResource(R.string.delete_all_of_your_account_information),
                 ImageVector.vectorResource(id = R.drawable.icon_delete_info)
             )
 
@@ -128,7 +129,7 @@ fun DeleteAccountContent(navController: NavHostController) {
                     end.linkTo(parent.end)
                 }
                 .height(70.dp),
-            text = "Delete profile",
+            text = stringResource(R.string.delete_profile),
             onClick = {
                 navController.navigate(DeleteScreenNav.DeleteAccPasswordScreen.route)
             }

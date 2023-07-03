@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
 import com.bytecode.framework.extension.formatDateDayMonth
@@ -210,7 +211,6 @@ class MainFlowViewModel @Inject constructor(
     }
 
     fun onEvent(event: MainFlowEvent) {
-
         when (event) {
             is MainFlowEvent.BrushingStateEvent -> {
                 state = state.copy(brushingPhase = event.brushingState)
@@ -386,7 +386,7 @@ class MainFlowViewModel @Inject constructor(
 
             is MainFlowEvent.DeleteUserClicked -> {
                 if (user.password != state.deletePassword) {
-                    state = state.copy(deletePasswordError = "Please check your  password")
+                    state = state.copy(deletePasswordError = "Please check your password")
                     return
                 } else {
                     state = state.copy(deletePasswordError = null)
