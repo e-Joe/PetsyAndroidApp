@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.bytecode.framework.room.dao.BaseDao
+import com.bytecode.petsy.data.model.local.brushing.BrushingTimeEntity
 import com.bytecode.petsy.data.model.local.dog.DogEntity
 
 @Dao
@@ -23,4 +24,7 @@ interface DogDao : BaseDao<DogEntity> {
 
     @Delete
     fun deleteDog(dogEntity: DogEntity): Int
+
+    @Query("DELETE FROM ${DogEntity.TABLE_NAME} WHERE ${DogEntity.COLUMN_OWNER_ID} = :ownerId")
+    fun deleteDogs(ownerId: Long): Int
 }

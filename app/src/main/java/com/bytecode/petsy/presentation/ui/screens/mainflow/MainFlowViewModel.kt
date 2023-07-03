@@ -13,13 +13,16 @@ import com.bytecode.petsy.data.model.dto.color.ColorDto
 import com.bytecode.petsy.data.model.dto.dog.DogDto
 import com.bytecode.petsy.data.model.dto.user.UserDto
 import com.bytecode.petsy.domain.usecase.brushingtime.DeleteTimeForDogUseCase
+import com.bytecode.petsy.domain.usecase.brushingtime.DeleteTimeForUserUseCase
 import com.bytecode.petsy.domain.usecase.brushingtime.SaveBrushingTimeUseCase
 import com.bytecode.petsy.domain.usecase.color.GetColorForNewDogUseCase
 import com.bytecode.petsy.domain.usecase.color.SaveColorUseCase
 import com.bytecode.petsy.domain.usecase.dog.DeleteDogUseCase
+import com.bytecode.petsy.domain.usecase.dog.DeleteDogsUseCase
 import com.bytecode.petsy.domain.usecase.dog.GetDogsUseCase
 import com.bytecode.petsy.domain.usecase.dog.SaveDogUseCase
 import com.bytecode.petsy.domain.usecase.dog.UpdateDogUseCase
+import com.bytecode.petsy.domain.usecase.user.DeleteUserUseCase
 import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserUseCase
 import com.bytecode.petsy.domain.usecase.user.UpdateUserUseCase
 import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordDigit
@@ -60,7 +63,11 @@ class MainFlowViewModel @Inject constructor(
     private val validatePasswordLowerCase: ValidatePasswordLowerCase,
     private val validatePasswordLength: ValidatePasswordLength,
     private val validatePasswordUpperCase: ValidatePasswordUpperCase,
-    private val updateUserUseCase: UpdateUserUseCase
+    private val updateUserUseCase: UpdateUserUseCase,
+    private val deleteDogsUseCase: DeleteDogsUseCase,
+    private val deleteTimeForUserUseCase: DeleteTimeForUserUseCase,
+    private val deleteUserUseCase: DeleteUserUseCase
+
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(MainFlowState())
@@ -99,6 +106,9 @@ class MainFlowViewModel @Inject constructor(
 
     val _passwordChanged = MutableStateFlow(false)
     val passwordChanged = _passwordChanged.asStateFlow()
+
+    val _accountDeleted = MutableStateFlow(false)
+    val accountDeleted = _accountDeleted.asStateFlow()
 
 
     internal val chartEntryModelProducer: ChartEntryModelProducer = ChartEntryModelProducer()
@@ -369,6 +379,21 @@ class MainFlowViewModel @Inject constructor(
             is MainFlowEvent.LogoutUserEvent -> {
                 logoutUser()
             }
+
+            is MainFlowEvent.DeletePasswordChanged -> {
+                state = state.copy(deletePassword = event.password)
+            }
+
+            is MainFlowEvent.DeleteUserClicked -> {
+                if (user.password != state.deletePassword) {
+                    state = state.copy(deletePasswordError = "Please check your  password")
+                    return
+                } else {
+                    state = state.copy(deletePasswordError = null)
+                }
+
+                deleteUser()
+            }
         }
     }
 
@@ -480,6 +505,33 @@ class MainFlowViewModel @Inject constructor(
         }
     }
 
+    private fun deleteTimesForUser() = safeLaunch {
+        val deleteTimesParams = user?.let { DeleteTimeForUserUseCase.Params(it.id) }
+        deleteTimesParams?.let {
+            call(deleteTimeForUserUseCase(it)) {
+                deleteDogsForUser()
+            }
+        }
+    }
+
+    private fun deleteDogsForUser() = safeLaunch {
+        val deleteDogsParams = user?.let { DeleteDogsUseCase.Params(it.id) }
+        deleteDogsParams?.let {
+            call(deleteDogsUseCase(it)) {
+                _accountDeleted.value = true
+            }
+        }
+    }
+
+    private fun deleteUser() = safeLaunch {
+        val deleteUserParams = user?.let { DeleteUserUseCase.Params(it) }
+        deleteUserParams?.let {
+            call(deleteUserUseCase(it)) {
+                deleteTimesForUser()
+            }
+        }
+    }
+
     private fun updateUserPassword() = safeLaunch {
         user = user.copy(password = state.newPassword)
         val updateUSerParams = user?.let { UpdateUserUseCase.Params(it) }
@@ -559,6 +611,8 @@ data class MainFlowState(
     val shouldScrollList: Boolean = false,
     val oldPassword: String = "",
     val newPassword: String = "",
+    val deletePassword: String = "",
+    val deletePasswordError: String? = null,
     val oldPasswordError: String? = null,
     val isPasswordDigitValid: Boolean = false,
     val isPasswordLength: Boolean = false,
@@ -596,6 +650,10 @@ sealed class MainFlowEvent() {
     data class ResetPasswordChangeDialogEvent(val temp: String) : MainFlowEvent()
 
     data class LogoutUserEvent(val temp: String) : MainFlowEvent()
+
+    data class DeletePasswordChanged(val password: String) : MainFlowEvent()
+
+    data class DeleteUserClicked(val temp: String) : MainFlowEvent()
 }
 
 enum class BrushingState {

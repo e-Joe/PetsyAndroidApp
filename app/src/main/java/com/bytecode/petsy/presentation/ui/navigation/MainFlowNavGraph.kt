@@ -55,7 +55,7 @@ fun NavGraphBuilder.profileNavGraph(
             TutorialsScreen(viewModel = mainFlowViewModel)
         }
         composable(route = ProfileScreenNav.ChangePassword.route) {
-            ChangePasswordScreen(navController = navController,viewModel = mainFlowViewModel)
+            ChangePasswordScreen(navController = navController, viewModel = mainFlowViewModel)
         }
 
         composable(route = ProfileScreenNav.Privacy.route) {
@@ -78,13 +78,16 @@ fun NavGraphBuilder.deleteAccNavGraph(
         startDestination = DeleteScreenNav.DeleteAccReasonScreen.route
     ) {
         composable(route = DeleteScreenNav.DeleteAccReasonScreen.route) {
-            DeleteAccountReasonScreen(viewModel = mainFlowViewModel)
+            DeleteAccountReasonScreen(viewModel = mainFlowViewModel, navController = navController)
         }
         composable(route = DeleteScreenNav.DeleteAccInfoScreen.route) {
-            DeleteAccountInfoScreen(viewModel = mainFlowViewModel)
+            DeleteAccountInfoScreen(viewModel = mainFlowViewModel, navController = navController)
         }
         composable(route = DeleteScreenNav.DeleteAccPasswordScreen.route) {
-            DeleteAccountPasswordScreen(viewModel = mainFlowViewModel)
+            DeleteAccountPasswordScreen(
+                viewModel = mainFlowViewModel,
+                navController = navController
+            )
         }
     }
 }

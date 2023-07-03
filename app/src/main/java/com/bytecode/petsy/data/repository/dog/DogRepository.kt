@@ -26,4 +26,6 @@ constructor(
     fun updateDog(dogEntity: DogEntity): Int = dao.updateDog(dogEntity)
 
     fun deleteDog(dogEntity: DogEntity): Int = dao.deleteDog(dogEntity)
+
+    fun deleteDogs(ownerId: Long): Int = dao.deleteDogs(ownerId)
 }

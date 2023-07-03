@@ -26,5 +26,7 @@ constructor(
 
     suspend fun deleteTimesForDog(dogId: Long) = dao.deleteTimesForDog(dogId)
 
+    suspend fun deleteTimesForUser(userId: Long) = dao.deleteTimesForUser(userId)
+
 
 }

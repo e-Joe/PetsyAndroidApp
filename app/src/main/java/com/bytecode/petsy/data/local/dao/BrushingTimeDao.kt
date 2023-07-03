@@ -17,4 +17,7 @@ interface BrushingTimeDao : BaseDao<BrushingTimeEntity> {
 
     @Query("DELETE FROM ${BrushingTimeEntity.TABLE_NAME} WHERE ${BrushingTimeEntity.COLUMN_DOG_ID} = :dogId")
     suspend fun deleteTimesForDog(dogId: Long): Int
+
+    @Query("DELETE FROM ${BrushingTimeEntity.TABLE_NAME} WHERE ${BrushingTimeEntity.COLUMN_OWNER_ID} = :userId")
+    suspend fun deleteTimesForUser(userId: Long): Int
 }
