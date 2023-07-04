@@ -126,4 +126,6 @@ dependencies {
 
     // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
     implementation ("com.patrykandpatrick.vico:compose-m3:1.6.5")
+
+    implementation ("com.google.android.exoplayer:exoplayer:2.18.7")
 }

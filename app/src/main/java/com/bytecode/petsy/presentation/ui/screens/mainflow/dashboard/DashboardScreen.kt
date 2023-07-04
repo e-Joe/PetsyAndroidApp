@@ -46,9 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bytecode.framework.extension.formatDateTimeShortMonth
 import com.bytecode.framework.extension.isToday
@@ -62,6 +60,7 @@ import com.bytecode.petsy.presentation.ui.commonui.custom.CustomLinearProgressIn
 import com.bytecode.petsy.presentation.ui.commonui.custom.chart.Chart6
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.navigation.BottomBarScreen
+import com.bytecode.petsy.presentation.ui.navigation.VideoScreenNav
 import com.bytecode.petsy.presentation.ui.screens.mainflow.BrushingState
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
@@ -75,7 +74,6 @@ import com.bytecode.petsy.presentation.ui.theme.chartTitle
 import com.bytecode.petsy.util.toColor
 import com.bytecode.petsy.util.toLighterColor
 import com.bytecode.petsy.util.toMediumColor
-import com.patrykandpatrick.vico.core.entry.ChartEntry
 
 @Composable
 fun DashboardScreen(viewModel: MainFlowViewModel, navController: NavHostController) {
@@ -86,9 +84,14 @@ fun DashboardScreen(viewModel: MainFlowViewModel, navController: NavHostControll
                 .padding(paddingValues = paddingValues)
                 .fillMaxSize()
         ) {
+            val dogsListState = viewModel.dogsFlow.collectAsState()
+
             PetsyImageBackground()
-//            EmptyStateDashboard(viewModel, navController)
-            PetsDataScreen(viewModel = viewModel)
+
+            if (dogsListState.value.isEmpty())
+                EmptyStateDashboard(viewModel, navController)
+            else
+                PetsDataScreen(viewModel = viewModel)
             HeaderOnboarding()
         }
     }
@@ -112,13 +115,17 @@ private fun EmptyStateDashboard(viewModel: MainFlowViewModel, navController: Nav
                 style = MaterialTheme.typography.h1,
             )
             Spacer(modifier = Modifier.height(20.dp))
-            Image(
-                modifier = Modifier
-                    .aspectRatio(ratio = 1f)
-                    .fillMaxWidth(),
-                painter = painterResource(id = R.drawable.img_video_tutorial),
-                contentDescription = ""
-            )
+//            Image(
+//                modifier = Modifier
+//                    .aspectRatio(ratio = 1f)
+//                    .fillMaxWidth()
+//                    .clickable {
+//                        navController.navigate(VideoScreenNav.VideoScreen.route)
+//                    },
+//                painter = painterResource(id = R.drawable.img_video_tutorial),
+//                contentDescription = ""
+//            )
+            VideoView()
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = stringResource(R.string.no_activities_yet),
@@ -518,7 +525,10 @@ fun RecentActivityView(dog: DogDto) {
                 )
 
                 Text(
-                    text = stringResource(id = R.string.brushing_duration_time,dog.lastBrushingPeriod),
+                    text = stringResource(
+                        id = R.string.brushing_duration_time,
+                        dog.lastBrushingPeriod
+                    ),
                     style = brushingCardTextBold,
                     modifier = Modifier.constrainAs(brushingTextSecondPart) {
                         top.linkTo(dogView.top)
@@ -630,3 +640,4 @@ fun RecentDogView(
         }
     }
 }
+

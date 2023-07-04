@@ -9,6 +9,7 @@ import androidx.navigation.compose.navigation
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 import com.bytecode.petsy.presentation.ui.screens.mainflow.brushing.BrushingScreen
 import com.bytecode.petsy.presentation.ui.screens.mainflow.dashboard.DashboardScreen
+import com.bytecode.petsy.presentation.ui.screens.mainflow.dashboard.PetsieVideoScreen
 import com.bytecode.petsy.presentation.ui.screens.mainflow.profile.ProfileScreen
 import com.bytecode.petsy.presentation.ui.screens.profileflow.changepassword.ChangePasswordScreen
 import com.bytecode.petsy.presentation.ui.screens.profileflow.deleteaccount.info.DeleteAccountInfoScreen
@@ -37,6 +38,22 @@ fun MainFlowNavGraph(navController: NavHostController, mainFlowViewModel: MainFl
         profileNavGraph(navController = navController, mainFlowViewModel)
 
         deleteAccNavGraph(navController = navController, mainFlowViewModel)
+
+        videoNavGraph(navController = navController, mainFlowViewModel)
+    }
+}
+
+fun NavGraphBuilder.videoNavGraph(
+    navController: NavHostController,
+    mainFlowViewModel: MainFlowViewModel
+) {
+    navigation(
+        route = "videoScreens",
+        startDestination = VideoScreenNav.VideoScreen.route
+    ) {
+        composable(route = VideoScreenNav.VideoScreen.route) {
+            PetsieVideoScreen(viewModel = mainFlowViewModel, navController = navController)
+        }
     }
 }
 
@@ -104,5 +121,8 @@ sealed class DeleteScreenNav(val route: String) {
     object DeleteAccReasonScreen : DeleteScreenNav(route = "DELETE__ACC_REASON")
     object DeleteAccInfoScreen : DeleteScreenNav(route = "DELETE__ACC_INFO")
     object DeleteAccPasswordScreen : DeleteScreenNav(route = "DELETE__ACC_PASS")
+}
 
+sealed class VideoScreenNav(val route: String) {
+    object VideoScreen : VideoScreenNav(route = "VIDEO_SC")
 }
