@@ -5,10 +5,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
 import com.bytecode.framework.extension.formatDateDayMonth
 import com.bytecode.petsy.data.model.dto.brushing.BrushingTimeDto
+import com.bytecode.petsy.data.model.dto.brushing.PetsieChartData
 import com.bytecode.petsy.data.model.dto.brushing.PetsieChartDataRequest
 import com.bytecode.petsy.data.model.dto.color.ColorDto
 import com.bytecode.petsy.data.model.dto.dog.DogDto
@@ -32,6 +34,7 @@ import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordDigit
 import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordLength
 import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordLowerCase
 import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordUpperCase
+import com.bytecode.petsy.util.toColor
 import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.FloatEntry
@@ -95,6 +98,11 @@ class MainFlowViewModel @Inject constructor(
     private val _dogsFlow = MutableStateFlow(dogs)
     val dogsFlow: StateFlow<List<DogDto>> get() = _dogsFlow
 
+    private var petsieChartData: PetsieChartData = PetsieChartData()
+    private val _petsieChartDataFlow = MutableStateFlow(petsieChartData)
+    val petsieChartDataFlow: StateFlow<PetsieChartData> get() = _petsieChartDataFlow
+
+
     private lateinit var startBrushingDateTime: ZonedDateTime
 
     private var firstChartDog: DogDto? = null
@@ -115,101 +123,10 @@ class MainFlowViewModel @Inject constructor(
     val _accountDeleted = MutableStateFlow(false)
     val accountDeleted = _accountDeleted.asStateFlow()
 
-
-    internal val chartEntryModelProducer: ChartEntryModelProducer = ChartEntryModelProducer()
-
-    internal val multiDataSetChartEntryModelProducer: ChartEntryModelProducer =
-        ChartEntryModelProducer()
-
-    internal val composedChartEntryModelProducer: ComposedChartEntryModelProducer<ChartEntryModel> =
-        chartEntryModelProducer + multiDataSetChartEntryModelProducer
-
-
-    fun generateRandomEntries2(): List<FloatEntry> {
-        val result = ArrayList<FloatEntry>()
-
-        val entry1 = entryOf(0, 150)
-        val entry2 = entryOf(1, 120)
-        val entry3 = entryOf(2, 85)
-        val entry4 = entryOf(3, 30)
-        val entry5 = entryOf(4, 50)
-        val entry6 = entryOf(5, 70)
-        val entry7 = entryOf(6, 90)
-
-        result.add(entry1)
-        result.add(entry2)
-        result.add(entry3)
-        result.add(entry4)
-        result.add(entry5)
-        result.add(entry6)
-        result.add(entry7)
-
-        return result
-    }
-
-    fun generateRandomEntries3(): List<FloatEntry> {
-        val result = ArrayList<FloatEntry>()
-
-        val entry1 = entryOf(0, 100)
-        val entry2 = entryOf(1, 90)
-        val entry3 = entryOf(2, 80)
-        val entry4 = entryOf(3, 70)
-        val entry5 = entryOf(4, 60)
-        val entry6 = entryOf(5, 50)
-        val entry7 = entryOf(6, 40)
-
-        result.add(entry1)
-        result.add(entry2)
-        result.add(entry3)
-        result.add(entry4)
-        result.add(entry5)
-        result.add(entry6)
-        result.add(entry7)
-
-        return result
-    }
-
-    fun generateRandomEntries4(): List<FloatEntry> {
-        val result = ArrayList<FloatEntry>()
-
-        val entry1 = entryOf(0, 120)
-        val entry2 = entryOf(1, 120)
-        val entry3 = entryOf(2, 120)
-        val entry4 = entryOf(3, 120)
-        val entry5 = entryOf(4, 120)
-        val entry6 = entryOf(5, 120)
-        val entry7 = entryOf(6, 120)
-
-        result.add(entry1)
-        result.add(entry2)
-        result.add(entry3)
-        result.add(entry4)
-        result.add(entry5)
-        result.add(entry6)
-        result.add(entry7)
-
-        return result
-    }
-
     init {
 //        saveFakeDogsTimes()
         getLoggedInUser()
         updateChartPeriod()
-
-        viewModelScope.launch {
-            while (currentCoroutineContext().isActive) {
-                multiDataSetChartEntryModelProducer.setEntries(
-                    entries = listOf(generateRandomEntries2(), generateRandomEntries3())
-                )
-                chartEntryModelProducer.setEntries(
-                    entries = listOf(
-                        generateRandomEntries4(),
-                        generateRandomEntries4()
-                    )
-                )
-                delay(UPDATE_FREQUENCY)
-            }
-        }
     }
 
     //TODO DELETE
@@ -322,9 +239,7 @@ class MainFlowViewModel @Inject constructor(
                 dogs.clear()
                 dogs.addAll(tempDogs)
 
-
                 getBrushingTimeForChart()
-
             }
 
             is MainFlowEvent.SaveBrushingTimeEvent -> {
@@ -340,14 +255,15 @@ class MainFlowViewModel @Inject constructor(
                 endDate = endDate.minusDays(7)
                 startDate = startDate.minusDays(7)
                 updateChartPeriod()
-                Log.d("Vremena", "Start: $startDate End: $endDate")
+                getBrushingTimeForChart()
+
             }
 
             is MainFlowEvent.NextPeriodClick -> {
                 endDate = endDate.plusDays(7)
                 startDate = startDate.plusDays(7)
                 updateChartPeriod()
-                Log.d("Vremena", "Start: $startDate End: $endDate")
+                getBrushingTimeForChart()
             }
 
             is MainFlowEvent.OldPasswordChanged -> {
@@ -411,6 +327,7 @@ class MainFlowViewModel @Inject constructor(
             }
         }
     }
+
 
     private fun updateChartPeriod() {
         val formatedTime =
@@ -492,13 +409,18 @@ class MainFlowViewModel @Inject constructor(
         val request = PetsieChartDataRequest(
             firstDogId,
             secondDogId,
+            firstChartDog,
+            secondChartDog,
             startDate.withHour(0).withMinute(0).withSecond(0),
             endDate.withHour(23).withMinute(59).withSecond(59)
         )
 
         call(getBrushingTimeUseCase(request)) {
-
+            petsieChartData = it
+            _petsieChartDataFlow.value = it
         }
+
+
     }
 
     private fun getColorForNewDog() = safeLaunch {

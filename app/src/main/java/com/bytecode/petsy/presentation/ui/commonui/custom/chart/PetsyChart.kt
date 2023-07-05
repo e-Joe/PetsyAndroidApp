@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.bytecode.petsy.presentation.ui.theme.ChartMaxColumn
+import com.bytecode.petsy.data.model.dto.brushing.PetsieChartData
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
@@ -43,11 +43,13 @@ import kotlin.math.roundToInt
 
 
 @Composable
-fun PetsieChart(chartEntryModelProducer: ComposedChartEntryModelProducer<ChartEntryModel>) {
+fun PetsieChart(
+    chartData: PetsieChartData
+) {
     val thresholdLine = rememberThresholdLine()
     val thresholdLine2 = rememberThresholdLine()
 
-    ProvideChartStyle(rememberChartStyle(chartColors)) {
+    ProvideChartStyle(rememberChartStyle(chartData.chartColors)) {
         val defaultColumns = currentChartStyle.columnChart.columns
         val defaultColumns2 = currentChartStyle.columnChart.columns
 
@@ -55,7 +57,7 @@ fun PetsieChart(chartEntryModelProducer: ComposedChartEntryModelProducer<ChartEn
             columns = remember(defaultColumns2) {
                 defaultColumns2.map { defaultColumn ->
                     LineComponent(
-                        ChartMaxColumn.toArgb(),
+                        chartData.chartMaxColumnColor.toArgb(),
                         13f,
                         Shapes.roundedCornerShape(100)
                     )
@@ -93,7 +95,7 @@ fun PetsieChart(chartEntryModelProducer: ComposedChartEntryModelProducer<ChartEn
         Chart(
             modifier = Modifier.fillMaxSize(),
             chart = remember(chart2, chart1) { chart2 + chart1 },
-            chartModelProducer = chartEntryModelProducer,
+            chartModelProducer = chartData.chartEntryModelProducer,
             startAxis = startAxis(
                 maxLabelCount = 5,
                 axis = LineComponent(
@@ -108,7 +110,7 @@ fun PetsieChart(chartEntryModelProducer: ComposedChartEntryModelProducer<ChartEn
                 tick = null
             ),
             bottomAxis = bottomAxis(
-                valueFormatter = bottomAxisValueFormatter,
+                valueFormatter = chartData.bottomAxisValueFormatter,
                 axis = LineComponent(
                     color = Color.Transparent.toArgb(),
                     thicknessDp = currentChartStyle.axis.axisLineWidth.value,
@@ -170,20 +172,14 @@ data class DottedShape(
     })
 }
 
-private const val COLOR_1_CODE = 0xFF63C4AF //0xff3e6558
-private const val COLOR_2_CODE = 0xFFF18989 //0xff5e836a
-private const val COLOR_3_CODE = 0xFF25cdf0 //0xffa5ba8e
+
 private const val COLOR_4_CODE = 0xffe9e5af
 private const val THRESHOLD_LINE_VALUE_RANGE_START = 120f
 private const val THRESHOLD_LINE_VALUE_RANGE_END = 155f
 private const val THRESHOLD_LINE_ALPHA = .36f
-private const val COLUMN_CORNER_CUT_SIZE_PERCENT = 100
 
-private val color1 = Color(COLOR_1_CODE)
-private val color2 = Color(COLOR_2_CODE)
-private val color3 = Color(COLOR_3_CODE)
 private val color4 = Color(COLOR_4_CODE)
-private val chartColors = listOf(color1, color2, color3)
+
 private val thresholdLineValueRange =
     THRESHOLD_LINE_VALUE_RANGE_START..THRESHOLD_LINE_VALUE_RANGE_END
 private val thresholdLineLabelHorizontalPaddingValue = 8.dp

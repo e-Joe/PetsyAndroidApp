@@ -51,6 +51,7 @@ import androidx.navigation.NavHostController
 import com.bytecode.framework.extension.formatDateTimeShortMonth
 import com.bytecode.framework.extension.isToday
 import com.bytecode.petsy.R
+import com.bytecode.petsy.data.model.dto.brushing.PetsieChartData
 import com.bytecode.petsy.data.model.dto.dog.DogDto
 import com.bytecode.petsy.data.model.dto.dog.calculatePercentage
 import com.bytecode.petsy.data.model.dto.dog.calculatePercentageRounded
@@ -283,7 +284,10 @@ private fun ChartAreaView(mainFlowViewModel: MainFlowViewModel) {
                         bottom.linkTo(parent.bottom)
                     }) {
 
-                    PetsieChart(mainFlowViewModel.composedChartEntryModelProducer)
+                    val petsieChartDataState =
+                        mainFlowViewModel.petsieChartDataFlow.collectAsState()
+
+                    PetsieChart(petsieChartDataState.value)
                 }
             }
         }
