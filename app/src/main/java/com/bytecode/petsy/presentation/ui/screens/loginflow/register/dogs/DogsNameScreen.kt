@@ -37,6 +37,7 @@ import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterFor
 import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterViewModel
 import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegistrationStep
 import com.bytecode.petsy.presentation.ui.screens.loginflow.register.ValidationEvent
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -97,7 +98,9 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
             viewModel.validationEvents.collect { event ->
                 when (event) {
                     is ValidationEvent.Success -> {
-                        navController.navigate(LoginFlowScreen.VerifyEmailScreen.route)
+                        delay(700)
+                        launchPetsyActivity(context)
+//                        navController.navigate(LoginFlowScreen.VerifyEmailScreen.route)
                     }
 
                     is ValidationEvent.Fail -> {

@@ -18,6 +18,7 @@ import com.bytecode.petsy.domain.usecase.user.GetUserByEmailUseCase
 import com.bytecode.petsy.domain.usecase.user.GetUsersUseCase
 import com.bytecode.petsy.domain.usecase.user.SaveUserUseCase
 import com.bytecode.petsy.domain.usecase.user.SaveUsersUseCase
+import com.bytecode.petsy.domain.usecase.user.UpdateUserUseCase
 import com.bytecode.petsy.domain.usecase.validation.ValidateCountry
 import com.bytecode.petsy.domain.usecase.validation.ValidateEmail
 import com.bytecode.petsy.domain.usecase.validation.ValidateFirstName
@@ -56,6 +57,7 @@ class RegisterViewModel @Inject constructor(
     private val saveDogsUserCase: SaveDogsUseCase,
     private val saveColorsUseCase: SaveColorsUseCase,
     private val getDogsUseCase: GetDogsUseCase,
+    private val updateUserUseCase: UpdateUserUseCase
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(RegisterFormState())
@@ -307,7 +309,10 @@ class RegisterViewModel @Inject constructor(
 
         if (isValid)
             viewModelScope.launch {
-                saveDogs()
+                call(updateUserUseCase(UpdateUserUseCase.Params(user.copy(isLoggedIn = true)))) {
+                    saveDogs()
+                }
+
             }
         else
             viewModelScope.launch {

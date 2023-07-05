@@ -26,7 +26,10 @@ import com.bytecode.petsy.presentation.ui.theme.button_text
 @Composable
 fun AboutUsAndPrivacyView() {
     val context = LocalContext.current
-    val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/")) }
+    val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/our-journey/")) }
+
+    val policy = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/terms-of-use/")) }
+
 
     Row {
         TextButton(contentPadding = PaddingValues(0.dp), onClick = {
@@ -41,7 +44,7 @@ fun AboutUsAndPrivacyView() {
         Spacer(modifier = Modifier.width(40.dp))
 
         TextButton(contentPadding = PaddingValues(0.dp), onClick = {
-            context.startActivity(intent)
+            context.startActivity(policy)
         }) {
             Text(
                 text = stringResource(R.string.common_privacy_policy),

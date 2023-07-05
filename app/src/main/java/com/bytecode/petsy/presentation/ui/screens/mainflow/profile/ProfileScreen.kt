@@ -120,7 +120,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 val privacyLink =
-                    remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/")) }
+                    remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/terms-of-use/")) }
 
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
