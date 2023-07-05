@@ -28,5 +28,7 @@ constructor(
 
     suspend fun deleteTimesForUser(userId: Long) = dao.deleteTimesForUser(userId)
 
+    suspend fun getAllTimes() = dao.getTimesForChart()
+
 
 }

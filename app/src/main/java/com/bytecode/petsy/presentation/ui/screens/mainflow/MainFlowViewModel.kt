@@ -5,17 +5,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
 import com.bytecode.framework.extension.formatDateDayMonth
 import com.bytecode.petsy.data.model.dto.brushing.BrushingTimeDto
+import com.bytecode.petsy.data.model.dto.brushing.PetsieChartDataRequest
 import com.bytecode.petsy.data.model.dto.color.ColorDto
 import com.bytecode.petsy.data.model.dto.dog.DogDto
 import com.bytecode.petsy.data.model.dto.user.UserDto
 import com.bytecode.petsy.domain.usecase.brushingtime.DeleteTimeForDogUseCase
 import com.bytecode.petsy.domain.usecase.brushingtime.DeleteTimeForUserUseCase
+import com.bytecode.petsy.domain.usecase.brushingtime.GetBrushingTimesUseCase
 import com.bytecode.petsy.domain.usecase.brushingtime.SaveBrushingTimeUseCase
+import com.bytecode.petsy.domain.usecase.brushingtime.SaveTempBrushingTimesUseCase
 import com.bytecode.petsy.domain.usecase.color.GetColorForNewDogUseCase
 import com.bytecode.petsy.domain.usecase.color.SaveColorUseCase
 import com.bytecode.petsy.domain.usecase.dog.DeleteDogUseCase
@@ -67,7 +69,9 @@ class MainFlowViewModel @Inject constructor(
     private val updateUserUseCase: UpdateUserUseCase,
     private val deleteDogsUseCase: DeleteDogsUseCase,
     private val deleteTimeForUserUseCase: DeleteTimeForUserUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase
+    private val deleteUserUseCase: DeleteUserUseCase,
+    private val getBrushingTimeUseCase: GetBrushingTimesUseCase,
+    private val saveTempBrushingTimesUseCase: SaveTempBrushingTimesUseCase
 
 ) : MvvmViewModel() {
 
@@ -97,7 +101,7 @@ class MainFlowViewModel @Inject constructor(
     private var secondChartDog: DogDto? = null
 
     private var endDate = ZonedDateTime.now().withHour(23).withMinute(59).withSecond(59)
-    private var startDate = ZonedDateTime.now().minusDays(7).withHour(0).withMinute(0).withSecond(0)
+    private var startDate = ZonedDateTime.now().minusDays(6).withHour(0).withMinute(0).withSecond(0)
 
     private var formattedChartPeriod: String = ""
     private val _formattedChartPeriodFLow = MutableStateFlow(formattedChartPeriod)
@@ -113,9 +117,6 @@ class MainFlowViewModel @Inject constructor(
 
 
     internal val chartEntryModelProducer: ChartEntryModelProducer = ChartEntryModelProducer()
-
-    internal val customStepChartEntryModelProducer: ChartEntryModelProducer =
-        ChartEntryModelProducer()
 
     internal val multiDataSetChartEntryModelProducer: ChartEntryModelProducer =
         ChartEntryModelProducer()
@@ -191,6 +192,7 @@ class MainFlowViewModel @Inject constructor(
     }
 
     init {
+//        saveFakeDogsTimes()
         getLoggedInUser()
         updateChartPeriod()
 
@@ -209,6 +211,15 @@ class MainFlowViewModel @Inject constructor(
             }
         }
     }
+
+    //TODO DELETE
+
+    private fun saveFakeDogsTimes() = safeLaunch {
+        call(saveTempBrushingTimesUseCase(SaveTempBrushingTimesUseCase.Params(""))) {
+            Log.d("Test", "testis")
+        }
+    }
+
 
     fun onEvent(event: MainFlowEvent) {
         when (event) {
@@ -310,6 +321,10 @@ class MainFlowViewModel @Inject constructor(
 
                 dogs.clear()
                 dogs.addAll(tempDogs)
+
+
+                getBrushingTimeForChart()
+
             }
 
             is MainFlowEvent.SaveBrushingTimeEvent -> {
@@ -457,7 +472,32 @@ class MainFlowViewModel @Inject constructor(
                 }
 
                 insertedDogId = -1
+
+                getBrushingTimeForChart()
             }
+        }
+    }
+
+    private fun getBrushingTimeForChart() = safeLaunch {
+        var firstDogId: Long = -1
+        var secondDogId: Long = -1
+
+        firstChartDog?.let {
+            firstDogId = it.id
+        }
+
+        secondChartDog?.let {
+            secondDogId = it.id
+        }
+        val request = PetsieChartDataRequest(
+            firstDogId,
+            secondDogId,
+            startDate.withHour(0).withMinute(0).withSecond(0),
+            endDate.withHour(23).withMinute(59).withSecond(59)
+        )
+
+        call(getBrushingTimeUseCase(request)) {
+
         }
     }
 

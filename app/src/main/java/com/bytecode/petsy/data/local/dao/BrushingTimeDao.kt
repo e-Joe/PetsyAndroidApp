@@ -20,4 +20,8 @@ interface BrushingTimeDao : BaseDao<BrushingTimeEntity> {
 
     @Query("DELETE FROM ${BrushingTimeEntity.TABLE_NAME} WHERE ${BrushingTimeEntity.COLUMN_OWNER_ID} = :userId")
     suspend fun deleteTimesForUser(userId: Long): Int
+
+    @Query("SELECT * FROM ${BrushingTimeEntity.TABLE_NAME}")
+    suspend fun getTimesForChart(): List<BrushingTimeEntity>
+
 }

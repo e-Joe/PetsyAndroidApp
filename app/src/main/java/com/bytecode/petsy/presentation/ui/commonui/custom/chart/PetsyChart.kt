@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -42,14 +41,9 @@ import com.patrykandpatrick.vico.core.entry.ChartEntryModel
 import com.patrykandpatrick.vico.core.entry.composed.ComposedChartEntryModelProducer
 import kotlin.math.roundToInt
 
-@Composable
-internal fun Chart6(chartEntryModelProducer: ComposedChartEntryModelProducer<ChartEntryModel>) {
-    ComposeChart6(chartEntryModelProducer)
-
-}
 
 @Composable
-private fun ComposeChart6(chartEntryModelProducer: ComposedChartEntryModelProducer<ChartEntryModel>) {
+fun PetsieChart(chartEntryModelProducer: ComposedChartEntryModelProducer<ChartEntryModel>) {
     val thresholdLine = rememberThresholdLine()
     val thresholdLine2 = rememberThresholdLine()
 

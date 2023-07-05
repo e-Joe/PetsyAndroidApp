@@ -57,10 +57,9 @@ import com.bytecode.petsy.data.model.dto.dog.calculatePercentageRounded
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
 import com.bytecode.petsy.presentation.ui.commonui.custom.CustomLinearProgressIndicator
-import com.bytecode.petsy.presentation.ui.commonui.custom.chart.Chart6
+import com.bytecode.petsy.presentation.ui.commonui.custom.chart.PetsieChart
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.navigation.BottomBarScreen
-import com.bytecode.petsy.presentation.ui.navigation.VideoScreenNav
 import com.bytecode.petsy.presentation.ui.screens.mainflow.BrushingState
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
@@ -283,7 +282,8 @@ private fun ChartAreaView(mainFlowViewModel: MainFlowViewModel) {
                         start.linkTo(parent.start)
                         bottom.linkTo(parent.bottom)
                     }) {
-                    Chart6(mainFlowViewModel.composedChartEntryModelProducer)
+
+                    PetsieChart(mainFlowViewModel.composedChartEntryModelProducer)
                 }
             }
         }
