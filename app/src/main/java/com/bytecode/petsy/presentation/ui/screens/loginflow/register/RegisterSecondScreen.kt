@@ -108,7 +108,6 @@ private fun BoxScope.Form(viewModel: RegisterViewModel) {
     var firstName = remember { mutableStateOf(state.firstName) }
     var lastName = remember { mutableStateOf(state.lastName) }
     var countryName = remember { mutableStateOf(state.country) }
-    var phoneNumber = remember { mutableStateOf(state.phoneNumber) }
 
     LaunchedEffect(key1 = context) {
         viewModel.countryChangeEvents.collect { event ->
@@ -178,16 +177,6 @@ private fun BoxScope.Form(viewModel: RegisterViewModel) {
         )
 
         Spacer(modifier = Modifier.height(10.dp))
-
-        RoundedInput(
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.register_phone_number),
-            onValueChange = { viewModel.onEvent(RegisterFormEvent.PhoneNumberChanged(it)) },
-            isError = state.phoneNumberError != null,
-            errorMessage = state.phoneNumberError.toString(),
-            textState = phoneNumber,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
-        )
     }
 }
 

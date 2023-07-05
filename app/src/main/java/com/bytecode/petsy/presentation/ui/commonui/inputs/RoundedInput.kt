@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -80,7 +81,6 @@ fun RoundedInput(
                 singleLine = true,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     backgroundColor = Color.White,
-                    cursorColor = Color.Black,
                     focusedBorderColor = OutlineBorder,
                     unfocusedBorderColor = OutlineBorder,
                     disabledBorderColor = OutlineBorder,
@@ -88,7 +88,8 @@ fun RoundedInput(
                     textColor = Color.Red,
                     disabledPlaceholderColor = TextSecondary.copy(0.5f),
                     placeholderColor = TextSecondary.copy(0.5f),
-                    focusedLabelColor = Color.Black
+                    focusedLabelColor = Color.Black,
+                    cursorColor = Color.Black,
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -101,8 +102,8 @@ fun RoundedInput(
                     }
 
                     if (isPassword) {
-                        val image = if (passwordVisible) Icons.Filled.Visibility
-                        else Icons.Filled.VisibilityOff
+                        val image = if (passwordVisible) Icons.Filled.VisibilityOff
+                        else Icons.Filled.Visibility
 
                         val description = if (passwordVisible) stringResource(R.string.hide_password) else stringResource(
                                                     R.string.show_password)
@@ -120,7 +121,6 @@ fun RoundedInput(
                 visualTransformation = if (passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
                 isError = isError,
                 keyboardOptions = keyboardOptions
-
             )
         }
 

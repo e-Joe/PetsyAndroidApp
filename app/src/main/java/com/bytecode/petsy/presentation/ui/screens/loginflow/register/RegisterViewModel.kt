@@ -48,7 +48,6 @@ class RegisterViewModel @Inject constructor(
     private val validateFirstName: ValidateFirstName,
     private val validateSecondName: ValidateSecondName,
     private val validateCountry: ValidateCountry,
-    private val validatePhoneNumber: ValidatePhoneNumber,
     private val saveUserUserCase: SaveUserUseCase,
     private val saveUsersUserCase: SaveUsersUseCase,
     private val getUsersUseCase: GetUsersUseCase,
@@ -198,10 +197,6 @@ class RegisterViewModel @Inject constructor(
                 state = state.copy(country = event.country)
             }
 
-            is RegisterFormEvent.PhoneNumberChanged -> {
-                state = state.copy(phoneNumber = event.phoneNumber)
-            }
-
             is RegisterFormEvent.CountryUpdated -> {
                 state = state.copy(country = event.name)
                 viewModelScope.launch {
@@ -276,11 +271,10 @@ class RegisterViewModel @Inject constructor(
         val firstName = validateFirstName.execute(state.firstName)
         val lastName = validateSecondName.execute(state.lastName)
         val country = validateCountry.execute(state.country)
-        val phoneNumber = validatePhoneNumber.execute(state.phoneNumber)
 
 
         val hasError = listOf(
-            firstName, lastName, country, phoneNumber
+            firstName, lastName, country
         ).any {
             it?.errorMessage != null
         }
@@ -290,15 +284,13 @@ class RegisterViewModel @Inject constructor(
                 firstNameError = firstName.errorMessage,
                 lastNameError = lastName.errorMessage,
                 countryError = country.errorMessage,
-                phoneNumberError = phoneNumber.errorMessage
             )
             return
         } else {
             state = state.copy(
                 firstNameError = null,
                 lastNameError = null,
-                countryError = null,
-                phoneNumberError = null
+                countryError = null
             )
         }
 
@@ -363,7 +355,6 @@ sealed class RegisterFormEvent {
     data class FirstNameChanged(val firstName: String) : RegisterFormEvent()
     data class LastNameChanged(val lastName: String) : RegisterFormEvent()
     data class CountryChanged(val country: String) : RegisterFormEvent()
-    data class PhoneNumberChanged(val phoneNumber: String) : RegisterFormEvent()
     data class CountryUpdated(val name: String) : RegisterFormEvent()
     data class CountryFieldClicked(var a: String = "") : RegisterFormEvent()
     data class CloseCountryModal(var a: String = "") : RegisterFormEvent()
@@ -380,7 +371,6 @@ data class RegisterFormState(
     val firstName: String = "",
     val lastName: String = "",
     val country: String = "",
-    val phoneNumber: String = "",
     val emailError: String? = null,
     val passwordError: String? = null,
     val firstNameError: String? = null,
