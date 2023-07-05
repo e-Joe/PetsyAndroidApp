@@ -17,4 +17,8 @@ constructor(
     suspend fun saveColors(colors: List<ColorEntity>) = dao.insert(colors)
 
     suspend fun getUsedColorsForUser(ownerId: Long) = dao.getUsedColorsForUser(ownerId)
+
+    suspend fun deleteColorsForDog(dogId: Long) = dao.deleteColorsForDog(dogId)
+
+    suspend fun deleteColorsForUser(ownerId: Long) = dao.deleteColorsForUser(ownerId)
 }

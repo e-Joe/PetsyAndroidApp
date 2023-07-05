@@ -20,6 +20,8 @@ import com.bytecode.petsy.domain.usecase.brushingtime.DeleteTimeForUserUseCase
 import com.bytecode.petsy.domain.usecase.brushingtime.GetBrushingTimesUseCase
 import com.bytecode.petsy.domain.usecase.brushingtime.SaveBrushingTimeUseCase
 import com.bytecode.petsy.domain.usecase.brushingtime.SaveTempBrushingTimesUseCase
+import com.bytecode.petsy.domain.usecase.color.DeleteColorsForDogUseCase
+import com.bytecode.petsy.domain.usecase.color.DeleteColorsForUserUseCase
 import com.bytecode.petsy.domain.usecase.color.GetColorForNewDogUseCase
 import com.bytecode.petsy.domain.usecase.color.SaveColorUseCase
 import com.bytecode.petsy.domain.usecase.dog.DeleteDogUseCase
@@ -72,6 +74,8 @@ class MainFlowViewModel @Inject constructor(
     private val updateUserUseCase: UpdateUserUseCase,
     private val deleteDogsUseCase: DeleteDogsUseCase,
     private val deleteTimeForUserUseCase: DeleteTimeForUserUseCase,
+    private val deleteColorsForDogUseCase: DeleteColorsForDogUseCase,
+    private val deleteColorsForUserUseCase: DeleteColorsForUserUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
     private val getBrushingTimeUseCase: GetBrushingTimesUseCase,
     private val saveTempBrushingTimesUseCase: SaveTempBrushingTimesUseCase
@@ -122,6 +126,9 @@ class MainFlowViewModel @Inject constructor(
 
     val _accountDeleted = MutableStateFlow(false)
     val accountDeleted = _accountDeleted.asStateFlow()
+
+    private val _showTutorialVideo = MutableStateFlow(true)
+    val showTutorialVideoFlow = _showTutorialVideo.asStateFlow()
 
     init {
 //        saveFakeDogsTimes()
@@ -195,6 +202,7 @@ class MainFlowViewModel @Inject constructor(
             }
 
             is MainFlowEvent.DeleteDogConfirmedEvent -> {
+                deleteColorsForDog()
                 deleteDog()
             }
 
@@ -391,6 +399,18 @@ class MainFlowViewModel @Inject constructor(
                 insertedDogId = -1
 
                 getBrushingTimeForChart()
+
+                if (dogs.size == 0) {
+                    _showTutorialVideo.value = true
+                } else {
+                    var shotTutorial = true
+                    dogs.forEach {
+                        if (it.lastBrushingPeriod > 0) {
+                            shotTutorial = false
+                        }
+                    }
+                    _showTutorialVideo.value = shotTutorial
+                }
             }
         }
     }
@@ -471,7 +491,26 @@ class MainFlowViewModel @Inject constructor(
         val deleteTimesParams = user?.let { DeleteTimeForUserUseCase.Params(it.id) }
         deleteTimesParams?.let {
             call(deleteTimeForUserUseCase(it)) {
+                deleteColorsForUser()
                 deleteDogsForUser()
+            }
+        }
+    }
+
+    private fun deleteColorsForUser() = safeLaunch {
+        val deleteColorsParams = user?.let { DeleteColorsForUserUseCase.Params(it.id) }
+        deleteColorsParams?.let {
+            call(deleteColorsForUserUseCase(it)) {
+
+            }
+        }
+    }
+
+    private fun deleteColorsForDog() = safeLaunch {
+        val deleteColorsParams = deleteDog?.let { DeleteColorsForDogUseCase.Params(it.id) }
+        deleteColorsParams?.let {
+            call(deleteColorsForDogUseCase(it)) {
+
             }
         }
     }

@@ -84,11 +84,11 @@ fun DashboardScreen(viewModel: MainFlowViewModel, navController: NavHostControll
                 .padding(paddingValues = paddingValues)
                 .fillMaxSize()
         ) {
-            val dogsListState = viewModel.dogsFlow.collectAsState()
+            val showTutorial = viewModel.showTutorialVideoFlow.collectAsState()
 
             PetsyImageBackground()
 
-            if (dogsListState.value.isEmpty())
+            if (showTutorial.value)
                 EmptyStateDashboard(viewModel, navController)
             else
                 PetsDataScreen(viewModel = viewModel)
