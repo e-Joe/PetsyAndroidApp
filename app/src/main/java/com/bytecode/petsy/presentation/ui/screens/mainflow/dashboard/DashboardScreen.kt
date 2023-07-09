@@ -143,7 +143,7 @@ private fun EmptyStateDashboard(viewModel: MainFlowViewModel, navController: Nav
             paddingEnd = 0.dp,
             paddingStart = 0.dp,
             text = if (viewModel.state.brushingPhase == BrushingState.IN_PROGRESS) stringResource(R.string.started)
-            else stringResource(R.string.start_brushing_label),
+            else stringResource(R.string.start_brushing),
             onClick = {
                 viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.IN_PROGRESS))
                 navController.navigate(BottomBarScreen.BrushingScreen.route)
@@ -175,6 +175,11 @@ private fun PetsDataScreen(viewModel: MainFlowViewModel) {
         Text(
             text = stringResource(R.string.recent_activities),
             style = MaterialTheme.typography.h2,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = stringResource(R.string.recommended_daily_brushing),
+            style = MaterialTheme.typography.h4,
         )
         Spacer(modifier = Modifier.height(20.dp))
         RecentActivities(viewModel)
@@ -389,7 +394,7 @@ fun TodaysBrushingView(viewModel: MainFlowViewModel) {
             .background(Color.White.copy(alpha = 0.7f))
     ) {
         Text(
-            text = stringResource(R.string.today_s_brushing_text),
+            text = stringResource(R.string.today_s_brushing),
             style = MaterialTheme.typography.h2,
             modifier = Modifier.padding(top = 20.dp, start = 20.dp)
         )

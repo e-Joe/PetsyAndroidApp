@@ -161,6 +161,7 @@ class MainFlowViewModel @Inject constructor(
                     }
 
                     BrushingState.CONTINUE -> {
+                        state = state.copy(brushingPhase = BrushingState.IN_PROGRESS)
                         startBrushing()
                     }
 
@@ -377,7 +378,8 @@ class MainFlowViewModel @Inject constructor(
             dogs.clear()
 
             if (it.isEmpty()) {
-                Log.d("Dogs", "empty")
+                _showTutorialVideo.value = true
+
             } else {
                 dogs.addAll(it)
 

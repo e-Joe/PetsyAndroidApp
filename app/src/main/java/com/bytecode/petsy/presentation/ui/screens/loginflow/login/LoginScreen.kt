@@ -1,6 +1,7 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.login
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -67,7 +68,7 @@ private fun BoxScope.LoginScreenBottomPart(
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
             GradientButton(
-                text = stringResource(R.string.login_login),
+                text = stringResource(R.string.common_login),
                 onClick = {
                     viewModel.onEvent(LoginFormEvent.Submit())
                 }
@@ -113,11 +114,17 @@ private fun BoxScope.LoginForm(navController: NavHostController, viewModel: Logi
         val state = viewModel.state
         val context = LocalContext.current
 
+        var message = stringResource(id = R.string.login_error_incorrect)
+
         LaunchedEffect(key1 = context) {
             viewModel.validationEvents.collect { event ->
                 when (event) {
                     is LoginViewModel.ValidationEvent.Success -> {
                         launchPetsyActivity(context)
+                    }
+
+                    is LoginViewModel.ValidationEvent.Fail -> {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -125,7 +132,7 @@ private fun BoxScope.LoginForm(navController: NavHostController, viewModel: Logi
 
         Text(
             style = MaterialTheme.typography.h1,
-            text = stringResource(R.string.login_login),
+            text = stringResource(R.string.common_login),
             modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp)
         )
 

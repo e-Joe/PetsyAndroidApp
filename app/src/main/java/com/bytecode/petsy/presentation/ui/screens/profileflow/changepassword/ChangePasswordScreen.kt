@@ -99,7 +99,7 @@ fun ChangePasswordContent(viewModel: MainFlowViewModel, navController: NavHostCo
                     start.linkTo(parent.start)
                 }
                 .padding(horizontal = 20.dp),
-            text = stringResource(R.string.change_password_title),
+            text = stringResource(R.string.change_password),
             style = MaterialTheme.typography.h1
         )
 

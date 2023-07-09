@@ -129,7 +129,7 @@ fun DeleteAccountContent(navController: NavHostController) {
                     end.linkTo(parent.end)
                 }
                 .height(70.dp),
-            text = stringResource(R.string.delete_profile),
+            text = stringResource(R.string.delete_account),
             onClick = {
                 navController.navigate(DeleteScreenNav.DeleteAccPasswordScreen.route)
             }

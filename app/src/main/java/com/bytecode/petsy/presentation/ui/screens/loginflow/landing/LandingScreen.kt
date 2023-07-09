@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toColorInt
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.R
@@ -51,7 +50,7 @@ fun LandingScreen(navController: NavHostController) {
 @Composable
 private fun RenderTopPart() {
     Text(
-        text = stringResource(R.string.welcome_to_smart_toothbrush),
+        text = stringResource(R.string.welcome_text),
         style = MaterialTheme.typography.h1,
         modifier = Modifier
             .padding(top = 150.dp, start = 20.dp, end = 20.dp)

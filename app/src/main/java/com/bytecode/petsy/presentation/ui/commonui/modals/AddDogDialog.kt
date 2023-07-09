@@ -127,7 +127,7 @@ fun AddDogDialog(dogs: List<String>, setShowDialog: (Boolean) -> Unit, setValue:
                     Spacer(modifier = Modifier.height(20.dp))
 
                     GradientButton(
-                        text = "Save",
+                        text = stringResource(id = R.string.btn_Save),
                         onClick = {
                             if (dogs.contains(txtField.value.lowercase().trim())) {
                                 txtFieldError.value = true

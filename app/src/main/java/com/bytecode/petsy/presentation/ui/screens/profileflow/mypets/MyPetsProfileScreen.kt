@@ -21,11 +21,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.buttons.IconTextButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
@@ -105,7 +107,7 @@ fun DogsList(viewModel: MainFlowViewModel) {
                     start.linkTo(parent.start)
                 }
                 .padding(horizontal = 20.dp),
-            text = "My Pets",
+            text = stringResource(id = R.string.my_pets),
             style = MaterialTheme.typography.h1
         )
 

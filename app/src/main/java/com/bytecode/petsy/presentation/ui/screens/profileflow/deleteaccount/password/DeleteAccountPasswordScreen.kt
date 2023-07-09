@@ -2,6 +2,7 @@ package com.bytecode.petsy.presentation.ui.screens.profileflow.deleteaccount.pas
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -115,9 +116,16 @@ fun DeleteAccountContent(navController: NavHostController, viewModel: MainFlowVi
                 .padding(horizontal = 20.dp)
                 .padding(top = 30.dp)
         ) {
+            Text(
+                text = stringResource(id = R.string.delete_account_password),
+                style = MaterialTheme.typography.h4
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
             RoundedInput(
                 modifier = Modifier.padding(start = 0.dp, end = 0.dp),
-                hint = stringResource(R.string.password_hint),
+                hint = stringResource(R.string.common_password),
                 isPassword = true,
                 onValueChange = {
                     viewModel.onEvent(MainFlowEvent.DeletePasswordChanged(it))
@@ -138,7 +146,7 @@ fun DeleteAccountContent(navController: NavHostController, viewModel: MainFlowVi
                     end.linkTo(parent.end)
                 }
                 .height(70.dp),
-            text = stringResource(R.string.btn_delete_profile),
+            text = stringResource(R.string.delete_account),
             onClick = {
                 viewModel.onEvent(MainFlowEvent.DeleteUserClicked(""))
             }

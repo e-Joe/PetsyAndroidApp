@@ -282,7 +282,7 @@ fun SaveBrushingScreen(viewModel: MainFlowViewModel) {
                 }
                 .padding(horizontal = 20.dp)
                 .padding(top = 10.dp),
-            text = "Brushing time:" + viewModel.formatTime(times),
+            text = stringResource(id = R.string.brushing_time) + viewModel.formatTime(times),
             style = brushing_time_text
         )
 
@@ -351,7 +351,7 @@ fun SaveBrushingScreen(viewModel: MainFlowViewModel) {
                 viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.PAUSED))
             }) {
             Text(
-                text = "Back to brushing",
+                text = stringResource(id = R.string.brushing_back),
                 style = button_primary_text
             )
         }
@@ -363,7 +363,7 @@ fun SaveBrushingScreen(viewModel: MainFlowViewModel) {
                     start.linkTo(parent.start)
                 }
                 .height(70.dp),
-            text = "Save",
+            text = stringResource(id = R.string.btn_Save),
             onClick = {
                 viewModel.onEvent(MainFlowEvent.SaveBrushingTimeEvent(""))
             },
@@ -451,7 +451,7 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavControll
                     end.linkTo(parent.end)
                 }
                 .padding(horizontal = 20.dp),
-            text = "Keep up the good work",
+            text = stringResource(id = R.string.brushing_motivation_title),
             style = MaterialTheme.typography.h2
         )
 
@@ -464,9 +464,7 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavControll
                 }
                 .padding(horizontal = 20.dp)
                 .padding(top = 15.dp),
-            text = "Thank you for looking up for your dog\n" +
-                    "and brushing his/her teeth.\n" +
-                    "Have a a great day",
+            text = stringResource(id = R.string.brushing_motivation_text),
             textAlign = TextAlign.Center,
             style = paragraph_text
         )
@@ -492,7 +490,7 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavControll
                 context.startActivity(shareIntent)
             }) {
             Text(
-                text = "Share",
+                text = stringResource(id = R.string.brushing_share),
                 style = button_primary_text
             )
         }
@@ -504,10 +502,10 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavControll
                     start.linkTo(parent.start)
                 }
                 .height(70.dp),
-            text = "Home",
+            text = stringResource(id = R.string.brushing_home),
             onClick = {
                 viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.NOT_STARTED))
-                viewModel.getLoggedInUser() // TODO
+                viewModel.getLoggedInUser()
                 navController.navigate(BottomBarScreen.DashboardScreen.route)
             }
         )

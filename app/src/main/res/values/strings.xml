@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Petsy</string>
+    <string name="recommended_daily_brushing">Reccomended daily brushing (120 sec)</string>
     <string name="common_about_us">About us</string>
     <string name="common_privacy_policy">Privacy policy</string>
     <string name="common_email">Email</string>
@@ -13,7 +14,6 @@
     <string name="register_first_name">First name</string>
     <string name="register_last_name">Last name</string>
     <string name="register_country">Country</string>
-    <string name="register_phone_number">Phone number</string>
     <string name="register_about_you">About you</string>
     <string name="register_your_dogs">Your dogs</string>
     <string name="register_your_dogs_name">Your dog\'s name</string>
@@ -66,17 +66,15 @@ instrunctions.</string>
     <string name="log_out_of_smartbrush">Log out of SmartBrush?</string>
     <string name="btn_logout">Log out</string>
     <string name="your_password_has_been_successfully_changed">Your password has been successfully changed</string>
-    <string name="welcome_to_smart_toothbrush">Welcome to\nsmart toothbrush ! 🐾</string>
+    <string name="welcome_text">Welcome to\nsmart toothbrush ! 🐾</string>
     <string name="the_dog_s_name_cannot_be_empty">The dog\'s name cannot be empty</string>
     <string name="user_already_exist">User already exist</string>
     <string name="in_order">In order to start using your Smartbrush account, you need to confirm your email address.</string>
     <string name="choose_doog_smiley">Choose the dog whose teeth you brushed 👇</string>
     <string name="started">Started</string>
-    <string name="start_brushing_label">Start brushing</string>
     <string name="choose_your_pet">Choose your pet</string>
     <string name="recent_activities">Recent activities</string>
     <string name="seconds">Seconds</string>
-    <string name="today_s_brushing_text">Today’s brushing</string>
     <string name="brushing_duration">Brushing duration:</string>
     <string name="brushing_duration_time">%d seconds</string>
     <string name="my_pets">My Pets</string>
@@ -85,7 +83,6 @@ instrunctions.</string>
     <string name="privacy">Privacy</string>
     <string name="delete_account">Delete account</string>
     <string name="logout">Logout</string>
-    <string name="change_password_title">Change password</string>
     <string name="old_password">Old password</string>
     <string name="new_password_hint">New password</string>
     <string name="btn_Save">Save</string>
@@ -93,18 +90,31 @@ instrunctions.</string>
     <string name="deleting_account_will_do_the_following">Deleting account will do the following</string>
     <string name="log_you_out_on_all_devices">Log you out on all devices</string>
     <string name="delete_all_of_your_account_information">Delete all of your account information</string>
-    <string name="delete_profile">Delete profile</string>
-    <string name="password_hint">Password</string>
-    <string name="btn_delete_profile">Delete profile</string>
     <string name="why_are_you_deleting_your_account">Why are you deleting your account?</string>
     <string name="i_don_t_need_it_anymore">I don’t need it anymore</string>
     <string name="app_is_hard_to_use">App is hard to use</string>
     <string name="i_m_switching_to_something_else">I’m switching to something else</string>
     <string name="other">Other</string>
     <string name="tutorials">Tutorials</string>
-    <string name="how_to_brush_you_pets_teeth">How to brush you pets teeth</string>
-    <string name="how_to_maintain_dogs_teeth">"How to maintain dogs teeth "</string>
-    <string name="best_foods_for_dogs">"Best foods for dogs "</string>
-    <string name="bad_foods_for_your_dog">Bad foods for your dog</string>
+    <string name="how_to_brush_you_pets_teeth">How long to brush dog s teeth?</string>
+    <string name="how_to_maintain_dogs_teeth">"How often to wash dog's teeth"</string>
+    <string name="best_foods_for_dogs">"Can Petsie replace teeth cleaning"</string>
+    <string name="bad_foods_for_your_dog">Learn more about Petisie</string>
+    <string name="verify_email_resend">Nu ai primit un e-mail? Retrimiteți</string>
+    <string name="verify_email_open_app">Deschideți aplicația de e-mail</string>
+    <string name="verify_email">Verifica adresa de email</string>
+
+    <string name="brushing_time">Brushing time: </string>
+    <string name="brushing_back">Back to brushing</string>
+    <string name="brushing_motivation_title">Keep up the good work</string>
+    <string name="brushing_motivation_text">Thank you for looking up for your dog
+        and brushing his/her teeth.
+        Have a a great day</string>
+    <string name="brushing_home">Home</string>
+    <string name="brushing_share">Share</string>
+    <string name="login_error_incorrect">Error! Incorrect password or email</string>
+    <string name="brushing_discard_explanation">This will discard your entry</string>
+    <string name="btn_discard">Discard</string>
+    <string name="delete_account_password">Enter your password to finalize deleting the account</string>
 
 </resources>

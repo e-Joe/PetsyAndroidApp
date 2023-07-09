@@ -12,11 +12,11 @@ fun ZonedDateTime.isToday(): Boolean {
 }
 
 fun ZonedDateTime.formatDateTimeShortMonth(): String {
-    val formatter = DateTimeFormatter.ofPattern("dd MMM HH:mm", Locale.ENGLISH)
+    val formatter = DateTimeFormatter.ofPattern("dd MMM HH:mm", Locale.getDefault())
     return this.format(formatter)
 }
 
 fun ZonedDateTime.formatDateDayMonth(): String {
-    val formatter = DateTimeFormatter.ofPattern("dd.MM", Locale.ENGLISH)
+    val formatter = DateTimeFormatter.ofPattern("dd.MM", Locale.getDefault())
     return this.format(formatter)
 }

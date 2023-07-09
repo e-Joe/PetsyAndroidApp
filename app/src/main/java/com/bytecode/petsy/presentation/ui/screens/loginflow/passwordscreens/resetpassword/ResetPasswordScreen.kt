@@ -106,7 +106,7 @@ private fun BoxScope.PasswordResetForm(viewModel: ResetPasswordViewModel) {
 
         RoundedInput(
             modifier = Modifier.padding(start = 20.dp, end = 20.dp),
-            hint = stringResource(R.string.new_password),
+            hint = stringResource(R.string.new_password_hint),
             isPassword = true,
             onValueChange = {
                 viewModel.onEvent(ResetPasswordEvent.PasswordChanged(it))

@@ -7,6 +7,8 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
     id("com.google.devtools.ksp")
     id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -82,7 +84,7 @@ dependencies {
     implementation(ComposeLib.Ui)
     implementation(ComposeLib.Preview)
     implementation(ComposeLib.Material)
-    implementation ("androidx.compose.material3:material3:1.1.0")
+    implementation("androidx.compose.material3:material3:1.1.0")
     implementation(ComposeLib.MaterialIconCore)
     implementation(ComposeLib.MaterialIconExtended)
     androidTestImplementation(AndroidTestingLib.ComposeTestJunit)
@@ -116,7 +118,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.7")
 
     implementation(ComposeLib.Paging)
-    implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
     // Includes the core logic for charts and other elements.
     implementation("com.patrykandpatrick.vico:core:1.6.5")
@@ -125,7 +127,11 @@ dependencies {
     implementation("com.patrykandpatrick.vico:compose:1.6.5")
 
     // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
-    implementation ("com.patrykandpatrick.vico:compose-m3:1.6.5")
+    implementation("com.patrykandpatrick.vico:compose-m3:1.6.5")
 
-    implementation ("com.google.android.exoplayer:exoplayer:2.18.7")
+    implementation("com.google.android.exoplayer:exoplayer:2.18.7")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.1.1"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
 }

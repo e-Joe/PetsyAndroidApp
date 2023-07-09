@@ -83,8 +83,8 @@ fun TutorialsContent() {
         val context = LocalContext.current
         val howToBrush = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/faq/#1680258613020-76225f68-7a69e400-3640")) }
         val howToMaintainDogs = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/faq/#1682339243478-9df677cb-4024")) }
-        val bestFood = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/faq/#1682339279240-495a13c0-5336")) }
-        val badFood = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/faq/#1680258613020-76225f68-7a69e400-3640")) }
+        val bestFood = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/faq/#1682339297888-28db988f-106f")) }
+        val badFood = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/faq/")) }
 
         Column(
             modifier = Modifier

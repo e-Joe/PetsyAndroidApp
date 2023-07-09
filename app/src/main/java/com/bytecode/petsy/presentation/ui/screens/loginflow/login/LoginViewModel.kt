@@ -60,6 +60,10 @@ class LoginViewModel @Inject constructor(
             if (it.id > -1) {
                 user = it
                 saveUser()
+            } else {
+                viewModelScope.launch {
+                    validationChannel.send(ValidationEvent.Fail)
+                }
             }
         }
     }
@@ -93,6 +97,8 @@ class LoginViewModel @Inject constructor(
 
     sealed class ValidationEvent {
         object Success : ValidationEvent()
+
+        object Fail : ValidationEvent()
     }
 }
 
@@ -102,6 +108,7 @@ data class LoginState(
     val password: String = "",
     val emailError: String? = null,
     val passwordError: String? = null,
+    val showError: Boolean = false
 )
 
 sealed class LoginFormEvent {
