@@ -23,8 +23,12 @@ abstract class MvvmViewModel : ViewModel() {
 
     open fun startLoading() {}
 
-    protected fun safeLaunch(block: suspend CoroutineScope.() -> Unit) : Job{
+    protected fun safeLaunch(block: suspend CoroutineScope.() -> Unit): Job {
         return viewModelScope.launch(handler, block = block)
+    }
+
+    protected fun safeLaunchUnit(block: suspend CoroutineScope.() -> Unit) {
+        viewModelScope.launch(handler, block = block)
     }
 
 

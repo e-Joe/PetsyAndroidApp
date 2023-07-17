@@ -87,6 +87,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.1.0")
     implementation(ComposeLib.MaterialIconCore)
     implementation(ComposeLib.MaterialIconExtended)
+    implementation("androidx.appcompat:appcompat:1.6.1")
     androidTestImplementation(AndroidTestingLib.ComposeTestJunit)
     debugImplementation(ComposeLib.Tooling)
     debugImplementation(ComposeLib.Manifest)

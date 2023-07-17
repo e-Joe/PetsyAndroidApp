@@ -1,9 +1,12 @@
 package com.bytecode.petsy.presentation.ui.screens.mainflow.profile
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bytecode.framework.extension.getActivity
@@ -49,6 +53,7 @@ import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowEvent
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 import com.bytecode.petsy.presentation.ui.theme.ScreenBackgroundColor
 import com.bytecode.petsy.presentation.ui.theme.h4bold
+import com.bytecode.petsy.util.LocaleUtils
 
 @Composable
 fun ProfileScreen(
@@ -119,8 +124,25 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                ProfileOptionCard(
+                    isVisibleRightIcon = true,
+                    "Change language", //TODO Add String
+                    ImageVector.vectorResource(id = R.drawable.ic_language),
+                )
+                {
+//                    LocaleUtils.setLocale(context)
+                    navController.navigate(ProfileScreenNav.ChangeLanguage.route)
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
                 val privacyLink =
-                    remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://petsie.pet/terms-of-use/")) }
+                    remember {
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://petsie.pet/terms-of-use/")
+                        )
+                    }
 
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
@@ -214,3 +236,4 @@ fun ProfileOptionCard(
             )
     }
 }
+

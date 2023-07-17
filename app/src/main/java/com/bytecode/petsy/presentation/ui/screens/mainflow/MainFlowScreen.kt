@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,11 +35,17 @@ import androidx.navigation.compose.rememberNavController
 import com.bytecode.petsy.presentation.ui.navigation.BottomBarScreen
 import com.bytecode.petsy.presentation.ui.navigation.MainFlowNavGraph
 import com.bytecode.petsy.presentation.ui.theme.NavigationItemActiveColor
+import com.bytecode.petsy.util.LocaleUtils
 
 @Composable
-fun MainFlowScreen(navController: NavHostController = rememberNavController()) {
+fun MainFlowScreen(
+    navController: NavHostController = rememberNavController(),
+    languageCode: String = "GB"
+) {
 
     var mainFlowViewModel: MainFlowViewModel = viewModel()
+    val context = LocalContext.current
+    LocaleUtils.setLocale(context, languageCode)
 
     Scaffold(bottomBar = { BottomBar(navController = navController, mainFlowViewModel) }) {
         it

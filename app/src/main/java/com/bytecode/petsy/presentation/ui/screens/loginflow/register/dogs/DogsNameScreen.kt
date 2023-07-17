@@ -1,9 +1,17 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.register.dogs
 
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -21,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import com.bytecode.framework.extension.getActivity
 import com.bytecode.framework.extension.launchActivity
@@ -28,11 +37,12 @@ import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.activities.petsy.PetsyActivity
 import com.bytecode.petsy.presentation.ui.commonui.AboutUsAndPrivacyView
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
-import com.bytecode.petsy.presentation.ui.commonui.buttons.IconTextButton
 import com.bytecode.petsy.presentation.ui.commonui.buttons.GradientButton
+import com.bytecode.petsy.presentation.ui.commonui.buttons.IconTextButton
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.commonui.inputs.RoundedInput
-import com.bytecode.petsy.presentation.ui.navigation.LoginFlowScreen
+import com.bytecode.petsy.presentation.ui.screens.loginflow.landing.LandingFlowEvent
+import com.bytecode.petsy.presentation.ui.screens.loginflow.landing.rememberLifecycleEvent
 import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterFormEvent
 import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegisterViewModel
 import com.bytecode.petsy.presentation.ui.screens.loginflow.register.RegistrationStep
@@ -45,6 +55,13 @@ fun DogsNameScreen(
     navController: NavHostController,
     viewModel: RegisterViewModel
 ) {
+    val lifecycleEvent = rememberLifecycleEvent()
+    LaunchedEffect(lifecycleEvent) {
+        if (lifecycleEvent == Lifecycle.Event.ON_RESUME) {
+            viewModel.onEvent(RegisterFormEvent.RefreshLanguage(""))
+        }
+    }
+
     Scaffold { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
             PetsyImageBackground()
@@ -99,7 +116,7 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
                 when (event) {
                     is ValidationEvent.Success -> {
                         delay(700)
-                        launchPetsyActivity(context)
+                        launchPetsyActivity(context, viewModel)
 //                        navController.navigate(LoginFlowScreen.VerifyEmailScreen.route)
                     }
 
@@ -111,7 +128,7 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
                         ).show()
                     }
 
-                    is ValidationEvent.UserExist ->{}
+                    is ValidationEvent.UserExist -> {}
                 }
             }
         }
@@ -167,9 +184,12 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
     }
 }
 
-private fun launchPetsyActivity(context: Context) {
-    context.launchActivity<PetsyActivity> { }
+private fun launchPetsyActivity(context: Context, viewModel: RegisterViewModel) {
+    val intent = Intent(context, PetsyActivity::class.java)
+    Log.d("Jezik", "sf: " + viewModel.selectedLanguageCode)
+    intent.putExtra("LANG", viewModel.selectedLanguageCode)
     val activity = context.getActivity()
+    activity?.startActivity(intent)
     activity?.finish()
 }
 

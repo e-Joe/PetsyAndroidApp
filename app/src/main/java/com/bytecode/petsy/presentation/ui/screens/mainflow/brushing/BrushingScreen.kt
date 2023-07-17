@@ -469,9 +469,16 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavControll
             style = paragraph_text
         )
 
+        var dogName = viewModel.dogSelected.name
+
+        if (viewModel.selectedLanguage == "RS")
+            dogName = ""
+
+
+        var textToShare = stringResource(id = R.string.share_text, dogName)
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, "This is my dog.")
+            putExtra(Intent.EXTRA_TEXT, textToShare)
             type = "text/plain"
         }
         val shareIntent = Intent.createChooser(sendIntent, null)

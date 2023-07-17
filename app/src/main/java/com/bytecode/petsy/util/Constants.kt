@@ -25,6 +25,7 @@ object Constants {
 
         object Keys {
             const val ON_BOARDING_KEY = "on_boarding_completed"
+            const val LANGUAGE_KEY = "on_boarding_completed"
         }
     }
 

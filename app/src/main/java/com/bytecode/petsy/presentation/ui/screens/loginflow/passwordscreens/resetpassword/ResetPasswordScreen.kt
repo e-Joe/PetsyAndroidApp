@@ -56,7 +56,7 @@ private fun BoxScope.PasswordRequestedBottomPart(
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             GradientButton(
-                text = stringResource(R.string.btn_change_password),
+                text = stringResource(R.string.btn_Save),
                 onClick = {
                     navController.navigate(LoginFlowScreen.LandingScreen.route) {
                         popUpTo(navController.graph.id){

@@ -3,12 +3,15 @@ package com.bytecode.petsy.presentation.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.bytecode.petsy.presentation.ui.screens.loginflow.changelanguage.ChangeLanguageScreen
 import com.bytecode.petsy.presentation.ui.screens.loginflow.passwordscreens.forgotpassword.ForgotPasswordScreen
 import com.bytecode.petsy.presentation.ui.screens.loginflow.passwordscreens.passwordrequestedscreen.ForgotPasswordRequestedScreen
 import com.bytecode.petsy.presentation.ui.screens.loginflow.landing.LandingScreen
+import com.bytecode.petsy.presentation.ui.screens.loginflow.landing.LandingViewModel
 import com.bytecode.petsy.presentation.ui.screens.loginflow.login.LoginScreen
 import com.bytecode.petsy.presentation.ui.screens.loginflow.passwordscreens.forgotpassword.ForgotPasswordViewModel
 import com.bytecode.petsy.presentation.ui.screens.loginflow.passwordscreens.resetpassword.ResetPasswordScreen
@@ -16,6 +19,7 @@ import com.bytecode.petsy.presentation.ui.screens.loginflow.passwordscreens.rese
 import com.bytecode.petsy.presentation.ui.screens.loginflow.register.*
 import com.bytecode.petsy.presentation.ui.screens.loginflow.register.dogs.DogsNameScreen
 import com.bytecode.petsy.presentation.ui.screens.loginflow.splash.SplashScreen
+import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
 
 /**
  * Creates a Composable function that sets up the navigation graph for the app using Jetpack Compose Navigation.
@@ -25,6 +29,8 @@ import com.bytecode.petsy.presentation.ui.screens.loginflow.splash.SplashScreen
  */
 @Composable
 fun LoginFlowGraph(navController: NavHostController, registerViewModel: RegisterViewModel) {
+    var landingViewModel: LandingViewModel = hiltViewModel()
+
     NavHost(
         navController = navController,
         startDestination = LoginFlowScreen.LandingScreen.route
@@ -35,7 +41,7 @@ fun LoginFlowGraph(navController: NavHostController, registerViewModel: Register
         }
 
         composable(route = LoginFlowScreen.LandingScreen.route) {
-            LandingScreen(navController = navController)
+            LandingScreen(navController = navController, landingViewModel)
         }
 
         composable(route = LoginFlowScreen.RegisterFirstScreen.route) {
@@ -70,6 +76,10 @@ fun LoginFlowGraph(navController: NavHostController, registerViewModel: Register
         composable(route = LoginFlowScreen.ResetPasswordScreen.route) {
             val viewModel: ResetPasswordViewModel = hiltViewModel(it)
             ResetPasswordScreen(navController = navController, viewModel)
+        }
+
+        composable(route = LoginFlowScreen.ChangeLanguageScreen.route) {
+            ChangeLanguageScreen(navController = navController, viewModel = landingViewModel)
         }
     }
 }

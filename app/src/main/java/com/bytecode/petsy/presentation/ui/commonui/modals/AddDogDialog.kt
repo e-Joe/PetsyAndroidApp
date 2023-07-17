@@ -112,7 +112,7 @@ fun AddDogDialog(dogs: List<String>, setShowDialog: (Boolean) -> Unit, setValue:
                             .border(width = 1.dp, OutlineBorder, shape = RoundedCornerShape(50.dp)),
                         enabled = true,
                         placeholder = {
-                            Text(text = stringResource(R.string.your_dog_s_name))
+                            Text(text = stringResource(R.string.register_your_dogs_name))
                         }
                     )
 

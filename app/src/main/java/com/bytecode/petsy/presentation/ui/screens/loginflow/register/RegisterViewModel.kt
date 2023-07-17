@@ -13,6 +13,7 @@ import com.bytecode.petsy.data.model.dto.user.UserDto
 import com.bytecode.petsy.domain.usecase.color.SaveColorsUseCase
 import com.bytecode.petsy.domain.usecase.dog.GetDogsUseCase
 import com.bytecode.petsy.domain.usecase.dog.SaveDogsUseCase
+import com.bytecode.petsy.domain.usecase.language.GetLanguageUseCase
 import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserByCredentialsUseCase
 import com.bytecode.petsy.domain.usecase.user.GetUserByEmailUseCase
 import com.bytecode.petsy.domain.usecase.user.GetUsersUseCase
@@ -57,7 +58,8 @@ class RegisterViewModel @Inject constructor(
     private val saveDogsUserCase: SaveDogsUseCase,
     private val saveColorsUseCase: SaveColorsUseCase,
     private val getDogsUseCase: GetDogsUseCase,
-    private val updateUserUseCase: UpdateUserUseCase
+    private val updateUserUseCase: UpdateUserUseCase,
+    private val getLanguageUseCase: GetLanguageUseCase
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(RegisterFormState())
@@ -75,6 +77,12 @@ class RegisterViewModel @Inject constructor(
     private val _dogsListFlow = MutableStateFlow(dogsList)
     val dogsListFlow: StateFlow<List<DogDto>> get() = _dogsListFlow
     lateinit var user: UserDto
+
+    var selectedLanguageCode = "GB"
+
+    init {
+        readLanguageFunc()
+    }
 
     private fun saveUser() = safeLaunch {
         val user = UserDto(
@@ -239,6 +247,10 @@ class RegisterViewModel @Inject constructor(
             is RegisterFormEvent.OnDogNameChanged -> {
                 dogsList[event.index] = dogsList[event.index].copy(name = event.name)
             }
+
+            is RegisterFormEvent.RefreshLanguage -> {
+                readLanguageFunc()
+            }
         }
     }
 
@@ -329,6 +341,12 @@ class RegisterViewModel @Inject constructor(
     private fun resetState() {
         state = RegisterFormState()
     }
+
+    private fun readLanguageFunc() = safeLaunch {
+        call(getLanguageUseCase(Unit)) {
+            selectedLanguageCode = it.countryCode
+        }
+    }
 }
 
 enum class RegistrationStep {
@@ -368,6 +386,8 @@ sealed class RegisterFormEvent {
 
     data class AddNewDogClicked(val clicked: Boolean = true) : RegisterFormEvent()
     data class OnDogNameChanged(val index: Int, val name: String) : RegisterFormEvent()
+
+    data class RefreshLanguage(val name: String) : RegisterFormEvent()
 }
 
 data class RegisterFormState(

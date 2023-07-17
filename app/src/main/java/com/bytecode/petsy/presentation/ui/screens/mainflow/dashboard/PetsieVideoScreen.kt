@@ -47,15 +47,17 @@ fun PetsieVideoScreen(
     }
 }
 
+//.setUri(Uri.parse("asset:///petsie_video.mp4"))
 @Composable
 fun VideoView() {
     val context = LocalContext.current
 
+    var url = "https://drive.google.com/u/1/uc?id=1XDanXfpUa7jC47aOsVTm0zo4sSm3Mu-A&export=download"
     val exoPlayer = ExoPlayer.Builder(LocalContext.current)
         .build()
         .also { exoPlayer ->
             val mediaItem = MediaItem.Builder()
-                .setUri(Uri.parse("asset:///petsie_video.mp4"))
+                .setUri(Uri.parse(url))
                 .build()
             exoPlayer.setMediaItem(mediaItem)
             exoPlayer.prepare()

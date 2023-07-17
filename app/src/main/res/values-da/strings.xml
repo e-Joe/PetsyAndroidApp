@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Petsy</string>
     <string name="watch_short_tutorial">Se vores hurtige vejledning </string>
     <string name="no_activities_yet">Ingen aktiviteter endnu</string>
     <string name="washing_teets_description">"Vidste du, at ved at børste din hunds tænder hver dag i
@@ -49,7 +50,7 @@
     <string name="brushing_time">Børstetid</string>
     <string name="brushing_back">Tilbage til børsning </string>
     <string name="brushing_motivation_title">Fortsæt det gode arbejde </string>
-    <string name="brushing_motivation_text">Tak fordi du tager dig af din hund! Ha en forrygende dag</string>
+    <string name="brushing_motivation_text">Tak fordi du tager dig af din hund! Ha\' en forrygende dag</string>
     <string name="brushing_share">Del</string>
     <string name="brushing_home">Hjem</string>
     <string name="brushing_discard_explanation">Dette vil slette din indtastning</string>
@@ -83,33 +84,29 @@
     <string name="how_to_maintain_dogs_teeth">Sådan vedligholder du din hunds tænder og tandkød</string>
     <string name="best_foods_for_dogs">Det bedste hundefodder til din hund</string>
     <string name="bad_foods_for_your_dog">Det dårligste hundefodder til din hund </string>
-
-
     <string name="pause">Pause</string>
-    <string name="your_dog_s_name">Your dog’s name</string>
-    <string name="seconds">Seconds</string>
-    <string name="old_password">Old password</string>
-    <string name="account">Account</string>
-    <string name="your_password_has_been_successfully_changed">Your password has been successfully changed</string>
-    <string name="the_dog_s_name_cannot_be_empty">The dog\'s name cannot be empty</string>
-    <string name="user_already_exist">User already exist</string>
-    <string name="dog_name_with">"Dog with name %s already exist."</string>
+    <string name="seconds">Sekunder</string>
+    <string name="old_password">Gammelt password</string>
+    <string name="account">Konto</string>
+    <string name="your_password_has_been_successfully_changed">Dit kodeord er blevet ændret succesfuldt.</string>
+    <string name="the_dog_s_name_cannot_be_empty">Hundens navn kan ikke være tomt.</string>
+    <string name="user_already_exist">Brugeren findes allerede</string>
+    <string name="dog_name_with">Hunden med navnet %s findes allerede</string>
     <string name="btn_ok">Ok</string>
-    <string name="started">Started</string>
-    <string name="hide_password">Hide password</string>
-    <string name="show_password">Show password</string>
+    <string name="started">Startet</string>
+    <string name="hide_password">Skjul adgangskode</string>
+    <string name="show_password">Vis adgangskode</string>
     <string name="common_send">Send</string>
-    <string name="forgot_password_email_hint">email123@gmail.com</string>
-    <string name="forgot_your_password_title">Forgot your password</string>
-    <string name="register_open_email">Open email</string>
-    <string name="reset_password_requested_link">Reset link requested</string>
-    <string name="country_title_text">Country</string>
-    <string name="open_email">Open email app</string>
-    <string name="search_country_title">Search</string>
-    <string name="reset_link_title">Reset link requested</string>
-    <string name="reset_link_explanation">A password reset email has been sent.
-Please check your inbox for further
-instrunctions.</string>
-    <string name="reset_your_password_title">Reset your password</string>
-    <string name="reset_your_password_explanation">Please chosse a new password to finish signing in.</string>
+    <string name="reset_password_requested_link">Anmodning om nulstilling af link</string>
+    <string name="open_email">Åbn e-mail-app</string>
+    <string name="search_country_title">Søg</string>
+    <string name="reset_link_explanation">En e-mail til nulstilling af adgangskode er blevet sendt. Venligst tjek din indbakke for yderligere instruktioner.</string>
+    <string name="reset_your_password_title">Nulstil din adgangskode</string>
+    <string name="reset_your_password_explanation">Vælg venligst en ny adgangskode for at fuldføre login.</string>
+    <string name="lang_english">Engelsk</string>
+    <string name="lang_denmark">Danmark</string>
+    <string name="lang_romanian">Rumænsk</string>
+    <string name="lang_serbian">Serbisk</string>
+    <string name="change_language_title">Skift sprog</string>
+    <string name="share_text">%s\'s sundhed har netop fået et potespektakulært løft med Petsie!</string>
 </resources>

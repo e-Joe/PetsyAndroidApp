@@ -22,4 +22,5 @@ sealed class LoginFlowScreen(val route: String) {
     object VerifyEmailScreen : LoginFlowScreen("verify_email_screen")
     object ForgotPasswordRequestedScreen : LoginFlowScreen("forgot_password_requestedScreen")
     object ResetPasswordScreen : LoginFlowScreen("reset_password_screen")
+    object ChangeLanguageScreen : LoginFlowScreen("change_language_screen")
 }

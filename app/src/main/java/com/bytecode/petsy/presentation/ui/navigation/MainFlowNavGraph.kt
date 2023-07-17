@@ -1,6 +1,7 @@
 package com.bytecode.petsy.presentation.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,19 +12,25 @@ import com.bytecode.petsy.presentation.ui.screens.mainflow.brushing.BrushingScre
 import com.bytecode.petsy.presentation.ui.screens.mainflow.dashboard.DashboardScreen
 import com.bytecode.petsy.presentation.ui.screens.mainflow.dashboard.PetsieVideoScreen
 import com.bytecode.petsy.presentation.ui.screens.mainflow.profile.ProfileScreen
+import com.bytecode.petsy.presentation.ui.screens.profileflow.ChangeLanguageScreen
 import com.bytecode.petsy.presentation.ui.screens.profileflow.changepassword.ChangePasswordScreen
 import com.bytecode.petsy.presentation.ui.screens.profileflow.deleteaccount.info.DeleteAccountInfoScreen
 import com.bytecode.petsy.presentation.ui.screens.profileflow.deleteaccount.password.DeleteAccountPasswordScreen
 import com.bytecode.petsy.presentation.ui.screens.profileflow.deleteaccount.reason.DeleteAccountReasonScreen
 import com.bytecode.petsy.presentation.ui.screens.profileflow.mypets.MyPetsProfileScreen
 import com.bytecode.petsy.presentation.ui.screens.profileflow.tutorials.TutorialsScreen
+import com.bytecode.petsy.util.LocaleUtils
 
 @Composable
 fun MainFlowNavGraph(navController: NavHostController, mainFlowViewModel: MainFlowViewModel) {
+//    val context = LocalContext.current
+//    LocaleUtils.setLocale(context, "RO")
+
     NavHost(
         navController = navController,
         startDestination = BottomBarScreen.DashboardScreen.route
     ) {
+
 
         composable(route = BottomBarScreen.DashboardScreen.route) {
             DashboardScreen(mainFlowViewModel, navController)
@@ -75,6 +82,10 @@ fun NavGraphBuilder.profileNavGraph(
             ChangePasswordScreen(navController = navController, viewModel = mainFlowViewModel)
         }
 
+        composable(route = ProfileScreenNav.ChangeLanguage.route) {
+            ChangeLanguageScreen(navController = navController, viewModel = mainFlowViewModel)
+        }
+
         composable(route = ProfileScreenNav.Privacy.route) {
             ScreenContent(name = ProfileScreenNav.Privacy.route) {
                 navController.popBackStack(
@@ -113,6 +124,7 @@ sealed class ProfileScreenNav(val route: String) {
     object MyPets : ProfileScreenNav(route = "MY_PETS")
     object Tutorials : ProfileScreenNav(route = "TUTORIALS")
     object ChangePassword : ProfileScreenNav(route = "CHANGE_PASSWORD")
+    object ChangeLanguage : ProfileScreenNav(route = "CHANGE_LANGUAGE")
     object Privacy : ProfileScreenNav(route = "PRIVACY")
     object DeleteAccount : ProfileScreenNav(route = "DELETE_ACC")
 }

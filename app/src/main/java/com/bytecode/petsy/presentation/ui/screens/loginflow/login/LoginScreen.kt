@@ -1,6 +1,7 @@
 package com.bytecode.petsy.presentation.ui.screens.loginflow.login
 
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -120,7 +121,7 @@ private fun BoxScope.LoginForm(navController: NavHostController, viewModel: Logi
             viewModel.validationEvents.collect { event ->
                 when (event) {
                     is LoginViewModel.ValidationEvent.Success -> {
-                        launchPetsyActivity(context)
+                        launchPetsyActivity(context, viewModel)
                     }
 
                     is LoginViewModel.ValidationEvent.Fail -> {
@@ -170,9 +171,11 @@ private fun BoxScope.LoginForm(navController: NavHostController, viewModel: Logi
     }
 }
 
-private fun launchPetsyActivity(context: Context) {
-    context.launchActivity<PetsyActivity> { }
+private fun launchPetsyActivity(context: Context, viewModel: LoginViewModel) {
+    val intent = Intent(context, PetsyActivity::class.java)
+    intent.putExtra("LANG", viewModel.selectedLanguageCode)
     val activity = context.getActivity()
+    activity?.startActivity(intent)
     activity?.finish()
 }
 

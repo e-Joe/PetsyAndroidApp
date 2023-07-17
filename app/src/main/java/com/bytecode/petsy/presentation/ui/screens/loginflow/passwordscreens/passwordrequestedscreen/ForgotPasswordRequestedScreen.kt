@@ -60,7 +60,7 @@ private fun BoxScope.PasswordRequestedForm() {
     ) {
         Text(
             style = MaterialTheme.typography.h1,
-            text = stringResource(R.string.reset_link_title),
+            text = "Reset",
             modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp)
         )
 

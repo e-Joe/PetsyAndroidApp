@@ -13,7 +13,7 @@
     <string name="paused">Pauza</string>
     <string name="btn_continue">Continua</string>
     <string name="finish_brushing">Finalizarea periajului</string>
-    <string name="welcome_text">Bun venit la periuța de dinți inteligentă! 🐾</string>
+    <string name="welcome_text">Bun venit la periuța de dinți inteligentă!</string>
     <string name="common_register">Inregistreaza-te</string>
     <string name="common_login">Conecteaza-te</string>
     <string name="common_privacy_policy">Politica de confidentialitate</string>
@@ -83,33 +83,29 @@
     <string name="how_to_maintain_dogs_teeth">Cum sa mentii sanatatea dintilor cainelui tau</string>
     <string name="best_foods_for_dogs">Cea mai buna mancare pentru cainele tau</string>
     <string name="bad_foods_for_your_dog">Mancare care dauneaza cainelui tau</string>
-
-
-    <string name="pause">Pause</string>
-    <string name="your_dog_s_name">Your dog’s name</string>
-    <string name="seconds">Seconds</string>
-    <string name="old_password">Old password</string>
-    <string name="account">Account</string>
-    <string name="your_password_has_been_successfully_changed">Your password has been successfully changed</string>
-    <string name="the_dog_s_name_cannot_be_empty">The dog\'s name cannot be empty</string>
-    <string name="user_already_exist">User already exist</string>
-    <string name="dog_name_with">"Dog with name %s already exist."</string>
+    <string name="pause">Pauză</string>
+    <string name="seconds">Secunde</string>
+    <string name="old_password">Parolă veche</string>
+    <string name="account">Cont</string>
+    <string name="your_password_has_been_successfully_changed">Parola ta a fost schimbată cu succes.</string>
+    <string name="the_dog_s_name_cannot_be_empty">Numele câinelui nu poate fi gol.</string>
+    <string name="user_already_exist">Utilizatorul există deja</string>
+    <string name="dog_name_with">Câinele cu numele %s există deja.</string>
     <string name="btn_ok">Ok</string>
-    <string name="started">Started</string>
-    <string name="hide_password">Hide password</string>
-    <string name="show_password">Show password</string>
-    <string name="common_send">Send</string>
-    <string name="forgot_password_email_hint">email123@gmail.com</string>
-    <string name="forgot_your_password_title">Forgot your password</string>
-    <string name="register_open_email">Open email</string>
-    <string name="reset_password_requested_link">Reset link requested</string>
-    <string name="country_title_text">Country</string>
-    <string name="open_email">Open email app</string>
-    <string name="search_country_title">Search</string>
-    <string name="reset_link_title">Reset link requested</string>
-    <string name="reset_link_explanation">A password reset email has been sent.
-Please check your inbox for further
-instrunctions.</string>
-    <string name="reset_your_password_title">Reset your password</string>
-    <string name="reset_your_password_explanation">Please chosse a new password to finish signing in.</string>
+    <string name="started">Început</string>
+    <string name="hide_password">Ascundeți parola</string>
+    <string name="show_password">Afișați parola</string>
+    <string name="common_send">Trimite</string>
+    <string name="reset_password_requested_link">Link de resetare solicitat</string>
+    <string name="open_email">Deschide aplicația de email</string>
+    <string name="search_country_title">Căutare</string>
+    <string name="reset_link_explanation">A fost trimis un email de resetare a parolei. Vă rugăm să verificați căsuța poștală pentru instrucțiuni suplimentare.</string>
+    <string name="reset_your_password_title">Resetați parola</string>
+    <string name="reset_your_password_explanation">Vă rugăm să alegeți o nouă parolă pentru a finaliza autentificarea.</string>
+    <string name="lang_english">Engleză</string>
+    <string name="lang_denmark">Danemarca</string>
+    <string name="lang_romanian">Română</string>
+    <string name="lang_serbian">Sârb</string>
+    <string name="change_language_title">Schimbați limba</string>
+    <string name="share_text">Sănătatea %s tocmai a primit un impuls cu Petsie!</string>
 </resources>

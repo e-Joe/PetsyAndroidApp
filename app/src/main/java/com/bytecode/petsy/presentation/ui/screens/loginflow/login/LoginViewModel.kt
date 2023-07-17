@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.bytecode.framework.base.MvvmViewModel
 import com.bytecode.petsy.data.model.dto.user.UserDto
+import com.bytecode.petsy.domain.usecase.language.GetLanguageUseCase
 import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserByCredentialsUseCase
 import com.bytecode.petsy.domain.usecase.user.SaveUserUseCase
 import com.bytecode.petsy.domain.usecase.validation.ValidateEmail
@@ -22,6 +23,7 @@ class LoginViewModel @Inject constructor(
     private val validatePassword: ValidatePassword,
     private val getLoggedInUserByCredentialsUseCase: GetLoggedInUserByCredentialsUseCase,
     private val saveUserUserCase: SaveUserUseCase,
+    private val getLanguageUseCase: GetLanguageUseCase
 ) : MvvmViewModel() {
 
     var state by mutableStateOf(LoginState())
@@ -29,6 +31,12 @@ class LoginViewModel @Inject constructor(
 
     private val validationChannel = Channel<ValidationEvent>()
     val validationEvents = validationChannel.receiveAsFlow()
+
+    var selectedLanguageCode = "GB"
+
+    init {
+        readLanguageFunc()
+    }
 
     fun onEvent(event: LoginFormEvent) {
         when (event) {
@@ -93,6 +101,12 @@ class LoginViewModel @Inject constructor(
             )
         }
         checkIfUserExist()
+    }
+
+    private fun readLanguageFunc() = safeLaunch {
+        call(getLanguageUseCase(Unit)) {
+            selectedLanguageCode = it.countryCode
+        }
     }
 
     sealed class ValidationEvent {

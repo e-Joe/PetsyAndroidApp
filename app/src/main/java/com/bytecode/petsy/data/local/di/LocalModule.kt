@@ -6,6 +6,7 @@ import com.bytecode.petsy.BuildConfig
 import com.bytecode.petsy.data.local.dao.BrushingTimeDao
 import com.bytecode.petsy.data.local.dao.ColorDao
 import com.bytecode.petsy.data.local.dao.DogDao
+import com.bytecode.petsy.data.local.dao.LanguageDao
 import com.bytecode.petsy.data.local.dao.UserDao
 import com.bytecode.petsy.data.local.db.PetsyDatabase
 import dagger.Module
@@ -62,5 +63,11 @@ class LocalModule {
     @Singleton
     fun provideBrushingTimeDao(appDatabase: PetsyDatabase): BrushingTimeDao {
         return appDatabase.brushingTimeDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLanguageDao(appDatabase: PetsyDatabase): LanguageDao {
+        return appDatabase.languageDao()
     }
 }

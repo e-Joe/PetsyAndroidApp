@@ -13,6 +13,7 @@ import com.bytecode.petsy.data.model.dto.brushing.PetsieChartData
 import com.bytecode.petsy.data.model.dto.brushing.PetsieChartDataRequest
 import com.bytecode.petsy.data.model.dto.color.ColorDto
 import com.bytecode.petsy.data.model.dto.dog.DogDto
+import com.bytecode.petsy.data.model.dto.language.LanguageDto
 import com.bytecode.petsy.data.model.dto.user.UserDto
 import com.bytecode.petsy.domain.usecase.brushingtime.DeleteTimeForDogUseCase
 import com.bytecode.petsy.domain.usecase.brushingtime.DeleteTimeForUserUseCase
@@ -28,6 +29,8 @@ import com.bytecode.petsy.domain.usecase.dog.DeleteDogsUseCase
 import com.bytecode.petsy.domain.usecase.dog.GetDogsUseCase
 import com.bytecode.petsy.domain.usecase.dog.SaveDogUseCase
 import com.bytecode.petsy.domain.usecase.dog.UpdateDogUseCase
+import com.bytecode.petsy.domain.usecase.language.GetLanguageUseCase
+import com.bytecode.petsy.domain.usecase.language.SaveLanguageUseCase
 import com.bytecode.petsy.domain.usecase.user.DeleteUserUseCase
 import com.bytecode.petsy.domain.usecase.user.GetLoggedInUserUseCase
 import com.bytecode.petsy.domain.usecase.user.UpdateUserUseCase
@@ -35,17 +38,9 @@ import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordDigit
 import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordLength
 import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordLowerCase
 import com.bytecode.petsy.domain.usecase.validation.ValidatePasswordUpperCase
-import com.bytecode.petsy.util.toColor
-import com.patrykandpatrick.vico.core.entry.ChartEntryModel
-import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
-import com.patrykandpatrick.vico.core.entry.FloatEntry
-import com.patrykandpatrick.vico.core.entry.composed.ComposedChartEntryModelProducer
-import com.patrykandpatrick.vico.core.entry.composed.plus
-import com.patrykandpatrick.vico.core.entry.entryOf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -77,7 +72,9 @@ class MainFlowViewModel @Inject constructor(
     private val deleteColorsForUserUseCase: DeleteColorsForUserUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
     private val getBrushingTimeUseCase: GetBrushingTimesUseCase,
-    private val saveTempBrushingTimesUseCase: SaveTempBrushingTimesUseCase
+    private val saveTempBrushingTimesUseCase: SaveTempBrushingTimesUseCase,
+    private val saveLanguageUseCase: SaveLanguageUseCase,
+    private val getLanguageUseCase: GetLanguageUseCase
 
 ) : MvvmViewModel() {
 
@@ -129,8 +126,55 @@ class MainFlowViewModel @Inject constructor(
     private val _showTutorialVideo = MutableStateFlow(true)
     val showTutorialVideoFlow = _showTutorialVideo.asStateFlow()
 
+    var dogSelected = DogDto()
+
+    private var englishLanguage =
+        LanguageDto(
+            languageName = "English",
+            countryCode = "GB",
+            flagCode = "GB",
+            isSelected = true
+        )
+    private val _englishLanguage = MutableStateFlow(englishLanguage)
+    val englishLanguageFlow = _englishLanguage.asStateFlow()
+
+    private var denmarkLanguage =
+        LanguageDto(
+            languageName = "Denmark",
+            countryCode = "DK",
+            flagCode = "DK",
+            isSelected = false
+        )
+    private val _denmarkLanguage = MutableStateFlow(denmarkLanguage)
+    val denmarkLanguageFlow = _denmarkLanguage.asStateFlow()
+
+    private var romanianLanguage =
+        LanguageDto(
+            languageName = "Romanian",
+            countryCode = "RO",
+            flagCode = "RO",
+            isSelected = false
+        )
+    private val _romanianLanguage = MutableStateFlow(romanianLanguage)
+    val romanianLanguageFlow = _romanianLanguage.asStateFlow()
+
+    private var serbianLanguage =
+        LanguageDto(
+            languageName = "Serbian",
+            countryCode = "RS",
+            flagCode = "RS",
+            isSelected = false
+        )
+    private val _serbianLanguage = MutableStateFlow(serbianLanguage)
+    val serbianLanguageFlow = _serbianLanguage.asStateFlow()
+
+    var selectedLanguage = "GB"
+    var tempLanguage = "GB"
+
+
     init {
 //        saveFakeDogsTimes()
+        readLanguageFunc()
         getLoggedInUser()
         updateChartPeriod()
     }
@@ -140,6 +184,72 @@ class MainFlowViewModel @Inject constructor(
     private fun saveFakeDogsTimes() = safeLaunch {
         call(saveTempBrushingTimesUseCase(SaveTempBrushingTimesUseCase.Params(""))) {
             Log.d("Test", "testis")
+        }
+    }
+
+    private fun readLanguageFunc() = safeLaunch {
+        call(getLanguageUseCase(Unit)) {
+            englishLanguage = englishLanguage.copy(isSelected = false)
+            romanianLanguage = romanianLanguage.copy(isSelected = false)
+            denmarkLanguage = denmarkLanguage.copy(isSelected = false)
+            serbianLanguage = serbianLanguage.copy(isSelected = false)
+
+            tempLanguage = it.countryCode
+            selectedLanguage = it.countryCode
+
+            when (selectedLanguage) {
+                "GB" -> {
+                    englishLanguage = englishLanguage.copy(isSelected = true)
+                }
+
+                "DK" -> {
+                    denmarkLanguage = denmarkLanguage.copy(isSelected = true)
+                }
+
+                "RO" -> {
+                    romanianLanguage = romanianLanguage.copy(isSelected = true)
+                }
+
+                "RS" -> {
+                    serbianLanguage = serbianLanguage.copy(isSelected = true)
+                }
+            }
+
+            _englishLanguage.value = englishLanguage
+            _romanianLanguage.value = romanianLanguage
+            _denmarkLanguage.value = denmarkLanguage
+            _serbianLanguage.value = serbianLanguage
+        }
+    }
+
+    private fun saveLanguage(langCode: String) = safeLaunch {
+        var language = LanguageDto()
+        selectedLanguage = langCode
+
+        when (tempLanguage) {
+            "GB" -> {
+                englishLanguage = englishLanguage.copy(isSelected = true)
+                language = englishLanguage.copy()
+            }
+
+            "DK" -> {
+                denmarkLanguage = denmarkLanguage.copy(isSelected = true)
+                language = denmarkLanguage.copy()
+            }
+
+            "RO" -> {
+                romanianLanguage = romanianLanguage.copy(isSelected = true)
+                language = romanianLanguage.copy()
+            }
+
+            "RS" -> {
+                serbianLanguage = serbianLanguage.copy(isSelected = true)
+                language = serbianLanguage.copy()
+            }
+        }
+
+        call(saveLanguageUseCase(SaveLanguageUseCase.Params(language))) {
+            readLanguageFunc()
         }
     }
 
@@ -191,6 +301,9 @@ class MainFlowViewModel @Inject constructor(
                 dogs.addAll(updatedList)
 
                 val dog = dogs.find { it.id == event.dogId }
+                if (dog != null) {
+                    dogSelected = dog
+                }
 
                 state = state.copy(
                     isDogSelected = dog?.isSelected ?: false
@@ -332,6 +445,31 @@ class MainFlowViewModel @Inject constructor(
                 }
 
                 deleteUser()
+            }
+
+            is MainFlowEvent.LanguageClicked -> {
+                tempLanguage = event.countryCode
+
+                englishLanguage = englishLanguage.copy(isSelected = false)
+                romanianLanguage = romanianLanguage.copy(isSelected = false)
+                denmarkLanguage = denmarkLanguage.copy(isSelected = false)
+                serbianLanguage = serbianLanguage.copy(isSelected = false)
+
+                when (tempLanguage) {
+                    "GB" -> englishLanguage = englishLanguage.copy(isSelected = true)
+                    "DK" -> denmarkLanguage = denmarkLanguage.copy(isSelected = true)
+                    "RO" -> romanianLanguage = romanianLanguage.copy(isSelected = true)
+                    "RS" -> serbianLanguage = serbianLanguage.copy(isSelected = true)
+                }
+
+                _englishLanguage.value = englishLanguage
+                _romanianLanguage.value = romanianLanguage
+                _denmarkLanguage.value = denmarkLanguage
+                _serbianLanguage.value = serbianLanguage
+            }
+
+            is MainFlowEvent.SaveLanguageClicked -> {
+                saveLanguage(selectedLanguage)
             }
         }
     }
@@ -656,6 +794,10 @@ sealed class MainFlowEvent() {
     data class DeletePasswordChanged(val password: String) : MainFlowEvent()
 
     data class DeleteUserClicked(val temp: String) : MainFlowEvent()
+
+    data class LanguageClicked(val countryCode: String) : MainFlowEvent()
+
+    data class SaveLanguageClicked(val temp: String) : MainFlowEvent()
 }
 
 enum class BrushingState {

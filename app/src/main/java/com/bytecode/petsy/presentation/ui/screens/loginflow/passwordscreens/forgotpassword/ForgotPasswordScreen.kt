@@ -103,7 +103,7 @@ private fun BoxScope.PasswordRequestedForm(viewModel: ForgotPasswordViewModel) {
 
         Text(
             style = MaterialTheme.typography.h1,
-            text = stringResource(R.string.forgot_your_password_title),
+            text = stringResource(R.string.login_forgot_password),
             modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp)
         )
 
