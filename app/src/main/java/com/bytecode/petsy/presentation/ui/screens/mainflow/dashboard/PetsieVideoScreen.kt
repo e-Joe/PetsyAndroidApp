@@ -15,10 +15,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.bytecode.petsy.R
 import com.bytecode.petsy.presentation.ui.commonui.PetsyImageBackground
 import com.bytecode.petsy.presentation.ui.commonui.headers.HeaderOnboarding
 import com.bytecode.petsy.presentation.ui.screens.mainflow.MainFlowViewModel
@@ -52,13 +54,18 @@ fun PetsieVideoScreen(
 fun VideoView() {
     val context = LocalContext.current
 
-    var url = "https://drive.google.com/u/1/uc?id=1XDanXfpUa7jC47aOsVTm0zo4sSm3Mu-A&export=download"
+
+    var url = "https://drive.google.com/u/1/uc?id=".plus(stringResource(id = R.string.video_url))
+        .plus("&export=download")
     val exoPlayer = ExoPlayer.Builder(LocalContext.current)
         .build()
         .also { exoPlayer ->
             val mediaItem = MediaItem.Builder()
+//                .setUri(Uri.parse("asset:///petsie_video.mp4"))
+//                .setUri(Uri.parse("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"))
                 .setUri(Uri.parse(url))
                 .build()
+
             exoPlayer.setMediaItem(mediaItem)
             exoPlayer.prepare()
             exoPlayer.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
