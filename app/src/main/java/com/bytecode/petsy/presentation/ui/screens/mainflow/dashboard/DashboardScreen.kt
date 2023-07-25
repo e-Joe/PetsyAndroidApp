@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -364,6 +366,7 @@ fun ChartDogView(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.background(Color.Transparent),
+                horizontalArrangement = Arrangement.Center
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_paw),
@@ -374,7 +377,8 @@ fun ChartDogView(
                 Text(
                     text = dog.name,
                     style = MaterialTheme.typography.h2,
-                    color = dog.color.toColor()
+                    color = dog.color.toColor(),
+                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -458,6 +462,7 @@ fun TodayDogView(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.background(Color.Transparent),
+                horizontalArrangement = Arrangement.Center
             ) {
                 Image(
                     painter = painterResource(icon),

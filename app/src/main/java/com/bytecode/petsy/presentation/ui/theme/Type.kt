@@ -3,6 +3,7 @@ package com.bytecode.petsy.presentation.ui.theme
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -32,6 +33,9 @@ val Typography = Typography(
         fontSize = 20.sp,
         color = TextSecondary,
         fontWeight = FontWeight.Bold,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        )
     ),
 
     h4 = TextStyle(
