@@ -1,6 +1,7 @@
 package com.bytecode.petsy.presentation.ui.screens.mainflow.brushing
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -476,6 +477,7 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavControll
 
 
         var textToShare = stringResource(id = R.string.share_text, dogName)
+
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, textToShare)

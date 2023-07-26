@@ -33,7 +33,7 @@ object LocaleUtils {
             var locale = Locale(lang)
             if (lang == "SR") {
                 locale =
-                    Locale.Builder().setLanguage("sr").setRegion("RS").setScript("Latn").build()
+                    Locale.Builder().setLanguage("sr").setRegion("RS").build()
             }
 
             val config = Configuration(configuration)
