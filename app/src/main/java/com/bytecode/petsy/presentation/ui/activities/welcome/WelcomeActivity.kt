@@ -52,6 +52,7 @@ class WelcomeActivity : ComponentActivity() {
                 LocaleUtils.setLocale(baseContext,it.countryCode)
                 setContent {
                     PetsyTheme {
+                        LocaleUtils.setLocale(baseContext,it.countryCode)
                         val navController = rememberNavController()
                         LoginFlowGraph(navController = navController, registerViewModel = hiltViewModel())
                     }
