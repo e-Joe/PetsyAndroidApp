@@ -205,6 +205,9 @@ val brushingCardText: TextStyle
             color = TextSecondary,
             fontSize = 16.sp,
             fontWeight = FontWeight.Normal,
+            platformStyle = PlatformTextStyle(
+                includeFontPadding = false
+            )
         )
     }
 

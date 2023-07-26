@@ -171,6 +171,9 @@ class MainFlowViewModel @Inject constructor(
     var selectedLanguage = "GB"
     var tempLanguage = "GB"
 
+    private val _selectedLanguage = MutableStateFlow(selectedLanguage)
+    val selectedLanguageFlow = _selectedLanguage.asStateFlow()
+
 
     init {
 //        saveFakeDogsTimes()
@@ -196,6 +199,7 @@ class MainFlowViewModel @Inject constructor(
 
             tempLanguage = it.countryCode
             selectedLanguage = it.countryCode
+            _selectedLanguage.value = it.countryCode
 
             when (selectedLanguage) {
                 "GB" -> {
@@ -225,6 +229,7 @@ class MainFlowViewModel @Inject constructor(
     private fun saveLanguage(langCode: String) = safeLaunch {
         var language = LanguageDto()
         selectedLanguage = langCode
+        _selectedLanguage.value = selectedLanguage
 
         when (tempLanguage) {
             "GB" -> {

@@ -30,7 +30,12 @@ object LocaleUtils {
             }
         }
         context.resources.apply {
-            val locale = Locale(lang)
+            var locale = Locale(lang)
+            if (lang == "SR") {
+                locale =
+                    Locale.Builder().setLanguage("sr").setRegion("RS").setScript("Latn").build()
+            }
+
             val config = Configuration(configuration)
 
             context.createConfigurationContext(configuration)

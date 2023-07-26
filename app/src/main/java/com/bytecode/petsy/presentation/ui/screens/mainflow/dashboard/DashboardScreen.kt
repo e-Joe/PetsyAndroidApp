@@ -35,6 +35,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -482,19 +483,20 @@ fun TodayDogView(
 fun RecentActivities(viewModel: MainFlowViewModel) {
     val dogsListState = viewModel.dogsFlow.collectAsState()
 
+
     Column() {
         if (dogsListState.value.isNotEmpty()) {
             val firstDog = dogsListState.value[0]
 
             if (firstDog.lastBrushingPeriod > 0) {
-                RecentActivityView(firstDog) // TODO Add check
+                RecentActivityView(firstDog, viewModel) // TODO Add check
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
             if (dogsListState.value.size >= 2) {
                 val secondDog = dogsListState.value[1]
                 if (secondDog.lastBrushingPeriod > 0) {
-                    RecentActivityView(secondDog)
+                    RecentActivityView(secondDog, viewModel)
                     Spacer(modifier = Modifier.height(20.dp))
                 }
             }
@@ -504,7 +506,9 @@ fun RecentActivities(viewModel: MainFlowViewModel) {
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun RecentActivityView(dog: DogDto) {
+fun RecentActivityView(dog: DogDto, viewModel: MainFlowViewModel) {
+    val selectedLanguage by viewModel.selectedLanguageFlow.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -532,7 +536,6 @@ fun RecentActivityView(dog: DogDto) {
                     style = brushingCardText,
                     modifier = Modifier.constrainAs(brushingTextFirstPart) {
                         top.linkTo(parent.top)
-                        bottom.linkTo(dogView.bottom)
                         start.linkTo(parent.start)
                     },
                     textAlign = TextAlign.Left
@@ -545,9 +548,8 @@ fun RecentActivityView(dog: DogDto) {
                     ),
                     style = brushingCardTextBold,
                     modifier = Modifier.constrainAs(brushingTextSecondPart) {
-                        top.linkTo(dogView.top)
-                        bottom.linkTo(dogView.bottom)
-                        start.linkTo(brushingTextFirstPart.end)
+                        top.linkTo(brushingTextFirstPart.bottom)
+                        start.linkTo(parent.start)
                     },
                     textAlign = TextAlign.Left
                 )
@@ -555,7 +557,6 @@ fun RecentActivityView(dog: DogDto) {
                 Box(
                     modifier = Modifier.constrainAs(dogView) {
                         top.linkTo(parent.top)
-                        start.linkTo(brushingTextSecondPart.end)
                         end.linkTo(parent.end)
                         width = Dimension.fillToConstraints
                     }, contentAlignment = Alignment.CenterEnd
@@ -580,7 +581,7 @@ fun RecentActivityView(dog: DogDto) {
                         top.linkTo(progressText.top)
                         bottom.linkTo(progressText.bottom)
                         start.linkTo(brushingTextFirstPart.start)
-                        end.linkTo(brushingTextSecondPart.end)
+                        end.linkTo(progressText.start)
                         width = Dimension.fillToConstraints
                     }
                     .padding(end = 10.dp, top = 2.dp),
@@ -590,16 +591,19 @@ fun RecentActivityView(dog: DogDto) {
                 Text(
                     text = "${dog.calculatePercentageRounded()}%",
                     style = brushingCardPercentageText,
-                    modifier = Modifier.constrainAs(progressText) {
-                        top.linkTo(spacer.bottom)
-                        start.linkTo(progress.end)
-                    },
+                    modifier = Modifier
+                        .constrainAs(progressText) {
+                            top.linkTo(spacer.bottom)
+                            end.linkTo(time.start)
+                        }
+                        .padding(end = 8.dp),
+
                     textAlign = TextAlign.Left,
                     color = dog.color.toColor()
                 )
 
                 Text(
-                    text = dog.lastBrushingDate.formatDateTimeShortMonth(),
+                    text = dog.lastBrushingDate.formatDateTimeShortMonth(selectedLanguage),
                     style = brushingCardTimeText,
                     modifier = Modifier.constrainAs(time) {
                         top.linkTo(progressText.top)
