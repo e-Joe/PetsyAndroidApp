@@ -247,20 +247,21 @@ private fun ChartAreaView(mainFlowViewModel: MainFlowViewModel) {
                     modifier = Modifier
                         .padding(end = 10.dp)
                         .height(31.dp)
-                        .width(98.dp)
                         .clip(CircleShape)
                         .background(Color.White)
                         .border(0.5.dp, TextSecondary2, CircleShape)
                         .constrainAs(datesView) {
                             top.linkTo(parent.top)
                             end.linkTo(nextButton.start)
+                            width = Dimension.fillToConstraints
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = chartPeriodDates.value,
-                        style = chartNavigationDates
+                        style = chartNavigationDates,
+                        modifier = Modifier.padding(horizontal = 10.dp)
                     )
                 }
 
