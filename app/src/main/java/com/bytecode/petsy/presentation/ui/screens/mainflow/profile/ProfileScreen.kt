@@ -126,7 +126,7 @@ fun ProfileScreen(
 
                 ProfileOptionCard(
                     isVisibleRightIcon = true,
-                    "Change language", //TODO Add String
+                    stringResource(id = R.string.change_language_title),
                     ImageVector.vectorResource(id = R.drawable.ic_language),
                 )
                 {

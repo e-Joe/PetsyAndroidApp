@@ -253,7 +253,6 @@ private fun ChartAreaView(mainFlowViewModel: MainFlowViewModel) {
                         .constrainAs(datesView) {
                             top.linkTo(parent.top)
                             end.linkTo(nextButton.start)
-                            width = Dimension.fillToConstraints
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
