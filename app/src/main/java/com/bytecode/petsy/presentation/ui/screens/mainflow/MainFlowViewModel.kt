@@ -370,11 +370,13 @@ class MainFlowViewModel @Inject constructor(
 
             is MainFlowEvent.SaveBrushingTimeEvent -> {
                 saveBrushingTime()
+                state = state.copy(isDogSelected = false)
             }
 
             is MainFlowEvent.SaveNewDog -> {
                 newDogName = event.name
                 getColorForNewDog()
+
             }
 
             is MainFlowEvent.PreviousPeriodClick -> {
@@ -596,6 +598,8 @@ class MainFlowViewModel @Inject constructor(
 
     private fun saveDog() = safeLaunch {
         var dog = DogDto(name = newDogName, ownerId = user.id, color = newColor)
+        dogSelected = dog
+        state = state.copy(isDogSelected = true)
 
         call(saveDogUseCase(SaveDogUseCase.Params(dog))) {
             insertedDogId = it

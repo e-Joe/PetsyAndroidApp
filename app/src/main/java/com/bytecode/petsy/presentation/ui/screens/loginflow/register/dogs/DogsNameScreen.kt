@@ -186,7 +186,6 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
 
 private fun launchPetsyActivity(context: Context, viewModel: RegisterViewModel) {
     val intent = Intent(context, PetsyActivity::class.java)
-    Log.d("Jezik", "sf: " + viewModel.selectedLanguageCode)
     intent.putExtra("LANG", viewModel.selectedLanguageCode)
     val activity = context.getActivity()
     activity?.startActivity(intent)

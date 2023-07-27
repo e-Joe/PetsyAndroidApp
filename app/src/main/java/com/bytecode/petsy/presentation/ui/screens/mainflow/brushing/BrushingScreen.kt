@@ -3,6 +3,7 @@ package com.bytecode.petsy.presentation.ui.screens.mainflow.brushing
 import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -362,8 +363,7 @@ fun SaveBrushingScreen(viewModel: MainFlowViewModel) {
                 .constrainAs(saveButton) {
                     bottom.linkTo(bottomGuideline)
                     start.linkTo(parent.start)
-                }
-                .height(70.dp),
+                },
             text = stringResource(id = R.string.btn_Save),
             onClick = {
                 viewModel.onEvent(MainFlowEvent.SaveBrushingTimeEvent(""))
@@ -391,7 +391,8 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavControll
             titleText,
             descriptionText,
             btnShare,
-            btnHome
+            btnHome,
+            mainContainer
         ) = createRefs()
 
         val topGuideline = createGuidelineFromTop(70.dp)
@@ -399,82 +400,92 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavControll
         val topGuidelineForCelebration = createGuidelineFromTop(110.dp)
         val bottomGuideline = createGuidelineFromBottom(120.dp)
 
-        Image(
-            modifier = Modifier
-                .constrainAs(gradientView) {
-                    top.linkTo(topGuidelineGradient)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-                .height(400.dp)
-                .fillMaxWidth(),
-            painter = painterResource(id = R.drawable.img_gradient),
-            contentDescription = "",
-            contentScale = ContentScale.FillBounds
-        )
-
-        Image(
-            modifier = Modifier
-                .constrainAs(celebrateImage) {
-                    top.linkTo(topGuidelineForCelebration)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-                .height(290.dp)
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp),
-            painter = painterResource(id = R.drawable.img_celebration),
-            contentDescription = "",
-            contentScale = ContentScale.FillHeight
-        )
-
-        viewModel.getSelectedDog()?.let {
-            Column(
-                modifier = Modifier
-                    .constrainAs(dogScoreView) {
-                        top.linkTo(topGuideline)
-                        centerHorizontallyTo(parent)
-                    }
-                    .padding(top = 30.dp)
-            ) {
-                DogShareView(
-                    dog = it,
-                    time = viewModel.formatTime(time),
-                )
+        ConstraintLayout(modifier = Modifier
+            .constrainAs(mainContainer) {
+                top.linkTo(topGuideline)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(btnShare.top)
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
             }
+            .verticalScroll(rememberScrollState())) {
+            Image(
+                modifier = Modifier
+                    .constrainAs(gradientView) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .height(400.dp)
+                    .fillMaxWidth(),
+                painter = painterResource(id = R.drawable.img_gradient),
+                contentDescription = "",
+                contentScale = ContentScale.FillBounds
+            )
+
+            Image(
+                modifier = Modifier
+                    .constrainAs(celebrateImage) {
+                        top.linkTo(topGuidelineForCelebration)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .height(290.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 40.dp),
+                painter = painterResource(id = R.drawable.img_celebration),
+                contentDescription = "",
+                contentScale = ContentScale.FillHeight
+            )
+
+            viewModel.dogSelected?.let {
+                Column(
+                    modifier = Modifier
+                        .constrainAs(dogScoreView) {
+                            top.linkTo(topGuideline)
+                            centerHorizontallyTo(parent)
+                        }
+                        .padding(top = 30.dp)
+                ) {
+                    DogShareView(
+                        dog = it,
+                        time = viewModel.formatTime(time),
+                    )
+                }
+            }
+
+            Text(
+                modifier = Modifier
+                    .constrainAs(titleText) {
+                        top.linkTo(celebrateImage.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(horizontal = 20.dp),
+                text = stringResource(id = R.string.brushing_motivation_title),
+                style = MaterialTheme.typography.h2
+            )
+
+            Text(
+                modifier = Modifier
+                    .constrainAs(descriptionText) {
+                        top.linkTo(titleText.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 15.dp),
+                text = stringResource(id = R.string.brushing_motivation_text),
+                textAlign = TextAlign.Center,
+                style = paragraph_text
+            )
         }
-
-        Text(
-            modifier = Modifier
-                .constrainAs(titleText) {
-                    top.linkTo(celebrateImage.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-                .padding(horizontal = 20.dp),
-            text = stringResource(id = R.string.brushing_motivation_title),
-            style = MaterialTheme.typography.h2
-        )
-
-        Text(
-            modifier = Modifier
-                .constrainAs(descriptionText) {
-                    top.linkTo(titleText.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-                .padding(horizontal = 20.dp)
-                .padding(top = 15.dp),
-            text = stringResource(id = R.string.brushing_motivation_text),
-            textAlign = TextAlign.Center,
-            style = paragraph_text
-        )
 
         var dogName = viewModel.dogSelected.name
 
         if (viewModel.selectedLanguage == "RS")
             dogName = ""
-
 
         var textToShare = stringResource(id = R.string.share_text, dogName)
 
@@ -509,8 +520,7 @@ fun ShareBrushingScreen(viewModel: MainFlowViewModel, navController: NavControll
                 .constrainAs(btnHome) {
                     bottom.linkTo(bottomGuideline)
                     start.linkTo(parent.start)
-                }
-                .height(70.dp),
+                },
             text = stringResource(id = R.string.brushing_home),
             onClick = {
                 viewModel.onEvent(MainFlowEvent.BrushingStateEvent(BrushingState.NOT_STARTED))
