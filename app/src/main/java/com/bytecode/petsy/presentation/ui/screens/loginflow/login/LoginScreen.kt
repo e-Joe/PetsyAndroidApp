@@ -75,7 +75,7 @@ private fun BoxScope.LoginScreenBottomPart(
                 }
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -99,7 +99,7 @@ private fun BoxScope.LoginScreenBottomPart(
                     )
             }
         }
-        Spacer(modifier = Modifier.height(57.dp))
+        Spacer(modifier = Modifier.height(30.dp))
         AboutUsAndPrivacyView()
     }
 }
@@ -108,7 +108,7 @@ private fun BoxScope.LoginScreenBottomPart(
 private fun BoxScope.LoginForm(navController: NavHostController, viewModel: LoginViewModel) {
     Column(
         modifier = Modifier
-            .padding(top = 150.dp)
+            .padding(top = 100.dp)
             .align(Alignment.TopCenter)
             .fillMaxWidth()
     ) {
@@ -134,7 +134,7 @@ private fun BoxScope.LoginForm(navController: NavHostController, viewModel: Logi
         Text(
             style = MaterialTheme.typography.h1,
             text = stringResource(R.string.common_login),
-            modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp)
+            modifier = Modifier.padding(top = 24.dp, start = 20.dp, end = 20.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))

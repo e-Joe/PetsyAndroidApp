@@ -61,7 +61,7 @@
     <string name="privacy">Politika privatnosti</string>
     <string name="delete_account">Obriši nalog</string>
     <string name="logout">Odjavi se</string>
-    <string name="delete_are_you_sure">Da li sigurno želiš da obrišeš “{name}” </string>
+    <string name="delete_are_you_sure">Da li sigurno želiš da obrišeš %s” </string>
     <string name="delete_statistic">Takođe ćeš izbrisati i sve dosadašnje podatke</string>
     <string name="btn_delete">Obriši </string>
     <string name="new_password_hint">Nova lozinka</string>
@@ -79,10 +79,10 @@
     <string name="log_out_of_smartbrush">Odjavi se?</string>
     <string name="btn_logout">Odjavi se</string>
     <string name="tutorials">Tutorijali </string>
-    <string name="how_to_brush_you_pets_teeth">Kako da pereš zube svom psu</string>
-    <string name="how_to_maintain_dogs_teeth">Kako da održavaš zube svom psu</string>
-    <string name="best_foods_for_dogs">Najbolja hrana za pse</string>
-    <string name="bad_foods_for_your_dog">Najgora hrana za pse</string>
+    <string name="how_to_brush_you_pets_teeth">Kako da opereš zube svom psu?</string>
+    <string name="how_to_maintain_dogs_teeth">Koliko često treba prati zube psu?</string>
+    <string name="best_foods_for_dogs">Može li Petsie da zameni čišćenje zuba?</string>
+    <string name="bad_foods_for_your_dog">Saznajte više o Petsie-u</string>
     <string name="pause">Pauza</string>
     <string name="seconds">Sekunde</string>
     <string name="old_password">Stara lozinka</string>

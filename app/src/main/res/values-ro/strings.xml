@@ -79,10 +79,10 @@
     <string name="log_out_of_smartbrush">Deconectare SmatBrush?</string>
     <string name="btn_logout">Deconectare</string>
     <string name="tutorials">Tutoriale</string>
-    <string name="how_to_brush_you_pets_teeth">Cum sa perii dintii cainelui tau</string>
-    <string name="how_to_maintain_dogs_teeth">Cum sa mentii sanatatea dintilor cainelui tau</string>
-    <string name="best_foods_for_dogs">Cea mai buna mancare pentru cainele tau</string>
-    <string name="bad_foods_for_your_dog">Mancare care dauneaza cainelui tau</string>
+    <string name="how_to_brush_you_pets_teeth">Cum să perii dinții cainelui tău</string>
+    <string name="how_to_maintain_dogs_teeth">Cum sa menții sănătatea dinților câinelui tău</string>
+    <string name="best_foods_for_dogs">Cea mai bună mâncare pentru câinele tău</string>
+    <string name="bad_foods_for_your_dog">Mâncare care dăuneaza câinelui tău</string>
     <string name="pause">Pauză</string>
     <string name="seconds">Secunde</string>
     <string name="old_password">Parolă veche</string>

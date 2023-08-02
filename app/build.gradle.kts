@@ -27,6 +27,12 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        bundle {
+            language {
+                enableSplit = false
+            }
+        }
     }
 
     buildTypes {

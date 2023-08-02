@@ -1,5 +1,6 @@
 package com.bytecode.petsy.util
 
+import android.app.LocaleManager
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.runtime.CompositionLocalContext
@@ -43,5 +44,7 @@ object LocaleUtils {
             config.setLocale(locale)
             context.resources.updateConfiguration(config, displayMetrics)
         }
+
+//        context.getSystemService(LocaleManager::class.java)
     }
 }

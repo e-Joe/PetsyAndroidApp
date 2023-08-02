@@ -214,7 +214,8 @@ fun ProfileOptionCard(
 
         Icon(
             imageVector = optionIcon,
-            contentDescription = "Navigation Icon"
+            contentDescription = "Navigation Icon",
+            tint = Color.Black
         )
 
         Text(
@@ -232,7 +233,8 @@ fun ProfileOptionCard(
         if (isVisibleRightIcon)
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
-                contentDescription = "Navigation Icon"
+                contentDescription = "Navigation Icon",
+                tint = Color.Black
             )
     }
 }

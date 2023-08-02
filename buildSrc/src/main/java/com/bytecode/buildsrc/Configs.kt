@@ -1,7 +1,7 @@
 package com.bytecode.buildsrc
 
 object Configs {
-    private const val versionMajor = 2
+    private const val versionMajor = 4
     private const val versionMinor = 0
     private const val versionPatch = 0
     private const val versionQualifier = "alpha1"

@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -83,6 +82,7 @@ fun RoundedInput(
                     backgroundColor = Color.White,
                     focusedBorderColor = OutlineBorder,
                     unfocusedBorderColor = OutlineBorder,
+                    unfocusedLabelColor = Color.Black,
                     disabledBorderColor = OutlineBorder,
                     disabledTextColor = TextSecondary,
                     textColor = Color.Red,

@@ -81,7 +81,7 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
         modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
-            .padding(bottom = 30.dp), horizontalAlignment = Alignment.CenterHorizontally
+            .padding(bottom = 20.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -93,7 +93,7 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
             )
         }
 
-        Spacer(modifier = Modifier.height(57.dp))
+        Spacer(modifier = Modifier.height(25.dp))
         AboutUsAndPrivacyView()
     }
 }
@@ -121,7 +121,7 @@ private fun BoxScope.Form(viewModel: RegisterViewModel) {
 
     Column(
         modifier = Modifier
-            .padding(top = 150.dp)
+            .padding(top = 100.dp)
             .align(Alignment.TopCenter)
             .fillMaxWidth()
     ) {
@@ -134,7 +134,7 @@ private fun BoxScope.Form(viewModel: RegisterViewModel) {
         Text(
             style = MaterialTheme.typography.h1,
             text = stringResource(R.string.register_about_you),
-            modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp)
+            modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))

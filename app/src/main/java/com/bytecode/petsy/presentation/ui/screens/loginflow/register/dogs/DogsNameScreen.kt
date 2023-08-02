@@ -78,7 +78,8 @@ private fun BoxScope.BottomPart(viewModel: RegisterViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
-            .padding(bottom = 30.dp), horizontalAlignment = Alignment.CenterHorizontally
+            .padding(bottom = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -89,7 +90,7 @@ private fun BoxScope.BottomPart(viewModel: RegisterViewModel) {
             )
         }
 
-        Spacer(modifier = Modifier.height(57.dp))
+        Spacer(modifier = Modifier.height(25.dp))
         AboutUsAndPrivacyView()
     }
 }
@@ -102,7 +103,7 @@ private fun BoxScope.DogsList(viewModel: RegisterViewModel, navController: NavHo
 
     Column(
         modifier = Modifier
-            .padding(top = 150.dp)
+            .padding(top = 100.dp)
             .align(Alignment.TopCenter)
             .fillMaxWidth()
     ) {

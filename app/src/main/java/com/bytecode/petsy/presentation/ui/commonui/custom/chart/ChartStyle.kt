@@ -23,7 +23,7 @@ internal fun rememberChartStyle(columnChartColors: List<Color>, lineChartColors:
         val defaultColors = if (isSystemInDarkTheme) DefaultColors.Dark else DefaultColors.Light
         ChartStyle(
             ChartStyle.Axis(
-                axisLabelColor = Color(defaultColors.axisLabelColor),
+                axisLabelColor = Color.Black,
                 axisGuidelineColor = Color(defaultColors.axisGuidelineColor),
                 axisLineColor = Color(defaultColors.axisLineColor),
             ),

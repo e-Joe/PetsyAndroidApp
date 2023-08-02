@@ -80,9 +80,9 @@
     <string name="btn_logout">Log out</string>
     <string name="tutorials">Tutorials</string>
     <string name="how_to_brush_you_pets_teeth">How to brush you pets teeth</string>
-    <string name="how_to_maintain_dogs_teeth">"How to maintain dogs teeth "</string>
-    <string name="best_foods_for_dogs">"Best foods for dogs "</string>
-    <string name="bad_foods_for_your_dog">Bad foods for your dog</string>
+    <string name="how_to_maintain_dogs_teeth">"How often to wash dog's teeth?"</string>
+    <string name="best_foods_for_dogs">"Can Petsie replace teeth cleaning?"</string>
+    <string name="bad_foods_for_your_dog">Learn more about Petisie</string>
     <string name="pause">Pause</string>
     <string name="seconds">Seconds</string>
     <string name="old_password">Old password</string>

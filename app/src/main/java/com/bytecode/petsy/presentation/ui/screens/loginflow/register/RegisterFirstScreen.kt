@@ -2,6 +2,7 @@ package com.bytecode.petsy.presentation.ui.screens.loginflow.register
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -11,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,7 +61,7 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
         modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
-            .padding(bottom = 30.dp), horizontalAlignment = Alignment.CenterHorizontally
+            .padding(bottom = 20.dp), horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -70,7 +72,7 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
                 }
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -96,7 +98,7 @@ private fun BoxScope.BottomPart(navController: NavHostController, viewModel: Reg
             }
         }
 
-        Spacer(modifier = Modifier.height(57.dp))
+        Spacer(modifier = Modifier.height(25.dp))
         AboutUsAndPrivacyView()
     }
 }
@@ -111,7 +113,7 @@ private fun BoxScope.Form(navController: NavHostController, viewModel: RegisterV
 
     Column(
         modifier = Modifier
-            .padding(top = 150.dp)
+            .padding(top = 100.dp)
             .align(Alignment.TopCenter)
             .fillMaxWidth()
     ) {
@@ -143,7 +145,7 @@ private fun BoxScope.Form(navController: NavHostController, viewModel: RegisterV
         Text(
             style = MaterialTheme.typography.h1,
             text = stringResource(R.string.register_your_account),
-            modifier = Modifier.padding(top = 34.dp, start = 20.dp, end = 20.dp)
+            modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
